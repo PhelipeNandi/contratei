@@ -1,0 +1,10 @@
+{
+  "expo": {
+    "name": "contratei",
+    "slug": "contratei",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
