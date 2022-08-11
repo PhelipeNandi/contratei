@@ -1,25 +1,20 @@
-import { createContext, useState, useEffect } from "react";
-import { Api, signInRequest } from "../services/Api";
+import { createContext, useState, useEffect, useContext } from "react";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-interface User {
-    token: string;
-}
+import { Api } from "../services/Api";
+import { signInRequest, signInGoogleRequest } from "../services/User";
+import { User, SignInData } from "../types/user";
 
 interface AuthContextType {
     isAuthenticated: boolean;
     isLoading: boolean;
-    user: User;
+    user: User | null;
     signIn: (data: SignInData) => Promise<void>;
+    signInGoogle(): void;
     logOut(): void;
 }
 
-interface SignInData {
-    email: string;
-    password: string;
-}
-
-export const AuthContext = createContext({} as AuthContextType);
+const AuthContext = createContext({} as AuthContextType);
 
 export function AuthProvider({ children }) {
     const [user, setUser] = useState<User | null>();
@@ -30,8 +25,9 @@ export function AuthProvider({ children }) {
             const storageUser = await AsyncStorage.getItem('@contratei:user');
 
             if (storageUser) {
-                Api.defaults.headers['Authorization'] = `Bearer ${storageUser}`;
-                setUser(JSON.parse(storageUser));
+                const userJson: User = JSON.parse(storageUser);
+                setUser(userJson);
+                Api.defaults.headers['Authorization'] = `Bearer ${userJson.token}`;
             }
 
             setLoading(false);
@@ -40,28 +36,33 @@ export function AuthProvider({ children }) {
         loadStorageData();
     }, []);
 
-    async function signIn({ email, password }: SignInData) {
-        const user = await signInRequest({
-            email,
-            password
-        });
+    async function signIn(data: SignInData) {
+        const user = await signInRequest(data);
 
         setUser(user);
 
-        Api.defaults.headers['Authorization'] = `Bearer ${user.token}`;
-
         await AsyncStorage.setItem('@contratei:user', JSON.stringify(user));
+    }
+
+    async function signInGoogle() {
+        await signInGoogleRequest();
     }
 
     function logOut() {
         AsyncStorage.removeItem('@contratei:user').then(() => {
             setUser(null);
+            delete Api.defaults.headers['Authorization'];
         });
     }
 
     return (
-        <AuthContext.Provider value={{ isAuthenticated: !!user, isLoading, user, signIn, logOut }}>
+        <AuthContext.Provider value={{ isAuthenticated: !!user, isLoading, user, signIn, signInGoogle, logOut }}>
             {children}
         </AuthContext.Provider>
     );
+}
+
+export function useAuth() {
+    const context = useContext(AuthContext);
+    return context;
 }

@@ -1,7 +1,11 @@
 {
+  "name": "contratei",
+  "displayName": "contratei",
   "expo": {
     "name": "contratei",
     "slug": "contratei",
+    "scheme": "contratei",
+    "owner": "phelipenandi",
     "version": "1.0.0",
     "assetBundlePatterns": [
       "**/*"

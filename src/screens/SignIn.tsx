@@ -1,22 +1,34 @@
-import { useState, useContext } from 'react';
 import { VStack, Icon, Divider, useTheme } from 'native-base';
+import { useForm, Controller } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as yup from 'yup';
 import { Envelope, Key, GoogleLogo } from 'phosphor-react-native';
-import { AuthContext } from '../contexts/auth';
 
+import { useAuth } from '../contexts/auth';
+import { SignInData } from '../types/user';
 import { Header } from '../components/Header';
 import { Button } from '../components/Button';
 import { Input } from '../components/Input';
 
+const signInForm: yup.SchemaOf<SignInData> = yup.object({
+    email: yup.string().email("E-mail inválido").required("E-mail obrigatório"),
+    password: yup.string().min(6, "A senha deve conter pelo menos 6 dígitos").required("Senha obrigatória")
+})
+
 export function SignIn() {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-
     const { colors } = useTheme();
+    const { signIn, signInGoogle } = useAuth();
 
-    const { signIn } = useContext(AuthContext);
+    const { control, handleSubmit, formState: { errors } } = useForm<SignInData>({
+        resolver: yupResolver(signInForm)
+    });
 
-    async function handleSignIn(data) {
+    async function handleSignIn(data: SignInData) {
         await signIn(data);
+    }
+
+    async function handleSignInGoogle() {
+        await signInGoogle();
     }
 
     return (
@@ -25,22 +37,45 @@ export function SignIn() {
             <Header title="Entrar" />
 
             <VStack justifyContent="center" px={8} mt={32}>
-                <Input
-                    mb={3}
-                    placeholder='E-mail'
-                    InputLeftElement={<Icon as={<Envelope color={colors.gray[100]} />} ml={4} />}
-                    onChangeText={setEmail}
+
+                <Controller
+                    control={control}
+                    name="email"
+                    render={({ field: { value, onChange } }) => (
+                        <Input
+                            mb={2}
+                            errorMessage={errors.email?.message}
+                            placeholder="E-mail"
+                            autoCapitalize="none"
+                            InputLeftElement={<Icon as={<Envelope color={colors.gray[100]} />} ml={4} />}
+                            value={value}
+                            onChangeText={onChange}
+                        />
+                    )}
                 />
 
-                <Input
-                    mb={3}
-                    placeholder='Senha'
-                    InputLeftElement={<Icon as={<Key color={colors.gray[100]} />} ml={4} />}
-                    secureTextEntry
-                    onChangeText={setPassword}
+                <Controller
+                    control={control}
+                    name="password"
+                    render={({ field: { value, onChange } }) => (
+                        <Input
+                            mb={2}
+                            errorMessage={errors.password?.message}
+                            placeholder="Senha"
+                            InputLeftElement={<Icon as={<Key color={colors.gray[100]} />} ml={4} />}
+                            secureTextEntry
+                            value={value}
+                            onChangeText={onChange}
+                        />
+                    )}
                 />
 
-                <Button title="Entrar" w="full" onPress={() => handleSignIn({ email, password })} />
+                <Button
+                    mt={5}
+                    title="Entrar"
+                    w="full"
+                    onPress={handleSubmit(handleSignIn)}
+                />
 
                 <Divider my="5" thickness="2" bg="gray.500" />
 
@@ -48,6 +83,7 @@ export function SignIn() {
                     leftIcon={<Icon as={<GoogleLogo color={colors.gray[500]} />} />}
                     title="Entrar com Google"
                     w="full"
+                    onPress={handleSignInGoogle}
                 />
             </VStack>
         </VStack>

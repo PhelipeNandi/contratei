@@ -1,10 +1,10 @@
-import { useContext } from 'react';
 import { VStack, Text } from 'native-base';
+
 import { Button } from '../components/Button';
-import { AuthContext } from '../contexts/auth';
+import { useAuth } from '../contexts/auth';
 
 export function Dashboard() {
-    const { logOut } = useContext(AuthContext);
+    const { logOut, user } = useAuth();
 
     function handleLogOut() {
         logOut();
@@ -13,7 +13,7 @@ export function Dashboard() {
     return (
         <VStack flex={1} justifyContent="center" alignItems="center">
             <Text>
-                Sou eu
+                {user.token}
             </Text>
 
             <Button

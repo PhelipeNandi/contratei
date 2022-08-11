@@ -23,7 +23,8 @@ export const THEME = extendTheme({
             100: '#E1E1E6'
         },
         white: '#FFFFFF',
-        background: '#F6F6F6'
+        background: '#F6F6F6',
+        error: '#FF375B'
     },
     fonts: {
         heading: 'Poppins_700Bold',
