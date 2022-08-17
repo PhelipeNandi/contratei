@@ -4,7 +4,11 @@ export declare global {
             splashScreen: undefined,
             signIn: undefined,
             registerAccount: undefined,
-            dashboard: undefined
+            dashboard: undefined,
+            searchProvider: undefined,
+            myBudgets: undefined,
+            createBudget: undefined,
+            profile: undefined
         }
     }
 }

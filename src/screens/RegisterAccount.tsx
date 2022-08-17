@@ -58,121 +58,124 @@ export function RegisterAccount() {
     }
 
     return (
-        <VStack flex={1} bg="background">
+        <VStack flex={1} bg="primary.700">
 
             <Header title="Cadastrar-se" />
 
-            <ScrollView mt={10} px={8}>
+            <VStack flex={1} roundedTop={32} bg="background">
 
-                <Controller
-                    control={control}
-                    name="type"
-                    render={({ field: { value, onChange } }) => (
-                        <RadioButton
-                            mb={4}
-                            name="type"
-                            defaultValue="Consumidor"
-                            optionOne="Consumidor"
-                            optionTwo="Fornecedor"
-                            value={value}
-                            onChange={onChange}
-                            errorMessage={errors.type?.message}
-                        />
-                    )}
-                />
+                <ScrollView flex={1} mt={10} mx={8}>
 
-                <Controller
-                    control={control}
-                    name="firstName"
-                    render={({ field: { value, onChange } }) => (
-                        <Input
-                            mt={3}
-                            mb={2}
-                            errorMessage={errors.firstName?.message}
-                            placeholder="Nome"
-                            value={value}
-                            onChangeText={onChange}
-                        />
-                    )}
-                />
+                    <Controller
+                        control={control}
+                        name="type"
+                        render={({ field: { value, onChange } }) => (
+                            <RadioButton
+                                mb={4}
+                                name="type"
+                                defaultValue="Consumidor"
+                                optionOne="Consumidor"
+                                optionTwo="Fornecedor"
+                                value={value}
+                                onChange={onChange}
+                                errorMessage={errors.type?.message}
+                            />
+                        )}
+                    />
 
-                <Controller
-                    control={control}
-                    name="lastName"
-                    render={({ field: { value, onChange } }) => (
-                        <Input
-                            mb={2}
-                            errorMessage={errors.lastName?.message}
-                            placeholder="Sobrenome"
-                            value={value}
-                            onChangeText={onChange}
-                        />
-                    )}
-                />
+                    <Controller
+                        control={control}
+                        name="firstName"
+                        render={({ field: { value, onChange } }) => (
+                            <Input
+                                mt={3}
+                                mb={2}
+                                errorMessage={errors.firstName?.message}
+                                placeholder="Nome"
+                                value={value}
+                                onChangeText={onChange}
+                            />
+                        )}
+                    />
 
-                <Controller
-                    control={control}
-                    name="contactNumber"
-                    render={({ field: { value, onChange } }) => (
-                        <Input
-                            mb={2}
-                            errorMessage={errors.contactNumber?.message}
-                            placeholder="Telefone"
-                            value={value}
-                            onChangeText={onChange}
-                            keyboardType="numeric"
-                        />
-                    )}
-                />
+                    <Controller
+                        control={control}
+                        name="lastName"
+                        render={({ field: { value, onChange } }) => (
+                            <Input
+                                mb={2}
+                                errorMessage={errors.lastName?.message}
+                                placeholder="Sobrenome"
+                                value={value}
+                                onChangeText={onChange}
+                            />
+                        )}
+                    />
 
-                <Controller
-                    control={control}
-                    name="cpf"
-                    render={({ field: { value, onChange } }) => (
-                        <Input
-                            mb={2}
-                            errorMessage={errors.cpf?.message}
-                            placeholder="CPF"
-                            value={value}
-                            onChangeText={onChange}
-                            keyboardType="numeric"
-                        />
-                    )}
-                />
+                    <Controller
+                        control={control}
+                        name="contactNumber"
+                        render={({ field: { value, onChange } }) => (
+                            <Input
+                                mb={2}
+                                errorMessage={errors.contactNumber?.message}
+                                placeholder="Telefone"
+                                value={value}
+                                onChangeText={onChange}
+                                keyboardType="numeric"
+                            />
+                        )}
+                    />
 
-                <Controller
-                    control={control}
-                    name="email"
-                    render={({ field: { value, onChange } }) => (
-                        <Input
-                            mb={2}
-                            errorMessage={errors.email?.message}
-                            placeholder="E-mail"
-                            autoCapitalize="none"
-                            value={value}
-                            onChangeText={onChange}
-                        />
-                    )}
-                />
+                    <Controller
+                        control={control}
+                        name="cpf"
+                        render={({ field: { value, onChange } }) => (
+                            <Input
+                                mb={2}
+                                errorMessage={errors.cpf?.message}
+                                placeholder="CPF"
+                                value={value}
+                                onChangeText={onChange}
+                                keyboardType="numeric"
+                            />
+                        )}
+                    />
 
-                <Controller
-                    control={control}
-                    name="password"
-                    render={({ field: { value, onChange } }) => (
-                        <Input
-                            mb={2}
-                            errorMessage={errors.password?.message}
-                            placeholder="Senha"
-                            secureTextEntry
-                            value={value}
-                            onChangeText={onChange}
-                        />
-                    )}
-                />
+                    <Controller
+                        control={control}
+                        name="email"
+                        render={({ field: { value, onChange } }) => (
+                            <Input
+                                mb={2}
+                                errorMessage={errors.email?.message}
+                                placeholder="E-mail"
+                                autoCapitalize="none"
+                                value={value}
+                                onChangeText={onChange}
+                            />
+                        )}
+                    />
 
-                <Button mt={5} title="Cadastrar" w="full" onPress={handleSubmit(handleRegisterAccount)} />
+                    <Controller
+                        control={control}
+                        name="password"
+                        render={({ field: { value, onChange } }) => (
+                            <Input
+                                mb={2}
+                                errorMessage={errors.password?.message}
+                                placeholder="Senha"
+                                secureTextEntry
+                                value={value}
+                                onChangeText={onChange}
+                            />
+                        )}
+                    />
 
-            </ScrollView>
+                    <Button mt={5} title="Cadastrar" w="full" onPress={handleSubmit(handleRegisterAccount)} />
+
+                </ScrollView>
+            </VStack>
 
         </VStack>
     );

@@ -1,8 +1,10 @@
-import { VStack, Icon, Divider, useTheme } from 'native-base';
+import { VStack, Icon, Divider, useTheme, HStack } from 'native-base';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup';
 import { Envelope, Key, GoogleLogo } from 'phosphor-react-native';
+
+import Login from '../assets/login.svg';
 
 import { useAuth } from '../contexts/auth';
 import { SignInData } from '../types/user';
@@ -32,11 +34,15 @@ export function SignIn() {
     }
 
     return (
-        <VStack flex={1} bg="background">
+        <VStack flex={1} bg="primary.700">
 
             <Header title="Entrar" />
 
-            <VStack justifyContent="center" px={8} mt={32}>
+            <VStack flex={1} px={8} roundedTop={32} bg="background">
+
+                <VStack alignItems="center" justifyContent="center">
+                    <Login />
+                </VStack>
 
                 <Controller
                     control={control}
@@ -47,7 +53,7 @@ export function SignIn() {
                             errorMessage={errors.email?.message}
                             placeholder="E-mail"
                             autoCapitalize="none"
-                            InputLeftElement={<Icon as={<Envelope color={colors.gray[100]} />} ml={4} />}
+                            InputLeftElement={<Icon as={<Envelope color={colors.secondary[700]} />} ml={4} />}
                             value={value}
                             onChangeText={onChange}
                         />
@@ -62,7 +68,7 @@ export function SignIn() {
                             mb={2}
                             errorMessage={errors.password?.message}
                             placeholder="Senha"
-                            InputLeftElement={<Icon as={<Key color={colors.gray[100]} />} ml={4} />}
+                            InputLeftElement={<Icon as={<Key color={colors.secondary[700]} />} ml={4} />}
                             secureTextEntry
                             value={value}
                             onChangeText={onChange}
@@ -77,15 +83,15 @@ export function SignIn() {
                     onPress={handleSubmit(handleSignIn)}
                 />
 
-                <Divider my="5" thickness="2" bg="gray.500" />
+                <Divider my="5" thickness="2" bg="secondary.700" />
 
                 <Button
-                    leftIcon={<Icon as={<GoogleLogo color={colors.gray[500]} />} />}
+                    leftIcon={<Icon as={<GoogleLogo color={colors.white} />} />}
                     title="Entrar com Google"
                     w="full"
                     onPress={handleSignInGoogle}
                 />
             </VStack>
-        </VStack>
+        </VStack >
     );
 }

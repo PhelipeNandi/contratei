@@ -13,7 +13,7 @@ export function SplashScreen() {
 
             <Logo />
 
-            <Heading color={'primary.700'} fontSize="title" mt={2} mb={10}>
+            <Heading color="primary.700" fontSize="title" mt={2} mb={10}>
                 Contratei
             </Heading>
 

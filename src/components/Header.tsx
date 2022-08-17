@@ -28,13 +28,13 @@ export function Header({ title, ...rest }: Props) {
 
             <HStack position="absolute" left={0} pt={8} px={8}>
                 <IconButton
-                    icon={<ArrowLeft color={colors.gray[500]} size={24} />}
+                    icon={<ArrowLeft color="white" size={24} />}
                     onPress={handleGoBack}
                 />
             </HStack>
 
             <HStack>
-                <Heading color="gray.500" textAlign="center" fontSize="lg">
+                <Heading color="white" textAlign="center" fontSize="lg">
                     {title}
                 </Heading>
             </HStack>

@@ -8,25 +8,27 @@ export function Input({ errorMessage, ...rest }: Props) {
     return (
         <VStack>
             <NativeBaseInput
-                bg="gray.500"
+                bg="white"
                 h={14}
                 size="md"
                 borderWidth={0}
                 fontSize="md"
                 fontFamily="body"
-                color="white"
-                placeholderTextColor="white"
+                color="secondary.700"
+                placeholderTextColor="secondary.700"
+                shadow={1}
+                rounded="lg"
                 _focus={{
                     borderWidth: 1,
                     borderColor: errorMessage != null ? "error" : "primary.700",
-                    bg: "gray.400"
+                    bg: "white"
                 }}
                 {...rest}
             />
 
             {
                 !!errorMessage &&
-                <Text textAlign="right" fontSize="sm" color="error" mb={2}>
+                <Text textAlign="right" fontSize="sm" color="red.600" mb={2}>
                     {errorMessage}
                 </Text>
             }
