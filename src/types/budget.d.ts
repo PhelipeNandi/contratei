@@ -1,8 +1,18 @@
 export interface Budget {
-    id: string;
+    id?: string;
     title: string;
-    type: string;
-    value: string;
-    inicialDate: string;
     status: 'open' | 'closed';
+    value?: string;
+    priorityLevel: string;
+    type: string;
+    description: string;
+    openingDate: string;
+    completionDate?: string;
+}
+
+export interface CreateNewBudget {
+    title: string;
+    priorityLevel: string;
+    type: string;
+    description: string;
 }

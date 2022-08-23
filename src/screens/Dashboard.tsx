@@ -1,4 +1,4 @@
-import { VStack, Text, HStack, Avatar, FlatList, Center, useTheme, Button } from 'native-base';
+import { VStack, Text, HStack, Avatar, FlatList, Center, useTheme } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { Briefcase, Clipboard, MagnifyingGlass } from 'phosphor-react-native';
 
@@ -18,42 +18,52 @@ export function Dashboard() {
         {
             id: '5',
             title: 'Ajuste no cano da pia',
+            description: '',
             type: 'Encanador',
             value: 'R$ 30,50',
-            inicialDate: '15 AGO',
-            status: 'open'
+            openingDate: '15 AGO',
+            status: 'open',
+            priorityLevel: 'TODAY'
         },
         {
             id: '4',
             title: 'Faxina da casa',
+            description: '',
             type: 'Limpeza',
             value: 'R$ 130,00',
-            inicialDate: '12 AGO',
-            status: 'closed'
+            openingDate: '12 AGO',
+            status: 'closed',
+            priorityLevel: 'TODAY'
         },
         {
             id: '3',
             title: 'Troca de chuveiro',
+            description: '',
             type: 'Eletricista',
             value: 'R$ 48,30',
-            inicialDate: '10 AGO',
-            status: 'closed'
+            openingDate: '10 AGO',
+            status: 'closed',
+            priorityLevel: 'TODAY'
         },
         {
             id: '2',
             title: 'Limpeza no jardim',
+            description: '',
             type: 'Jardineiro',
             value: 'R$ 70,00',
-            inicialDate: '08 AGO',
-            status: 'closed'
+            openingDate: '08 AGO',
+            status: 'closed',
+            priorityLevel: 'TODAY'
         },
         {
             id: '1',
             title: 'Troca de cor do galpão',
+            description: '',
             type: 'Pintor',
             value: 'R$ 220,35',
-            inicialDate: '02 AGO',
-            status: 'open'
+            openingDate: '02 AGO',
+            status: 'open',
+            priorityLevel: 'TODAY'
         }
     ]
 

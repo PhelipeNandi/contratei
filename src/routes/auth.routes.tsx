@@ -8,7 +8,7 @@ import { MyBudgets } from '../screens/MyBudgets';
 import { CreateBudget } from '../screens/CreateBudget';
 import { Profile } from '../screens/Profile';
 
-import { ButtomCreateBudget } from '../components/ButtomCreateBudget';
+import { ButtonCreateBudget } from '../components/ButtonCreateBudget';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -28,12 +28,13 @@ export function AuthRoutes() {
     return (
         <Tab.Navigator
             screenOptions={{
+                tabBarHideOnKeyboard: true,
                 headerShown: false,
                 tabBarShowLabel: false,
                 tabBarStyle: {
                     backgroundColor: '#ffffff'
                 },
-                tabBarActiveTintColor: '#000000',
+                tabBarActiveTintColor: '#3A539B',
                 tabBarInactiveTintColor: '#000000'
             }}
         >
@@ -61,8 +62,8 @@ export function AuthRoutes() {
                 name="Buscar Fornecedor"
                 component={SearchProvider}
                 options={{
-                    tabBarIcon: ({ size, color, focused }) => (
-                        <ButtomCreateBudget size={size} color={color} isFocused={focused} />
+                    tabBarIcon: ({ size, focused }) => (
+                        <ButtonCreateBudget size={size} isFocused={focused} />
                     )
                 }}
             />
@@ -71,8 +72,8 @@ export function AuthRoutes() {
                 name="Criar Orçamento"
                 component={CreateBudget}
                 options={{
-                    tabBarIcon: ({ size, focused }) => (
-                        <Clipboard size={size} weight={focused ? "fill" : "regular"} />
+                    tabBarIcon: ({ size, color, focused }) => (
+                        <Clipboard size={size} color={color} weight={focused ? "fill" : "regular"} />
                     )
                 }}
             />
