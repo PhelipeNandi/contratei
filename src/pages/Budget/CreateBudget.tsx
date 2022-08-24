@@ -4,14 +4,13 @@ import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup';
 
-import { Header } from '../components/Header';
-import { SelectServiceType } from '../components/SelectServiceType';
-import { Input } from '../components/Input';
-import { TextArea } from '../components/TextArea';
-import { RadioButtonPriorityLevel } from '../components/RadioButtonPriorityLevel';
-import { Button } from '../components/Button';
+import { Header } from '../../components/ui/Header';
+import { Input } from '../../components/form/Input';
+import { TextArea } from '../../components/form/TextArea';
+import { Button } from '../../components/ui/Button';
+import { RadioButtonPriorityLevel, SelectServiceType } from '../../features/createBudget';
 
-import { CreateNewBudget } from '../types/budget';
+import { CreateNewBudget } from '../../types/budget';
 
 const createNewBudgetForm: yup.SchemaOf<CreateNewBudget> = yup.object({
     title: yup.string().required("Título obrigatório"),

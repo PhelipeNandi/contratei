@@ -2,13 +2,13 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { House, Briefcase, Clipboard, User } from 'phosphor-react-native';
 
-import { Dashboard } from '../screens/Dashboard';
-import { SearchProvider } from '../screens/SearchProvider';
-import { MyBudgets } from '../screens/MyBudgets';
-import { CreateBudget } from '../screens/CreateBudget';
-import { Profile } from '../screens/Profile';
+import { Dashboard } from '../pages/Dashboard/Dashboard';
+import { SearchProvider } from '../pages/Provider/SearchProvider';
+import { MyBudgets } from '../pages/Budget/MyBudgets';
+import { CreateBudget } from '../pages/Budget/CreateBudget';
+import { Profile } from '../pages/Profile/Profile';
 
-import { ButtonCreateBudget } from '../components/ButtonCreateBudget';
+import { ButtonCreateBudget } from '../features/createBudget';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();

@@ -1,13 +1,13 @@
 import { VStack, HStack, Pressable, IPressableProps, Circle, useTheme, Text } from 'native-base';
 import { Briefcase } from 'phosphor-react-native';
 
-import { Budget } from '../types/budget';
+import { Budget } from '../../../types/budget';
 
-type BudgetProps = IPressableProps & {
+type Props = IPressableProps & {
     data?: Budget
 }
 
-export function BudgetCardDetails({ data, ...rest }: BudgetProps) {
+export function BudgetCardDetails({ data, ...rest }: Props) {
     const { colors } = useTheme();
 
     return (
@@ -33,7 +33,7 @@ export function BudgetCardDetails({ data, ...rest }: BudgetProps) {
 
                 <VStack justifyContent="space-between">
                     <Text textAlign="right" fontFamily="mono" fontSize="md" color="gray.300">
-                        {data.inicialDate}
+                        {data.openingDate}
                     </Text>
 
                     <Text textAlign="right" fontFamily="mono" fontSize="sm" color="gray.300">

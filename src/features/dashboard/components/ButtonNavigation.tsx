@@ -1,12 +1,12 @@
 import { Flex, HStack, Text, Pressable, IPressableProps, useTheme, Divider } from 'native-base';
 import { IconProps } from 'phosphor-react-native';
 
-type MenuCardProps = IPressableProps & {
+type Props = IPressableProps & {
     title: string;
     icon: React.ElementType<IconProps>;
 }
 
-export function ButtonNavigation({ title, icon: Icon, ...rest }: MenuCardProps) {
+export function ButtonNavigation({ title, icon: Icon, ...rest }: Props) {
     const { colors } = useTheme();
 
     return (

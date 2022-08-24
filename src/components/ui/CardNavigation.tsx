@@ -1,14 +1,14 @@
 import { Flex, HStack, Text, Pressable, IPressableProps } from 'native-base';
 import { IconProps } from 'phosphor-react-native';
 
-type MenuCardProps = IPressableProps & {
+type Props = IPressableProps & {
     title: string;
     colorCard: string;
     colorFont: string;
     icon: React.ElementType<IconProps>;
 }
 
-export function MenuCard({ title, colorCard, colorFont, icon: Icon, ...rest }: MenuCardProps) {
+export function CardNavigation({ title, colorCard, colorFont, icon: Icon, ...rest }: Props) {
     return (
         <Pressable {...rest}>
             <Flex

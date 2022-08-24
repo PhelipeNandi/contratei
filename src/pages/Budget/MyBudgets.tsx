@@ -1,24 +1,18 @@
 import { VStack } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
-import { useAuth } from '../contexts/auth';
 
-import { Button } from '../components/Button';
+import { Button } from '../../components/ui/Button';
 
-export function Profile() {
-    const { logOut } = useAuth();
+export function MyBudgets() {
     const navigation = useNavigation();
-
-    function handleLogOut() {
-        logOut();
-    }
 
     return (
         <VStack flex={1} justifyContent="center" >
             <Button
                 mx={8}
                 mb={2}
-                title="Logout"
-                onPress={logOut}
+                title="Voltar"
+                onPress={() => navigation.goBack()}
             />
         </VStack >
     );

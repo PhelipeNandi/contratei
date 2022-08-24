@@ -1,9 +1,9 @@
 import { VStack } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 
-import { Button } from '../components/Button';
+import { Button } from '../../components/ui/Button';
 
-export function MyBudgets() {
+export function SearchProvider() {
     const navigation = useNavigation();
 
     return (

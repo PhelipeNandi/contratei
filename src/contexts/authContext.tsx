@@ -1,8 +1,8 @@
 import { createContext, useState, useEffect, useContext } from "react";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { Api } from "../services/Api";
-import { signInRequest, signInGoogleRequest } from "../services/User";
+import { Api } from "../lib/Api";
+import { signInRequest, signInGoogleRequest } from "../features/authentication";
 import { User, SignInData } from "../types/user";
 
 interface AuthContextType {
@@ -14,7 +14,7 @@ interface AuthContextType {
     logOut(): void;
 }
 
-const AuthContext = createContext({} as AuthContextType);
+export const AuthContext = createContext({} as AuthContextType);
 
 export function AuthProvider({ children }) {
     const [user, setUser] = useState<User | null>();
@@ -60,9 +60,4 @@ export function AuthProvider({ children }) {
             {children}
         </AuthContext.Provider>
     );
-}
-
-export function useAuth() {
-    const context = useContext(AuthContext);
-    return context;
 }

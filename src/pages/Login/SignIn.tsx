@@ -4,13 +4,13 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup';
 import { Envelope, Key, GoogleLogo } from 'phosphor-react-native';
 
-import Login from '../assets/login.svg';
+import Login from '../../assets/svg/login.svg';
 
-import { useAuth } from '../contexts/auth';
-import { SignInData } from '../types/user';
-import { Header } from '../components/Header';
-import { Button } from '../components/Button';
-import { Input } from '../components/Input';
+import { useAuthContext } from '../../hooks/useAuthContext';
+import { SignInData } from '../../types/user';
+import { Header } from '../../components/ui/Header';
+import { Button } from '../../components/ui/Button';
+import { Input } from '../../components/form/Input';
 
 const signInForm: yup.SchemaOf<SignInData> = yup.object({
     email: yup.string().email("E-mail inválido").required("E-mail obrigatório"),
@@ -19,7 +19,7 @@ const signInForm: yup.SchemaOf<SignInData> = yup.object({
 
 export function SignIn() {
     const { colors } = useTheme();
-    const { signIn, signInGoogle } = useAuth();
+    const { signIn, signInGoogle } = useAuthContext();
 
     const { control, handleSubmit, formState: { errors } } = useForm<SignInData>({
         resolver: yupResolver(signInForm)

@@ -5,14 +5,14 @@ import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup';
 
-import { registerAccountRequest } from '../services/User';
-import { Header } from '../components/Header';
-import { Input } from '../components/Input';
-import { RadioButton } from '../components/RadioButton';
-import { Button } from '../components/Button';
-import { normalizeCPF, normalizeContactNumberValue } from '../utils/masks';
+import { registerAccountRequest } from '../../features/registerAccount';
+import { Header } from '../../components/ui/Header';
+import { Input } from '../../components/form/Input';
+import { RadioButton } from '../../components/form/RadioButton';
+import { Button } from '../../components/ui/Button';
+import { normalizeCPF, normalizeContactNumberValue } from '../../utils/masks';
 
-import { RegisterNewUser } from '../types/user';
+import { RegisterNewUser } from '../../types/user';
 
 const registerNewUserForm: yup.SchemaOf<RegisterNewUser> = yup.object({
     type: yup.mixed().oneOf(['Consumidor', 'Fornecedor']).required("Tipo obrigatório"),

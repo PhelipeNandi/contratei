@@ -1,13 +1,13 @@
 import { NavigationContainer } from '@react-navigation/native';
 
-import { useAuth } from '../contexts/auth';
-import { Loading } from "../components/Loading";
+import { useAuthContext } from '../hooks/useAuthContext';
+import { Loading } from "../components/ui/Loading";
 
 import { AppRoutes } from './app.routes';
 import { AuthRoutes } from './auth.routes';
 
 export function Routes() {
-    const { isAuthenticated, isLoading } = useAuth();
+    const { isAuthenticated, isLoading } = useAuthContext();
 
     if (isLoading) {
         return <Loading />

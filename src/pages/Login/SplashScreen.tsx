@@ -1,9 +1,9 @@
 import { VStack, Heading } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 
-import Logo from '../assets/logo_contratei.svg';
+import Logo from '../../assets/svg/logo_contratei.svg';
 
-import { Button } from '../components/Button';
+import { Button } from '../../components/ui/Button';
 
 export function SplashScreen() {
     const navigation = useNavigation();

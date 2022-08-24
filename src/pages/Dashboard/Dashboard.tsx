@@ -2,16 +2,15 @@ import { VStack, Text, HStack, Avatar, FlatList, Center, useTheme } from 'native
 import { useNavigation } from '@react-navigation/native';
 import { Briefcase, Clipboard, MagnifyingGlass } from 'phosphor-react-native';
 
-import { ButtonNavigation } from '../components/ButtonNavigation';
-import { MenuCard } from '../components/MenuCard';
-import { useAuth } from '../contexts/auth';
-import { BudgetCardDetails } from '../components/BudgetCardDetails';
+import { ButtonNavigation, BudgetCardDetails } from '../../features/dashboard';
+import { CardNavigation } from '../../components/ui/CardNavigation';
+import { useAuthContext } from '../../hooks/useAuthContext';
 
-import { Budget } from '../types/budget';
+import { Budget } from '../../types/budget';
 
 export function Dashboard() {
     const navigation = useNavigation();
-    const { logOut, user } = useAuth();
+    const { logOut, user } = useAuthContext();
     const { colors } = useTheme();
 
     const budgets: Budget[] = [
@@ -96,7 +95,7 @@ export function Dashboard() {
             <VStack flex={1} roundedTop={32} px={8} bg="background">
 
                 <HStack mt={3} justifyContent="space-between">
-                    <MenuCard
+                    <CardNavigation
                         title={`Meus\nOrçamentos`}
                         colorCard="red.500"
                         colorFont="white"
@@ -104,7 +103,7 @@ export function Dashboard() {
                         onPress={() => navigation.navigate('myBudgets')}
                     />
 
-                    <MenuCard
+                    <CardNavigation
                         title={`Criar\nOrçamento`}
                         colorCard="primary.700"
                         colorFont="white"
