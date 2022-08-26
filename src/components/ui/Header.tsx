@@ -1,14 +1,16 @@
-import { HStack, IconButton, Heading, StyledProps, useTheme } from 'native-base';
+import { HStack, IconButton, Heading, StyledProps } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
-import { ArrowLeft } from 'phosphor-react-native';
+import { ArrowLeft, DotsThreeVertical, Bell } from 'phosphor-react-native';
+
+import { useAuthContext } from '../../hooks/useAuthContext';
 
 type Props = StyledProps & {
     title: string;
 }
 
 export function Header({ title, ...rest }: Props) {
-    const { colors } = useTheme();
     const navigation = useNavigation();
+    const { isAuthenticated } = useAuthContext();
 
     function handleGoBack() {
         navigation.goBack();
@@ -16,28 +18,46 @@ export function Header({ title, ...rest }: Props) {
 
     return (
         <HStack
-            w="full"
-            flexDirection="row"
-            justifyContent="center"
+            justifyContent="space-between"
             alignItems="center"
             bg="primary.700"
-            pb={12}
-            pt={20}
+            pt={12}
+            pb={6}
             {...rest}
         >
-
-            <HStack position="absolute" left={0} pt={8} px={8}>
+            <HStack
+                pl={3}
+                alignItems="center"
+            >
                 <IconButton
                     icon={<ArrowLeft color="white" size={24} />}
                     onPress={handleGoBack}
                 />
-            </HStack>
 
-            <HStack>
-                <Heading color="white" textAlign="center" fontSize="lg">
+                <Heading
+                    pl={5}
+                    color="white"
+                    textAlign="center"
+                    fontSize="lg"
+                >
                     {title}
                 </Heading>
             </HStack>
+
+            {
+                isAuthenticated &&
+                <HStack
+                    pl={3}
+                    alignItems="center"
+                >
+                    <IconButton
+                        icon={<Bell color="white" size={24} />}
+                    />
+                    <IconButton
+                        icon={<DotsThreeVertical color="white" size={24} />}
+                    />
+                </HStack>
+            }
 
         </HStack>
     );

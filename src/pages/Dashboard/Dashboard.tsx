@@ -10,7 +10,7 @@ import { Budget } from '../../types/budget';
 
 export function Dashboard() {
     const navigation = useNavigation();
-    const { logOut, user } = useAuthContext();
+    const { user } = useAuthContext();
     const { colors } = useTheme();
 
     const budgets: Budget[] = [
@@ -18,7 +18,7 @@ export function Dashboard() {
             id: '5',
             title: 'Ajuste no cano da pia',
             description: '',
-            type: 'Encanador',
+            serviceType: 'Encanador',
             value: 'R$ 30,50',
             openingDate: '15 AGO',
             status: 'open',
@@ -28,7 +28,7 @@ export function Dashboard() {
             id: '4',
             title: 'Faxina da casa',
             description: '',
-            type: 'Limpeza',
+            serviceType: 'Limpeza',
             value: 'R$ 130,00',
             openingDate: '12 AGO',
             status: 'closed',
@@ -38,7 +38,7 @@ export function Dashboard() {
             id: '3',
             title: 'Troca de chuveiro',
             description: '',
-            type: 'Eletricista',
+            serviceType: 'Eletricista',
             value: 'R$ 48,30',
             openingDate: '10 AGO',
             status: 'closed',
@@ -48,7 +48,7 @@ export function Dashboard() {
             id: '2',
             title: 'Limpeza no jardim',
             description: '',
-            type: 'Jardineiro',
+            serviceType: 'Jardineiro',
             value: 'R$ 70,00',
             openingDate: '08 AGO',
             status: 'closed',
@@ -58,17 +58,13 @@ export function Dashboard() {
             id: '1',
             title: 'Troca de cor do galpão',
             description: '',
-            type: 'Pintor',
+            serviceType: 'Pintor',
             value: 'R$ 220,35',
             openingDate: '02 AGO',
             status: 'open',
             priorityLevel: 'TODAY'
         }
     ]
-
-    function handleLogOut() {
-        logOut();
-    }
 
     return (
         <VStack flex={1} bg="primary.700">

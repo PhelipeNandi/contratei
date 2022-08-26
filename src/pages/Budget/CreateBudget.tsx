@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+import { Alert } from 'react-native';
 import { VStack, ScrollView, Text } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { useForm, Controller } from 'react-hook-form';
@@ -8,14 +10,14 @@ import { Header } from '../../components/ui/Header';
 import { Input } from '../../components/form/Input';
 import { TextArea } from '../../components/form/TextArea';
 import { Button } from '../../components/ui/Button';
-import { RadioButtonPriorityLevel, SelectServiceType } from '../../features/createBudget';
+import { RadioButtonPriorityLevel, SelectServiceType, createNewBudgetRequest } from '../../features/createBudget';
 
 import { CreateNewBudget } from '../../types/budget';
 
 const createNewBudgetForm: yup.SchemaOf<CreateNewBudget> = yup.object({
     title: yup.string().required("Título obrigatório"),
     priorityLevel: yup.string().required("Nível de Prioridade obrigatório"),
-    type: yup.string().required("Tipo de Serviço obrigatório"),
+    serviceType: yup.string().required("Tipo de Serviço obrigatório"),
     description: yup.string().required("Tipo de Serviço obrigatório")
 })
 
@@ -25,14 +27,29 @@ export function CreateBudget() {
     const {
         control,
         handleSubmit,
-        formState: { errors }
+        reset,
+        formState: { errors, isSubmitSuccessful }
     } = useForm<CreateNewBudget>({
         resolver: yupResolver(createNewBudgetForm)
     });
 
-    function handleCreateNewBudget(data: CreateNewBudget) {
-        console.log(data);
-        navigation.navigate('myBudgets');
+    useEffect(() => {
+        reset({
+            title: "",
+            description: "",
+            priorityLevel: "",
+            serviceType: ""
+        });
+    }, [isSubmitSuccessful])
+
+    async function handleCreateNewBudget(data: CreateNewBudget) {
+        createNewBudgetRequest(data)
+            .then(result => {
+                Alert.alert("Sucesso", result)
+            })
+            .catch(error => {
+                Alert.alert("Error", error)
+            });
     }
 
     return (
@@ -45,13 +62,13 @@ export function CreateBudget() {
 
                     <Controller
                         control={control}
-                        name="type"
+                        name="serviceType"
                         render={({ field: { value, onChange } }) => (
                             <SelectServiceType
                                 mt={5}
                                 selectedValue={value}
                                 onValueChange={onChange}
-                                errorMessage={errors.type?.message}
+                                errorMessage={errors.serviceType?.message}
                             />
                         )}
                     />

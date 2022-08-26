@@ -32,7 +32,8 @@ export function RegisterAccount() {
         handleSubmit,
         watch,
         setValue,
-        formState: { errors }
+        reset,
+        formState: { errors, isSubmitSuccessful }
     } = useForm<RegisterNewUser>({
         resolver: yupResolver(registerNewUserForm)
     });
@@ -47,6 +48,18 @@ export function RegisterAccount() {
     useEffect(() => {
         setValue('cpf', normalizeCPF(cpfValue))
     }, [cpfValue]);
+
+    useEffect(() => {
+        reset({
+            type: "Consumidor",
+            firstName: "",
+            lastName: "",
+            contactNumber: "",
+            cpf: "",
+            email: "",
+            password: ""
+        })
+    }, [isSubmitSuccessful]);
 
     async function handleRegisterAccount(data: RegisterNewUser) {
         const response = await registerAccountRequest(data);
@@ -74,7 +87,6 @@ export function RegisterAccount() {
                             <RadioButton
                                 mb={4}
                                 name="type"
-                                defaultValue="Consumidor"
                                 optionOne="Consumidor"
                                 optionTwo="Fornecedor"
                                 value={value}

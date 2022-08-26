@@ -4,7 +4,7 @@ export interface Budget {
     status: 'open' | 'closed';
     value?: string;
     priorityLevel: string;
-    type: string;
+    serviceType: string;
     description: string;
     openingDate: string;
     completionDate?: string;
@@ -13,6 +13,6 @@ export interface Budget {
 export interface CreateNewBudget {
     title: string;
     priorityLevel: string;
-    type: string;
+    serviceType: string;
     description: string;
 }
