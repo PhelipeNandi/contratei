@@ -7,6 +7,10 @@ import { SearchProvider } from '../pages/Provider/SearchProvider';
 import { MyBudgets } from '../pages/Budget/MyBudgets';
 import { CreateBudget } from '../pages/Budget/CreateBudget';
 import { Profile } from '../pages/Profile/Profile';
+import { PersonalInformation } from '../pages/Profile/PersonalInformation';
+import { Payments } from '../pages/Profile/Payments';
+import { Notifications } from '../pages/Profile/Notifications';
+import { Settings } from '../pages/Profile/Settings';
 
 import { ButtonCreateBudget } from '../features/createBudget';
 
@@ -24,6 +28,18 @@ const DashboardStack = () => {
     )
 }
 
+const ProfileStack = () => {
+    return (
+        <Stack.Navigator initialRouteName='profile' screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="profile" component={Profile} />
+            <Stack.Screen name="personalInformation" component={PersonalInformation} />
+            <Stack.Screen name="payments" component={Payments} />
+            <Stack.Screen name="notifications" component={Notifications} />
+            <Stack.Screen name="settings" component={Settings} />
+        </Stack.Navigator>
+    )
+}
+
 export function AuthRoutes() {
     return (
         <Tab.Navigator
@@ -35,7 +51,7 @@ export function AuthRoutes() {
                     backgroundColor: '#ffffff'
                 },
                 tabBarActiveTintColor: '#3A539B',
-                tabBarInactiveTintColor: '#000000'
+                tabBarInactiveTintColor: '#3A539B'
             }}
         >
             <Tab.Screen
@@ -80,7 +96,7 @@ export function AuthRoutes() {
 
             <Tab.Screen
                 name="Perfil"
-                component={Profile}
+                component={ProfileStack}
                 options={{
                     tabBarIcon: ({ size, color, focused }) => (
                         <User size={size} color={color} weight={focused ? "fill" : "regular"} />

@@ -1,7 +1,7 @@
 import { VStack, HStack, Pressable, IPressableProps, Circle, useTheme, Text } from 'native-base';
 import { Briefcase } from 'phosphor-react-native';
 
-import { Budget } from '../../../types/budget';
+import { Budget } from '../../types/budget';
 
 type Props = IPressableProps & {
     data?: Budget
@@ -23,7 +23,7 @@ export function BudgetCardDetails({ data, ...rest }: Props) {
                             {data.title}
                         </Text>
                         <Text fontFamily="mono" fontSize="sm" color="gray.300">
-                            {data.type}
+                            {data.serviceType}
                         </Text>
                         <Text fontFamily="mono" fontSize="sm" color="gray.300">
                             {data.value}

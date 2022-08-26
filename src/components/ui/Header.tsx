@@ -53,6 +53,7 @@ export function Header({ title, ...rest }: Props) {
                     <IconButton
                         icon={<Bell color="white" size={24} />}
                     />
+
                     <IconButton
                         icon={<DotsThreeVertical color="white" size={24} />}
                     />

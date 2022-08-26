@@ -8,7 +8,11 @@ export declare global {
             searchProvider: undefined,
             myBudgets: undefined,
             createBudget: undefined,
-            profile: undefined
+            profile: undefined,
+            personalInformation: undefined,
+            payments: undefined,
+            notifications: undefined,
+            settings: undefined
         }
     }
 }

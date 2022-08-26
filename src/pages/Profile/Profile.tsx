@@ -4,7 +4,6 @@ import { useAuthContext } from '../../hooks/useAuthContext';
 import { Bell, Gear, User, SignOut, Cardholder } from 'phosphor-react-native';
 
 import { MenuNavigation } from '../../components/ui/MenuNavigation';
-import { Button } from '../../components/ui/Button';
 
 export function Profile() {
     const { user, logOut } = useAuthContext();
@@ -38,24 +37,28 @@ export function Profile() {
                         mt={12}
                         title="Informações Pessoais"
                         icon={User}
+                        onPress={() => navigation.navigate('personalInformation')}
                     />
 
                     <MenuNavigation
                         mt={8}
                         title="Pagamentos"
                         icon={Cardholder}
+                        onPress={() => navigation.navigate('payments')}
                     />
 
                     <MenuNavigation
                         mt={8}
                         title="Notificações"
                         icon={Bell}
+                        onPress={() => navigation.navigate('notifications')}
                     />
 
                     <MenuNavigation
                         mt={8}
                         title="Configurações"
                         icon={Gear}
+                        onPress={() => navigation.navigate('settings')}
                     />
 
                     <MenuNavigation

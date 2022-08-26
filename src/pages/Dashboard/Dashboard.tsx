@@ -2,7 +2,8 @@ import { VStack, Text, HStack, Avatar, FlatList, Center, useTheme } from 'native
 import { useNavigation } from '@react-navigation/native';
 import { Briefcase, Clipboard, MagnifyingGlass } from 'phosphor-react-native';
 
-import { ButtonNavigation, BudgetCardDetails } from '../../features/dashboard';
+import { ButtonNavigation } from '../../features/dashboard';
+import { BudgetCardDetails } from '../../components/ui/BudgetCardDetails';
 import { CardNavigation } from '../../components/ui/CardNavigation';
 import { useAuthContext } from '../../hooks/useAuthContext';
 
