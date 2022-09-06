@@ -6,6 +6,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup';
 
+import { useAuthContext } from '../../hooks/useAuthContext';
 import { Header } from '../../components/ui/Header';
 import { Input } from '../../components/form/Input';
 import { TextArea } from '../../components/form/TextArea';
@@ -23,6 +24,7 @@ const createNewBudgetForm: yup.SchemaOf<CreateNewBudget> = yup.object({
 
 export function CreateBudget() {
     const navigation = useNavigation();
+    const { user } = useAuthContext();
 
     const {
         control,
@@ -43,7 +45,7 @@ export function CreateBudget() {
     }, [isSubmitSuccessful])
 
     async function handleCreateNewBudget(data: CreateNewBudget) {
-        createNewBudgetRequest(data)
+        createNewBudgetRequest(data, user)
             .then(result => {
                 Alert.alert("Sucesso", result)
             })

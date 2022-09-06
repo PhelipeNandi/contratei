@@ -14,6 +14,7 @@ export async function signInRequest(data: SignInData) {
     });
 
     return {
+        id: reponseFindUser.data.id,
         type: reponseFindUser.data.isProvider ? "Fornecedor" : "Consumidor",
         firstName: reponseFindUser.data.firstName,
         lastName: reponseFindUser.data.lastName,

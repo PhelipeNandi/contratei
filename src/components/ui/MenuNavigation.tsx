@@ -23,7 +23,7 @@ export function MenuNavigation({ title, icon: Icon, ...rest }: Props) {
 
             <Divider
                 mt={2}
-                thickness={2}
+                thickness={1}
                 bg="primary.700"
             />
         </Pressable>

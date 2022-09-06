@@ -1,7 +1,7 @@
 export interface Budget {
     id?: string;
     title: string;
-    status: 'open' | 'closed';
+    status: 'open' | 'finish' | 'inProgress' | 'canceled';
     value?: string;
     priorityLevel: string;
     serviceType: string;

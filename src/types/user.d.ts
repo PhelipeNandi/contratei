@@ -21,6 +21,7 @@ export interface AuthResponse {
 }
 
 export interface User {
+    id: number;
     type: 'Consumidor' | 'Fornecedor';
     firstName: string;
     lastName: string;

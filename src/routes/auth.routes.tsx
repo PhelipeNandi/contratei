@@ -5,6 +5,7 @@ import { House, Briefcase, Clipboard, User } from 'phosphor-react-native';
 import { Dashboard } from '../pages/Dashboard/Dashboard';
 import { SearchProvider } from '../pages/Provider/SearchProvider';
 import { MyBudgets } from '../pages/Budget/MyBudgets';
+import { Budget } from '../pages/Budget/Budget';
 import { CreateBudget } from '../pages/Budget/CreateBudget';
 import { Profile } from '../pages/Profile/Profile';
 import { PersonalInformation } from '../pages/Profile/PersonalInformation';
@@ -40,6 +41,15 @@ const ProfileStack = () => {
     )
 }
 
+const BudgetsStack = () => {
+    return (
+        <Stack.Navigator initialRouteName='myBudgets' screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="myBudgets" component={MyBudgets} />
+            <Stack.Screen name="budget" component={Budget} />
+        </Stack.Navigator>
+    )
+}
+
 export function AuthRoutes() {
     return (
         <Tab.Navigator
@@ -66,7 +76,7 @@ export function AuthRoutes() {
 
             <Tab.Screen
                 name="Meus Orçamentos"
-                component={MyBudgets}
+                component={BudgetsStack}
                 options={{
                     tabBarIcon: ({ size, color, focused }) => (
                         <Briefcase size={size} color={color} weight={focused ? "fill" : "regular"} />

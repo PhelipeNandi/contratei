@@ -1,22 +1,31 @@
-import { VStack, HStack, Pressable, IPressableProps, Circle, useTheme, Text } from 'native-base';
-import { Briefcase } from 'phosphor-react-native';
+import { VStack, HStack, Pressable, IPressableProps, Text } from 'native-base';
 
-import { Budget } from '../../types/budget';
+import { IconStatusBudget } from './IconStatusBudget';
+import { Budget } from '../../../types/budget';
 
 type Props = IPressableProps & {
     data?: Budget
 }
 
 export function BudgetCardDetails({ data, ...rest }: Props) {
-    const { colors } = useTheme();
+    function handleStatusName(status: string) {
+        switch (status) {
+            case "open":
+                return "Aberto";
+            case "inProgress":
+                return "Em andamento";
+            case "finish":
+                return "Finalizado";
+            case "canceled":
+                return "Cancelado";
+        }
+    }
 
     return (
-        <Pressable>
+        <Pressable {...rest}>
             <HStack my={4} justifyContent="space-between">
                 <HStack>
-                    <Circle bg="gray.100" h={16} w={16}>
-                        <Briefcase size={24} color={colors.primary[700]} weight="fill" />
-                    </Circle>
+                    <IconStatusBudget status={data.status} />
 
                     <VStack pl={4}>
                         <Text fontFamily="mono" fontSize="md" color="gray.700">
@@ -37,14 +46,10 @@ export function BudgetCardDetails({ data, ...rest }: Props) {
                     </Text>
 
                     <Text textAlign="right" fontFamily="mono" fontSize="sm" color="gray.300">
-                        {
-                            data.status === 'open'
-                                ? "Aberto"
-                                : "Finalizado"
-                        }
+                        {handleStatusName(data.status)}
                     </Text>
                 </VStack>
             </HStack>
-        </Pressable >
+        </Pressable>
     );
 }

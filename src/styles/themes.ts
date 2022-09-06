@@ -21,6 +21,12 @@ export const THEME = extendTheme({
             200: '#C4C4CC',
             100: '#E1E1E6'
         },
+        status: {
+            open: '#4B77BE',
+            inProgress: '#EAB308',
+            finish: '#15803D',
+            canceled: '#CD2315'
+        },
         white: '#FFFFFF',
         background: '#FEFBF6'
     },

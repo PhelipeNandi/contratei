@@ -3,7 +3,7 @@ import { useNavigation } from '@react-navigation/native';
 import { Briefcase, Clipboard, MagnifyingGlass } from 'phosphor-react-native';
 
 import { ButtonNavigation } from '../../features/dashboard';
-import { BudgetCardDetails } from '../../components/ui/BudgetCardDetails';
+import { BudgetCardDetails } from '../../features/myBudgets/components/BudgetCardDetails';
 import { CardNavigation } from '../../components/ui/CardNavigation';
 import { useAuthContext } from '../../hooks/useAuthContext';
 
@@ -32,7 +32,7 @@ export function Dashboard() {
             serviceType: 'Limpeza',
             value: 'R$ 130,00',
             openingDate: '12 AGO',
-            status: 'closed',
+            status: 'finish',
             priorityLevel: 'TODAY'
         },
         {
@@ -42,7 +42,7 @@ export function Dashboard() {
             serviceType: 'Eletricista',
             value: 'R$ 48,30',
             openingDate: '10 AGO',
-            status: 'closed',
+            status: 'finish',
             priorityLevel: 'TODAY'
         },
         {
@@ -52,7 +52,7 @@ export function Dashboard() {
             serviceType: 'Jardineiro',
             value: 'R$ 70,00',
             openingDate: '08 AGO',
-            status: 'closed',
+            status: 'finish',
             priorityLevel: 'TODAY'
         },
         {
