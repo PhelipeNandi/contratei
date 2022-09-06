@@ -9,7 +9,8 @@ import { Budget } from '../pages/Budget/Budget';
 import { CreateBudget } from '../pages/Budget/CreateBudget';
 import { Profile } from '../pages/Profile/Profile';
 import { PersonalInformation } from '../pages/Profile/PersonalInformation';
-import { Payments } from '../pages/Profile/Payments';
+import { Payments } from '../pages/Profile/Payment/Payments';
+import { AddNewCreditCard } from '../pages/Profile/Payment/AddNewCreditCard';
 import { Notifications } from '../pages/Profile/Notifications';
 import { Settings } from '../pages/Profile/Settings';
 
@@ -35,6 +36,7 @@ const ProfileStack = () => {
             <Stack.Screen name="profile" component={Profile} />
             <Stack.Screen name="personalInformation" component={PersonalInformation} />
             <Stack.Screen name="payments" component={Payments} />
+            <Stack.Screen name="addNewCreditCard" component={AddNewCreditCard} />
             <Stack.Screen name="notifications" component={Notifications} />
             <Stack.Screen name="settings" component={Settings} />
         </Stack.Navigator>

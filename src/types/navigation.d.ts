@@ -11,6 +11,7 @@ export declare global {
             profile: undefined,
             personalInformation: undefined,
             payments: undefined,
+            addNewCreditCard: undefined,
             notifications: undefined,
             settings: undefined,
             budget: { idBudget: number }
