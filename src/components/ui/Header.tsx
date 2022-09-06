@@ -16,6 +16,14 @@ export function Header({ title, ...rest }: Props) {
         navigation.goBack();
     }
 
+    function handleNavigateNotifications() {
+        navigation.navigate('notifications');
+    }
+
+    function handleNavigateSettigns() {
+        navigation.navigate('settings');
+    }
+
     return (
         <HStack
             justifyContent="space-between"
@@ -51,10 +59,12 @@ export function Header({ title, ...rest }: Props) {
                     alignItems="center"
                 >
                     <IconButton
+                        onPress={handleNavigateNotifications}
                         icon={<Bell color="white" size={24} />}
                     />
 
                     <IconButton
+                        onPress={handleNavigateSettigns}
                         icon={<DotsThreeVertical color="white" size={24} />}
                     />
                 </HStack>
