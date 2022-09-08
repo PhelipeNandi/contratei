@@ -4,7 +4,7 @@ import { CreateNewBudget } from '../../../types/budget';
 import { User } from '../../../types/user';
 
 export async function createNewBudgetRequest(data: CreateNewBudget, user: User) {
-    const response = await Api.post("buget", {
+    const response = await Api.post("budget", {
         title: data.title,
         status: "ABERTO",
         priority: data.priorityLevel,
