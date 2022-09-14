@@ -34,7 +34,7 @@ export function RadioButton({
 
                 {
                     !!errorMessage &&
-                    <Text textAlign="center" fontSize="sm" color="error" flex={1} mt={2}>
+                    <Text textAlign="center" fontSize="sm" color="error.600" flex={1} mt={2}>
                         {errorMessage}
                     </Text>
                 }

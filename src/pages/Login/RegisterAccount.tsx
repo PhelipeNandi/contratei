@@ -50,25 +50,26 @@ export function RegisterAccount() {
     }, [cpfValue]);
 
     useEffect(() => {
-        reset({
-            type: "Consumidor",
-            firstName: "",
-            lastName: "",
-            contactNumber: "",
-            cpf: "",
-            email: "",
-            password: ""
-        })
+        if (isSubmitSuccessful) {
+            reset({
+                type: "Consumidor",
+                firstName: "",
+                lastName: "",
+                contactNumber: "",
+                cpf: "",
+                email: "",
+                password: ""
+            })
+        }
     }, [isSubmitSuccessful]);
 
     async function handleRegisterAccount(data: RegisterNewUser) {
-        const response = await registerAccountRequest(data);
-
-        if (response.status === 200) {
-            navigation.goBack();
-        } else {
-            //TODO
-        }
+        await registerAccountRequest(data)
+            .catch((error) => {
+                if (error instanceof Error) {
+                    console.log(error.message);
+                }
+            });
     }
 
     return (

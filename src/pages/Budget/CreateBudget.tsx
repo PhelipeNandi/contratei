@@ -36,12 +36,14 @@ export function CreateBudget() {
     });
 
     useEffect(() => {
-        reset({
-            title: "",
-            description: "",
-            priorityLevel: "",
-            serviceType: ""
-        });
+        if (isSubmitSuccessful) {
+            reset({
+                title: "",
+                description: "",
+                priorityLevel: "",
+                serviceType: ""
+            });
+        }
     }, [isSubmitSuccessful])
 
     async function handleCreateNewBudget(data: CreateNewBudget) {
