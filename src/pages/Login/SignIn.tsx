@@ -26,7 +26,12 @@ export function SignIn() {
     });
 
     async function handleSignIn(data: SignInData) {
-        await signIn(data);
+        await signIn(data)
+            .catch((error) => {
+                if (error instanceof Error) {
+                    console.log(error.message);
+                }
+            });
     }
 
     async function handleSignInGoogle() {

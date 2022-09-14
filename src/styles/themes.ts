@@ -24,7 +24,7 @@ export const THEME = extendTheme({
         status: {
             open: '#4B77BE',
             inProgress: '#EAB308',
-            finish: '#15803D',
+            closed: '#15803D',
             canceled: '#CD2315'
         },
         white: '#FFFFFF',

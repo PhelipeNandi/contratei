@@ -1,13 +1,15 @@
 export interface Budget {
-    id?: string;
+    id: number;
     title: string;
-    status: 'open' | 'finish' | 'inProgress' | 'canceled';
+    status: 'OPEN' | 'IN_PROGRESS' | 'CLOSED' | 'CANCELED';
     value?: string;
-    priorityLevel: string;
-    serviceType: string;
+    priorityLevel: 'TODAY' | 'THIS_WEEK' | 'THIS_MONTH' | 'COMBINE';
+    serviceType: 'EMPREGADO' | 'MARCENEIRO' | 'PINTOR' | 'PEDREIRO' | 'MECANICO';
     description: string;
-    openingDate: string;
-    completionDate?: string;
+    openingDate: date;
+    completionDate?: date;
+    consumerId: number;
+    providerId?: number;
 }
 
 export interface CreateNewBudget {

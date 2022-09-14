@@ -37,11 +37,16 @@ export function AuthProvider({ children }) {
     }, []);
 
     async function signIn(data: SignInData) {
-        const user = await signInRequest(data);
-
-        setUser(user);
-
-        await AsyncStorage.setItem('@contratei:user', JSON.stringify(user));
+        await signInRequest(data)
+            .then((user) => {
+                setUser(user);
+                AsyncStorage.setItem('@contratei:user', JSON.stringify(user));
+            })
+            .catch((error) => {
+                if (error instanceof Error) {
+                    throw new Error(error.message);
+                }
+            });
     }
 
     async function signInGoogle() {
@@ -49,10 +54,11 @@ export function AuthProvider({ children }) {
     }
 
     function logOut() {
-        AsyncStorage.removeItem('@contratei:user').then(() => {
-            setUser(null);
-            delete Api.defaults.headers['Authorization'];
-        });
+        AsyncStorage.removeItem('@contratei:user')
+            .then(() => {
+                setUser(null);
+                delete Api.defaults.headers['Authorization'];
+            });
     }
 
     return (

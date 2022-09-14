@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { VStack, Text, HStack, Avatar, FlatList, Center, useTheme } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { Briefcase, Clipboard, MagnifyingGlass } from 'phosphor-react-native';
@@ -6,66 +7,35 @@ import { ButtonNavigation } from '../../features/dashboard';
 import { BudgetCardDetails } from '../../features/myBudgets/components/BudgetCardDetails';
 import { CardNavigation } from '../../components/ui/CardNavigation';
 import { useAuthContext } from '../../hooks/useAuthContext';
+import { searchMyBudgets } from '../../features/myBudgets/services/searchMyBudgets';
 
 import { Budget } from '../../types/budget';
 
 export function Dashboard() {
-    const navigation = useNavigation();
-    const { user } = useAuthContext();
     const { colors } = useTheme();
+    const { user } = useAuthContext();
+    const { navigate } = useNavigation();
+    const [budgets, setBudgets] = useState<Budget[]>();
 
-    const budgets: Budget[] = [
-        {
-            id: '5',
-            title: 'Ajuste no cano da pia',
-            description: '',
-            serviceType: 'Encanador',
-            value: 'R$ 30,50',
-            openingDate: '15 AGO',
-            status: 'open',
-            priorityLevel: 'TODAY'
-        },
-        {
-            id: '4',
-            title: 'Faxina da casa',
-            description: '',
-            serviceType: 'Limpeza',
-            value: 'R$ 130,00',
-            openingDate: '12 AGO',
-            status: 'finish',
-            priorityLevel: 'TODAY'
-        },
-        {
-            id: '3',
-            title: 'Troca de chuveiro',
-            description: '',
-            serviceType: 'Eletricista',
-            value: 'R$ 48,30',
-            openingDate: '10 AGO',
-            status: 'finish',
-            priorityLevel: 'TODAY'
-        },
-        {
-            id: '2',
-            title: 'Limpeza no jardim',
-            description: '',
-            serviceType: 'Jardineiro',
-            value: 'R$ 70,00',
-            openingDate: '08 AGO',
-            status: 'finish',
-            priorityLevel: 'TODAY'
-        },
-        {
-            id: '1',
-            title: 'Troca de cor do galpão',
-            description: '',
-            serviceType: 'Pintor',
-            value: 'R$ 220,35',
-            openingDate: '02 AGO',
-            status: 'open',
-            priorityLevel: 'TODAY'
+    useEffect(() => {
+        async function handleSearchMyBudgets() {
+            try {
+                await searchMyBudgets("0", "5", user.id)
+                    .then((budgets) => {
+                        setBudgets(budgets);
+                    })
+                    .catch((error) => {
+                        if (error instanceof Error) {
+                            console.log(error.message);
+                        }
+                    });
+            } catch (error) {
+                console.log(error);
+            }
         }
-    ]
+
+        handleSearchMyBudgets();
+    }, []);
 
     return (
         <VStack flex={1} bg="primary.700">
@@ -97,7 +67,7 @@ export function Dashboard() {
                         colorCard="red.500"
                         colorFont="white"
                         icon={Briefcase}
-                        onPress={() => navigation.navigate('myBudgets')}
+                        onPress={() => navigate('myBudgets')}
                     />
 
                     <CardNavigation
@@ -105,7 +75,7 @@ export function Dashboard() {
                         colorCard="primary.700"
                         colorFont="white"
                         icon={Clipboard}
-                        onPress={() => navigation.navigate('createBudget')}
+                        onPress={() => navigate('createBudget')}
                     />
                 </HStack>
 
@@ -113,7 +83,7 @@ export function Dashboard() {
                     mt={2}
                     title="Qual tipo de serviço?"
                     icon={MagnifyingGlass}
-                    onPress={() => navigation.navigate('searchProvider')}
+                    onPress={() => navigate('searchProvider')}
                 />
 
                 <Text
@@ -128,7 +98,7 @@ export function Dashboard() {
 
                 <FlatList
                     data={budgets}
-                    keyExtractor={budget => budget.id}
+                    keyExtractor={budget => budget.id.toString()}
                     renderItem={({ item }) => <BudgetCardDetails data={item} />}
                     showsVerticalScrollIndicator={false}
                     ListEmptyComponent={() => (

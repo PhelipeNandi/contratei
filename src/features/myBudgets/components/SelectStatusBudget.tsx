@@ -1,5 +1,7 @@
 import { Select as NativeBaseSelect, ISelectProps } from 'native-base';
 
+import { Status } from '../../../types/budget';
+
 export function SelectStatusBudget({ ...rest }: ISelectProps) {
     return (
         <NativeBaseSelect
@@ -10,14 +12,14 @@ export function SelectStatusBudget({ ...rest }: ISelectProps) {
             size="md"
             color="primary.700"
             rounded="lg"
-            defaultValue="all"
+            defaultValue="ALL"
             {...rest}
         >
-            <NativeBaseSelect.Item label="Todos" value="all" />
-            <NativeBaseSelect.Item label="Aberto" value="open" />
-            <NativeBaseSelect.Item label="Em Andamento" value="inProgress" />
-            <NativeBaseSelect.Item label="Finalizado" value="finish" />
-            <NativeBaseSelect.Item label="Cancelado" value="canceled" />
+            <NativeBaseSelect.Item label="Todos" value="ALL" />
+            <NativeBaseSelect.Item label="Aberto" value="OPEN" />
+            <NativeBaseSelect.Item label="Em andamento" value="IN_PROGRESS" />
+            <NativeBaseSelect.Item label="Finalizado" value="CLOSED" />
+            <NativeBaseSelect.Item label="Cancelado" value="CANCELED" />
         </NativeBaseSelect>
     );
 }

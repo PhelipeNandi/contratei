@@ -1,120 +1,75 @@
 import { useEffect, useState } from 'react';
-import { VStack, FlatList, Center, Text, useTheme, HStack, Divider } from 'native-base';
+import { VStack, FlatList, Center, Text, useTheme, Divider } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { Briefcase } from 'phosphor-react-native';
 
-import { Header } from '../../components/ui/Header';
-import { SelectStatusBudget } from '../../features/myBudgets';
-import { BudgetCardDetails } from '../../features/myBudgets/components/BudgetCardDetails';
-
 import { Budget } from '../../types/budget';
+import { useAuthContext } from '../../hooks/useAuthContext';
+
+import { Header } from '../../components/ui/Header';
+import { searchMyBudgets } from '../../features/myBudgets/services/searchMyBudgets';
+import { SelectStatusBudget, BudgetCardDetails } from '../../features/myBudgets';
 
 export function MyBudgets() {
-    const budgetsArray: Budget[] = [
-        {
-            id: '6',
-            title: 'Cortar grama',
-            description: '',
-            serviceType: 'Jardineiro',
-            value: 'R$ 20,00',
-            openingDate: '18 AGO',
-            status: 'open',
-            priorityLevel: 'TODAY'
-        },
-        {
-            id: '5',
-            title: 'Ajuste no cano da pia',
-            description: '',
-            serviceType: 'Encanador',
-            value: 'R$ 30,50',
-            openingDate: '15 AGO',
-            status: 'open',
-            priorityLevel: 'TODAY'
-        },
-        {
-            id: '4',
-            title: 'Faxina da casa',
-            description: '',
-            serviceType: 'Limpeza',
-            value: 'R$ 130,00',
-            openingDate: '12 AGO',
-            status: 'finish',
-            priorityLevel: 'TODAY'
-        },
-        {
-            id: '3',
-            title: 'Troca de chuveiro',
-            description: '',
-            serviceType: 'Eletricista',
-            value: 'R$ 48,30',
-            openingDate: '10 AGO',
-            status: 'finish',
-            priorityLevel: 'TODAY'
-        },
-        {
-            id: '2',
-            title: 'Limpeza no jardim',
-            description: '',
-            serviceType: 'Jardineiro',
-            value: 'R$ 70,00',
-            openingDate: '08 AGO',
-            status: 'finish',
-            priorityLevel: 'TODAY'
-        },
-        {
-            id: '1',
-            title: 'Troca de cor do galpão',
-            description: '',
-            serviceType: 'Pintor',
-            value: 'R$ 220,35',
-            openingDate: '02 AGO',
-            status: 'canceled',
-            priorityLevel: 'TODAY'
-        }
-    ]
-
-    const navigation = useNavigation();
     const { colors } = useTheme();
-
-    const [budgets, setBudgets] = useState(budgetsArray);
-    const [budgetsFiltered, setBudgetsFiltered] = useState([]);
-    const [labelBudgetQuantity, setLabelBudgetQuantity] = useState("");
-    const [statusBudgetSelect, setStatusBudgetSelect] = useState("");
-
-    useEffect(() => {
-        setBudgetsFiltered(budgets);
-    }, [])
+    const { navigate } = useNavigation();
+    const { user } = useAuthContext();
+    const [budgets, setBudgets] = useState<Budget[]>();
+    const [budgetsFiltered, setBudgetsFiltered] = useState<Budget[]>();
+    const [labelBudgetQuantity, setLabelBudgetQuantity] = useState<string>();
+    const [statusBudgetSelect, setStatusBudgetSelect] = useState<string>();
 
     useEffect(() => {
-        setLabelBudgetQuantity("Quantidade: " + budgetsFiltered.length);
-    }, [budgetsFiltered])
+        async function handleSearchMyBudgets() {
+            try {
+                await searchMyBudgets("0", "5", user.id)
+                    .then((budgets) => {
+                        setBudgets(budgets);
+                        setBudgetsFiltered(budgets);
+                    })
+                    .catch((error) => {
+                        if (error instanceof Error) {
+                            console.log(error.message);
+                        }
+                    });
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
+        handleSearchMyBudgets();
+    }, []);
+
+    useEffect(() => {
+        setLabelBudgetQuantity("Quantidade: " + budgetsFiltered?.length);
+    }, [budgetsFiltered]);
 
     function filterBudgetSelect(status: string) {
         switch (status) {
-            case "all":
+            case "ALL":
                 setBudgetsFiltered(budgets);
                 break;
-            case "open":
-                setStatusBudgetSelect("aberto");
-                setBudgetsFiltered(budgets.filter((b) => b.status === "open"));
+            case "OPEN":
+                setStatusBudgetSelect("em aberto");
+                setBudgetsFiltered(budgets.filter((b) => b.status === "OPEN"));
                 break;
-            case "inProgress":
+            case "IN_PROGRESS":
                 setStatusBudgetSelect("em andamento");
-                setBudgetsFiltered(budgets.filter((b) => b.status === "inProgress"));
+                setBudgetsFiltered(budgets.filter((b) => b.status === "IN_PROGRESS"));
                 break;
-            case "finish":
-                setStatusBudgetSelect("finalizado");
-                setBudgetsFiltered(budgets.filter((b) => b.status === "finish"));
+            case "CLOSED":
+                setStatusBudgetSelect("finalizados");
+                setBudgetsFiltered(budgets.filter((b) => b.status === "CLOSED"));
                 break;
-            case "canceled":
-                setStatusBudgetSelect("cancelado");
-                setBudgetsFiltered(budgets.filter((b) => b.status === "canceled"));
+            case "CANCELED":
+                setStatusBudgetSelect("cancelados");
+                setBudgetsFiltered(budgets.filter((b) => b.status === "CANCELED"));
                 break;
         }
     }
 
     function handleNavigateBudget(idBudget: number) {
-        navigation.navigate('budget', { idBudget });
+        navigate('budget', { idBudget });
     }
 
     return (
@@ -145,7 +100,7 @@ export function MyBudgets() {
                 <FlatList
                     px={4}
                     data={budgetsFiltered}
-                    keyExtractor={budget => budget.id}
+                    keyExtractor={budget => budget.id.toString()}
                     renderItem={({ item }) => <BudgetCardDetails data={item} onPress={() => handleNavigateBudget(item.id)} />}
                     showsVerticalScrollIndicator={false}
                     ListEmptyComponent={() => (

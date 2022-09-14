@@ -1,29 +1,58 @@
 import { Api } from "../../../lib/Api";
-import { SignInData, User } from "../../../types/user";
+import { SignInData, User, UserResponse } from "../../../types/user";
 
-export async function signInRequest(data: SignInData) {
-    const responseAuthenticate = await Api.post("login/authenticate", {
-        email: data.email,
-        password: data.password
-    });
+async function handleSignIn(data: SignInData): Promise<string> {
+    try {
+        const responseAuthenticate = await Api.post("login/authenticate", {
+            email: data.email,
+            password: data.password
+        });
 
-    Api.defaults.headers['Authorization'] = `Bearer ${responseAuthenticate.data.jwt}`;
+        Api.defaults.headers['Authorization'] = `Bearer ${responseAuthenticate.data.jwt}`;
 
-    const reponseFindUser = await Api.get("login/find-user", {
-        params: { email: data.email }
-    });
+        return responseAuthenticate.data.jwt;
+    } catch (error) {
+        if (error instanceof Error) {
+            throw new Error(error.message);
+        }
+    }
+}
 
-    return {
-        id: reponseFindUser.data.id,
-        type: reponseFindUser.data.isProvider ? "Fornecedor" : "Consumidor",
-        firstName: reponseFindUser.data.firstName,
-        lastName: reponseFindUser.data.lastName,
-        contactNumber: reponseFindUser.data.contactNumber,
-        cpf: reponseFindUser.data.cpf,
-        email: reponseFindUser.data.email,
-        token: responseAuthenticate.data.jwt,
-        description: reponseFindUser.data.isProvider ? reponseFindUser.data.description : null,
-        kmWorkRange: reponseFindUser.data.isProvider ? reponseFindUser.data.kmWorkRange : null,
-        hourValue: reponseFindUser.data.isProvider ? reponseFindUser.data.hourValue : null
-    } as User;
+async function handleFindUser(email: string): Promise<UserResponse> {
+    try {
+        const reponseFindUser = await Api.get("login/find-user", {
+            params: { email: email }
+        });
+
+        return reponseFindUser.data;
+    } catch (error) {
+        if (error instanceof Error) {
+            throw new Error(error.message);
+        }
+    }
+}
+
+export async function signInRequest(data: SignInData): Promise<User> {
+    try {
+        const token = await handleSignIn(data);
+        const user = await handleFindUser(data.email);
+
+        return {
+            id: user.id,
+            type: user.isProvider ? "Fornecedor" : "Consumidor",
+            firstName: user.firstName,
+            lastName: user.lastName,
+            contactNumber: user.contactNumber,
+            cpf: user.cpf,
+            email: user.email,
+            token: token,
+            description: user.description,
+            kmWorkRange: user.kmWorkRange,
+            hourValue: user.hourValue
+        }
+    } catch (error) {
+        if (error instanceof Error) {
+            throw new Error(error.message);
+        }
+    }
 }
