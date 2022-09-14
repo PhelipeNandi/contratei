@@ -1,4 +1,4 @@
-import { VStack, Select as NativeBaseSelect, ISelectProps, Text } from 'native-base';
+import { Select as NativeBaseSelect, ISelectProps, FormControl, WarningOutlineIcon } from 'native-base';
 
 type Props = ISelectProps & {
     errorMessage?: string;
@@ -6,7 +6,7 @@ type Props = ISelectProps & {
 
 export function SelectServiceType({ errorMessage, ...rest }: Props) {
     return (
-        <VStack>
+        <FormControl isInvalid={!!errorMessage}>
             <NativeBaseSelect
                 bg="white"
                 h={14}
@@ -26,12 +26,9 @@ export function SelectServiceType({ errorMessage, ...rest }: Props) {
                 <NativeBaseSelect.Item label="Mecanico" value="MECANICO" />
             </NativeBaseSelect>
 
-            {
-                !!errorMessage &&
-                <Text textAlign="right" fontSize="sm" color="red.600" mt={2}>
-                    {errorMessage}
-                </Text>
-            }
-        </VStack>
+            <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
+                {errorMessage}
+            </FormControl.ErrorMessage>
+        </FormControl>
     );
 }

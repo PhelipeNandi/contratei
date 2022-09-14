@@ -1,4 +1,4 @@
-import { Input as NativeBaseInput, IInputProps, VStack, Text } from 'native-base';
+import { Input as NativeBaseInput, IInputProps, FormControl, WarningOutlineIcon } from 'native-base';
 
 type Props = IInputProps & {
     errorMessage?: string;
@@ -6,7 +6,7 @@ type Props = IInputProps & {
 
 export function Input({ errorMessage, ...rest }: Props) {
     return (
-        <VStack>
+        <FormControl isInvalid={!!errorMessage}>
             <NativeBaseInput
                 bg="white"
                 h={14}
@@ -20,18 +20,15 @@ export function Input({ errorMessage, ...rest }: Props) {
                 rounded="lg"
                 _focus={{
                     borderWidth: 1,
-                    borderColor: errorMessage != null ? "error" : "primary.700",
+                    borderColor: !!errorMessage ? "error" : "primary.700",
                     bg: "white"
                 }}
                 {...rest}
             />
 
-            {
-                !!errorMessage &&
-                <Text textAlign="right" fontSize="sm" color="red.600" mb={2}>
-                    {errorMessage}
-                </Text>
-            }
-        </VStack>
+            <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
+                {errorMessage}
+            </FormControl.ErrorMessage>
+        </FormControl>
     );
 }

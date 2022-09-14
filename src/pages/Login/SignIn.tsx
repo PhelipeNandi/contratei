@@ -54,7 +54,6 @@ export function SignIn() {
                     name="email"
                     render={({ field: { value, onChange } }) => (
                         <Input
-                            mb={2}
                             errorMessage={errors.email?.message}
                             placeholder="E-mail"
                             autoCapitalize="none"
@@ -70,7 +69,7 @@ export function SignIn() {
                     name="password"
                     render={({ field: { value, onChange } }) => (
                         <Input
-                            mb={2}
+                            mt={4}
                             errorMessage={errors.password?.message}
                             placeholder="Senha"
                             InputLeftElement={<Icon as={<Key color={colors.secondary[700]} />} ml={4} />}

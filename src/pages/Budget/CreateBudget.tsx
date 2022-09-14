@@ -32,7 +32,10 @@ export function CreateBudget() {
         reset,
         formState: { errors, isSubmitSuccessful }
     } = useForm<CreateNewBudget>({
-        resolver: yupResolver(createNewBudgetForm)
+        resolver: yupResolver(createNewBudgetForm),
+        defaultValues: {
+            priorityLevel: "COMBINE"
+        }
     });
 
     useEffect(() => {
@@ -119,8 +122,9 @@ export function CreateBudget() {
                         name="priorityLevel"
                         render={({ field: { value, onChange } }) => (
                             <RadioButtonPriorityLevel
-                                mt={5}
+                                mt={4}
                                 name="priority"
+                                defaultValue="COMBINE"
                                 value={value}
                                 onChange={onChange}
                                 errorMessage={errors.priorityLevel?.message}
@@ -129,7 +133,8 @@ export function CreateBudget() {
                     />
 
                     <Button
-                        my={10}
+                        mt={2}
+                        mb={8}
                         title="Salvar"
                         onPress={handleSubmit(handleCreateNewBudget)}
                     />

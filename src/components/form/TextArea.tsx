@@ -1,4 +1,4 @@
-import { TextArea as NativeBaseTextArea, VStack, ITextAreaProps, Text } from 'native-base';
+import { TextArea as NativeBaseTextArea, ITextAreaProps, FormControl, WarningOutlineIcon } from 'native-base';
 
 type Props = ITextAreaProps & {
     errorMessage?: string;
@@ -6,7 +6,7 @@ type Props = ITextAreaProps & {
 
 export function TextArea({ errorMessage, ...rest }: Props) {
     return (
-        <VStack>
+        <FormControl isInvalid={!!errorMessage}>
             <NativeBaseTextArea
                 bg="white"
                 h={48}
@@ -27,12 +27,9 @@ export function TextArea({ errorMessage, ...rest }: Props) {
                 {...rest}
             />
 
-            {
-                !!errorMessage &&
-                <Text textAlign="right" fontSize="sm" color="red.600" mt={2}>
-                    {errorMessage}
-                </Text>
-            }
-        </VStack>
+            <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
+                {errorMessage}
+            </FormControl.ErrorMessage>
+        </FormControl>
     );
 }

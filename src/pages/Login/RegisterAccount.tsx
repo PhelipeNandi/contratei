@@ -35,7 +35,10 @@ export function RegisterAccount() {
         reset,
         formState: { errors, isSubmitSuccessful }
     } = useForm<RegisterNewUser>({
-        resolver: yupResolver(registerNewUserForm)
+        resolver: yupResolver(registerNewUserForm),
+        defaultValues: {
+            type: "Consumidor"
+        }
     });
 
     const contactNumberValue = watch('contactNumber');
@@ -86,10 +89,10 @@ export function RegisterAccount() {
                         name="type"
                         render={({ field: { value, onChange } }) => (
                             <RadioButton
-                                mb={4}
                                 name="type"
                                 optionOne="Consumidor"
                                 optionTwo="Fornecedor"
+                                defaultValue="Consumidor"
                                 value={value}
                                 onChange={onChange}
                                 errorMessage={errors.type?.message}
@@ -102,8 +105,7 @@ export function RegisterAccount() {
                         name="firstName"
                         render={({ field: { value, onChange } }) => (
                             <Input
-                                mt={3}
-                                mb={2}
+                                mt={8}
                                 errorMessage={errors.firstName?.message}
                                 placeholder="Nome"
                                 value={value}
@@ -117,7 +119,7 @@ export function RegisterAccount() {
                         name="lastName"
                         render={({ field: { value, onChange } }) => (
                             <Input
-                                mb={2}
+                                mt={3}
                                 errorMessage={errors.lastName?.message}
                                 placeholder="Sobrenome"
                                 value={value}
@@ -131,7 +133,7 @@ export function RegisterAccount() {
                         name="contactNumber"
                         render={({ field: { value, onChange } }) => (
                             <Input
-                                mb={2}
+                                mt={3}
                                 errorMessage={errors.contactNumber?.message}
                                 placeholder="Telefone"
                                 value={value}
@@ -146,7 +148,7 @@ export function RegisterAccount() {
                         name="cpf"
                         render={({ field: { value, onChange } }) => (
                             <Input
-                                mb={2}
+                                mt={3}
                                 errorMessage={errors.cpf?.message}
                                 placeholder="CPF"
                                 value={value}
@@ -161,7 +163,7 @@ export function RegisterAccount() {
                         name="email"
                         render={({ field: { value, onChange } }) => (
                             <Input
-                                mb={2}
+                                mt={3}
                                 errorMessage={errors.email?.message}
                                 placeholder="E-mail"
                                 autoCapitalize="none"
@@ -176,7 +178,7 @@ export function RegisterAccount() {
                         name="password"
                         render={({ field: { value, onChange } }) => (
                             <Input
-                                mb={2}
+                                mt={3}
                                 errorMessage={errors.password?.message}
                                 placeholder="Senha"
                                 secureTextEntry

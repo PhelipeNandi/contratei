@@ -1,4 +1,4 @@
-import { VStack, HStack, Text, Radio, IRadioGroupProps } from 'native-base';
+import { HStack, Text, Radio, IRadioGroupProps, FormControl, WarningOutlineIcon } from 'native-base';
 
 type Props = IRadioGroupProps & {
     optionOne: string;
@@ -13,12 +13,12 @@ export function RadioButton({
     ...rest
 }: Props) {
     return (
-        <Radio.Group
-            flex={1}
-            alignItems="center"
-            {...rest}
-        >
-            <VStack>
+        <FormControl isInvalid={!!errorMessage}>
+            <Radio.Group
+                flex={1}
+                alignItems="center"
+                {...rest}
+            >
                 <HStack space={6}>
                     <Radio value={optionOne}>
                         <Text fontSize="md">
@@ -32,13 +32,10 @@ export function RadioButton({
                     </Radio>
                 </HStack>
 
-                {
-                    !!errorMessage &&
-                    <Text textAlign="center" fontSize="sm" color="error.600" flex={1} mt={2}>
-                        {errorMessage}
-                    </Text>
-                }
-            </VStack>
-        </Radio.Group>
+                <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
+                    {errorMessage}
+                </FormControl.ErrorMessage>
+            </Radio.Group>
+        </FormControl>
     );
 }
