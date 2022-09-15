@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import { Alert } from 'react-native';
 import { VStack, ScrollView, Text } from 'native-base';
-import { useNavigation } from '@react-navigation/native';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup';
@@ -23,7 +22,6 @@ const createNewBudgetForm: yup.SchemaOf<CreateNewBudget> = yup.object({
 })
 
 export function CreateBudget() {
-    const navigation = useNavigation();
     const { user } = useAuthContext();
 
     const {

@@ -1,5 +1,4 @@
 import { VStack, Avatar, HStack, Box, ScrollView } from 'native-base';
-import { useNavigation } from '@react-navigation/native';
 
 import { Header } from '../../components/ui/Header';
 import { Input } from '../../components/form/Input';
@@ -8,7 +7,6 @@ import { useAuthContext } from '../../hooks/useAuthContext';
 import { TextArea } from '../../components/form/TextArea';
 
 export function PersonalInformation() {
-    const navigation = useNavigation();
     const { user } = useAuthContext();
 
     return (

@@ -5,6 +5,7 @@ import { Briefcase } from 'phosphor-react-native';
 
 import { Budget } from '../../types/budget';
 import { useAuthContext } from '../../hooks/useAuthContext';
+import { propsStack } from '../../routes/Navigators/Models';
 
 import { Header } from '../../components/ui/Header';
 import { searchMyBudgets } from '../../features/myBudgets/services/searchMyBudgets';
@@ -12,7 +13,7 @@ import { SelectStatusBudget, BudgetCardDetails } from '../../features/myBudgets'
 
 export function MyBudgets() {
     const { colors } = useTheme();
-    const { navigate } = useNavigation();
+    const { navigate } = useNavigation<propsStack>();
     const { user } = useAuthContext();
     const [budgets, setBudgets] = useState<Budget[]>();
     const [budgetsFiltered, setBudgetsFiltered] = useState<Budget[]>();

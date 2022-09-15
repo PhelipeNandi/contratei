@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { VStack, ScrollView } from 'native-base';
-import { useNavigation } from '@react-navigation/native';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup';
@@ -25,8 +24,6 @@ const registerNewUserForm: yup.SchemaOf<RegisterNewUser> = yup.object({
 })
 
 export function RegisterAccount() {
-    const navigation = useNavigation();
-
     const {
         control,
         handleSubmit,

@@ -4,10 +4,11 @@ import { useAuthContext } from '../../hooks/useAuthContext';
 import { Bell, Gear, User, SignOut, Cardholder } from 'phosphor-react-native';
 
 import { MenuNavigation } from '../../components/ui/MenuNavigation';
+import { propsStack } from '../../routes/Navigators/Models';
 
 export function Profile() {
     const { user, logOut } = useAuthContext();
-    const navigation = useNavigation();
+    const navigation = useNavigation<propsStack>();
 
     function handleLogOut() {
         logOut();

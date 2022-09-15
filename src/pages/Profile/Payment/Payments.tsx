@@ -1,13 +1,15 @@
 import { ScrollView, VStack, Text, useTheme, Link, HStack } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 
+import { propsStack } from '../../../routes/Navigators/Models';
+
 import { Header } from '../../../components/ui/Header';
 import { CreditCard } from '../../../components/ui/CreditCard';
 import { CardCreditCard } from '../../../features/payments';
 import { Button } from '../../../components/ui/Button';
 
 export function Payments() {
-    const navigation = useNavigation();
+    const navigation = useNavigation<propsStack>();
 
     function handleNavigateAddNewCreditCard() {
         navigation.navigate('addNewCreditCard');

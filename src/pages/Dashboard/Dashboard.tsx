@@ -10,11 +10,12 @@ import { useAuthContext } from '../../hooks/useAuthContext';
 import { searchMyBudgets } from '../../features/myBudgets/services/searchMyBudgets';
 
 import { Budget } from '../../types/budget';
+import { propsTab } from '../../routes/Navigators/Models';
 
 export function Dashboard() {
     const { colors } = useTheme();
     const { user } = useAuthContext();
-    const { navigate } = useNavigation();
+    const { navigate } = useNavigation<propsTab>();
     const [budgets, setBudgets] = useState<Budget[]>();
 
     useEffect(() => {
@@ -67,7 +68,7 @@ export function Dashboard() {
                         colorCard="red.500"
                         colorFont="white"
                         icon={Briefcase}
-                        onPress={() => navigate('myBudgets')}
+                        onPress={() => navigate('myBudgetsTab')}
                     />
 
                     <CardNavigation
@@ -75,7 +76,7 @@ export function Dashboard() {
                         colorCard="primary.700"
                         colorFont="white"
                         icon={Clipboard}
-                        onPress={() => navigate('createBudget')}
+                        onPress={() => navigate('createBudgetTab')}
                     />
                 </HStack>
 
@@ -83,7 +84,7 @@ export function Dashboard() {
                     mt={2}
                     title="Qual tipo de serviço?"
                     icon={MagnifyingGlass}
-                    onPress={() => navigate('searchProvider')}
+                    onPress={() => navigate('searchProviderTab')}
                 />
 
                 <Text

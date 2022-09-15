@@ -2,11 +2,12 @@ import { VStack, Heading } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 
 import Logo from '../../assets/svg/logo_contratei.svg';
+import { propsStack } from '../../routes/Navigators/Models';
 
 import { Button } from '../../components/ui/Button';
 
 export function SplashScreen() {
-    const navigation = useNavigation();
+    const navigation = useNavigation<propsStack>();
 
     return (
         <VStack flex={1} alignItems="center" bg="background" px={5} pt={40}>
