@@ -1,72 +1,64 @@
 import { useEffect, useState } from 'react';
+import { ListRenderItemInfo } from 'react-native';
 import { VStack, FlatList, Center, Text, useTheme, Divider } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
-import { Briefcase } from 'phosphor-react-native';
+import { useInfiniteQuery } from 'react-query';
+import { Briefcase, Warning } from 'phosphor-react-native';
 
 import { Budget } from '../../types/budget';
 import { useAuthContext } from '../../hooks/useAuthContext';
 import { propsStack } from '../../routes/Navigators/Models';
+import { normalizeStatus } from '../../utils/formatStrings';
 
 import { Header } from '../../components/ui/Header';
-import { searchMyBudgets } from '../../features/myBudgets/services/searchMyBudgets';
+import { Loading } from '../../components/ui/Loading';
 import { SelectStatusBudget, BudgetCardDetails } from '../../features/myBudgets';
+import { searchMyBudgets } from '../../features/myBudgets/services/searchMyBudgets';
 
 export function MyBudgets() {
     const { colors } = useTheme();
-    const { navigate } = useNavigation<propsStack>();
     const { user } = useAuthContext();
-    const [budgets, setBudgets] = useState<Budget[]>();
-    const [budgetsFiltered, setBudgetsFiltered] = useState<Budget[]>();
-    const [labelBudgetQuantity, setLabelBudgetQuantity] = useState<string>();
+    const { navigate } = useNavigation<propsStack>();
+    const [labelBudgetQuantity, setLabelBudgetQuantity] = useState<string>("Quantidade: 0");
     const [statusBudgetSelect, setStatusBudgetSelect] = useState<string>();
 
-    useEffect(() => {
-        async function handleSearchMyBudgets() {
-            try {
-                await searchMyBudgets("0", "5", user.id)
-                    .then((budgets) => {
-                        setBudgets(budgets);
-                        setBudgetsFiltered(budgets);
-                    })
-                    .catch((error) => {
-                        if (error instanceof Error) {
-                            console.log(error.message);
-                        }
-                    });
-            } catch (error) {
-                console.log(error);
+    const {
+        data,
+        isSuccess,
+        isLoading,
+        isError,
+        hasNextPage,
+        fetchNextPage,
+        isFetchingNextPage
+    } = useInfiniteQuery(['myBudgets', statusBudgetSelect],
+        ({ queryKey, pageParam = 0 }) => searchMyBudgets(pageParam, user.id, queryKey[1]), {
+        getNextPageParam: (page) => {
+            if (page.currentPage < page.totalPages) {
+                return page.currentPage + 1;
             }
+            return false;
         }
+    });
 
-        handleSearchMyBudgets();
-    }, []);
+    function handleLabelBudgetQuantity() {
+        setLabelBudgetQuantity("Quantidade: " + data.pages.map((budgetResponse) => budgetResponse.budgets).flat()?.length);
+    }
 
     useEffect(() => {
-        setLabelBudgetQuantity("Quantidade: " + budgetsFiltered?.length);
-    }, [budgetsFiltered]);
-
-    function filterBudgetSelect(status: string) {
-        switch (status) {
-            case "ALL":
-                setBudgetsFiltered(budgets);
-                break;
-            case "OPEN":
-                setStatusBudgetSelect("em aberto");
-                setBudgetsFiltered(budgets.filter((b) => b.status === "OPEN"));
-                break;
-            case "IN_PROGRESS":
-                setStatusBudgetSelect("em andamento");
-                setBudgetsFiltered(budgets.filter((b) => b.status === "IN_PROGRESS"));
-                break;
-            case "CLOSED":
-                setStatusBudgetSelect("finalizados");
-                setBudgetsFiltered(budgets.filter((b) => b.status === "CLOSED"));
-                break;
-            case "CANCELED":
-                setStatusBudgetSelect("cancelados");
-                setBudgetsFiltered(budgets.filter((b) => b.status === "CANCELED"));
-                break;
+        if (isSuccess) {
+            handleLabelBudgetQuantity();
         }
+    }, [isSuccess]);
+
+    function handleFetchNextPaget() {
+        if (hasNextPage) {
+            fetchNextPage();
+            handleLabelBudgetQuantity();
+        }
+    }
+
+    function renderBudgetCard({ item }: ListRenderItemInfo<Budget>) {
+        return <BudgetCardDetails data={item} onPress={() => handleNavigateBudget(item.id)} />
     }
 
     function handleNavigateBudget(idBudget: number) {
@@ -84,7 +76,7 @@ export function MyBudgets() {
                 <SelectStatusBudget
                     my={2}
                     mx={3}
-                    onValueChange={(selectValue) => filterBudgetSelect(selectValue)}
+                    onValueChange={(selectValue) => setStatusBudgetSelect(selectValue)}
                 />
 
                 <Text
@@ -98,22 +90,46 @@ export function MyBudgets() {
                     {labelBudgetQuantity}
                 </Text>
 
-                <FlatList
-                    px={4}
-                    data={budgetsFiltered}
-                    keyExtractor={budget => budget.id.toString()}
-                    renderItem={({ item }) => <BudgetCardDetails data={item} onPress={() => handleNavigateBudget(item.id)} />}
-                    showsVerticalScrollIndicator={false}
-                    ListEmptyComponent={() => (
-                        <Center mt={40}>
-                            <Briefcase color={colors.gray[300]} size={32} />
-                            <Text textAlign="center" color="gray.300" fontFamily="body" fontSize="sm">
-                                Você ainda não possui
-                                orçamentos {statusBudgetSelect}
-                            </Text>
-                        </Center>
-                    )}
-                />
+                {
+                    isLoading &&
+                    <Loading />
+                }
+
+                {
+                    isError &&
+                    <Center flex={1}>
+                        <Warning color={colors.red[600]} size={32} />
+                        <Text mt={4} textAlign="center" color="gray.300" fontFamily="body" fontSize="sm">
+                            Aconteceu um erro ao buscar {"\n"}
+                            seus orçamentos
+                        </Text>
+                    </Center>
+                }
+
+                {
+                    isSuccess &&
+                    <FlatList
+                        px={4}
+                        data={data.pages.map((budgetResponse) => budgetResponse.budgets).flat()}
+                        keyExtractor={budget => budget.id.toString()}
+                        renderItem={renderBudgetCard}
+                        showsVerticalScrollIndicator={false}
+                        ListEmptyComponent={() => (
+                            <Center mt={40}>
+                                <Briefcase color={colors.primary[700]} size={32} />
+                                <Text mt={4} textAlign="center" color="gray.300" fontFamily="body" fontSize="sm">
+                                    Você ainda não possui orçamentos {"\n"}
+                                    {normalizeStatus(statusBudgetSelect).toLowerCase()}
+                                </Text>
+                            </Center>
+                        )}
+                        onEndReached={handleFetchNextPaget}
+                        onEndReachedThreshold={0.1}
+                        ListFooterComponent={
+                            isFetchingNextPage && <Loading mb={10} />
+                        }
+                    />
+                }
 
             </VStack>
         </VStack >

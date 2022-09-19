@@ -1,42 +1,33 @@
 import { useEffect, useState } from 'react';
 import { VStack, Text, HStack, Avatar, FlatList, Center, useTheme } from 'native-base';
+import { useQuery } from 'react-query';
 import { useNavigation } from '@react-navigation/native';
-import { Briefcase, Clipboard, MagnifyingGlass } from 'phosphor-react-native';
+import { Briefcase, Clipboard, MagnifyingGlass, Warning } from 'phosphor-react-native';
 
 import { ButtonNavigation } from '../../features/dashboard';
 import { BudgetCardDetails } from '../../features/myBudgets/components/BudgetCardDetails';
 import { CardNavigation } from '../../components/ui/CardNavigation';
 import { useAuthContext } from '../../hooks/useAuthContext';
 import { searchMyBudgets } from '../../features/myBudgets/services/searchMyBudgets';
-
-import { Budget } from '../../types/budget';
-import { propsTab } from '../../routes/Navigators/Models';
+import { Loading } from '../../components/ui/Loading';
+import { propsStack, propsTab } from '../../routes/Navigators/Models';
 
 export function Dashboard() {
     const { colors } = useTheme();
     const { user } = useAuthContext();
-    const { navigate } = useNavigation<propsTab>();
-    const [budgets, setBudgets] = useState<Budget[]>();
+    const { navigate: navigateTab } = useNavigation<propsTab>();
+    const { navigate: navigateStack } = useNavigation<propsStack>();
 
-    useEffect(() => {
-        async function handleSearchMyBudgets() {
-            try {
-                await searchMyBudgets("0", "5", user.id)
-                    .then((budgets) => {
-                        setBudgets(budgets);
-                    })
-                    .catch((error) => {
-                        if (error instanceof Error) {
-                            console.log(error.message);
-                        }
-                    });
-            } catch (error) {
-                console.log(error);
-            }
-        }
+    const {
+        data,
+        isSuccess,
+        isLoading,
+        isError
+    } = useQuery('budgets', () => searchMyBudgets(0, user.id, "ALL"));
 
-        handleSearchMyBudgets();
-    }, []);
+    function handleNavigateBudget(idBudget: number) {
+        navigateStack('budget', { idBudget });
+    }
 
     return (
         <VStack flex={1} bg="primary.700">
@@ -68,7 +59,7 @@ export function Dashboard() {
                         colorCard="red.500"
                         colorFont="white"
                         icon={Briefcase}
-                        onPress={() => navigate('myBudgetsTab')}
+                        onPress={() => navigateTab('myBudgetsTab')}
                     />
 
                     <CardNavigation
@@ -76,7 +67,7 @@ export function Dashboard() {
                         colorCard="primary.700"
                         colorFont="white"
                         icon={Clipboard}
-                        onPress={() => navigate('createBudgetTab')}
+                        onPress={() => navigateTab('createBudgetTab')}
                     />
                 </HStack>
 
@@ -84,7 +75,7 @@ export function Dashboard() {
                     mt={2}
                     title="Qual tipo de serviço?"
                     icon={MagnifyingGlass}
-                    onPress={() => navigate('searchProviderTab')}
+                    onPress={() => navigateTab('searchProviderTab')}
                 />
 
                 <Text
@@ -97,21 +88,38 @@ export function Dashboard() {
                     Últimos Serviços
                 </Text>
 
-                <FlatList
-                    data={budgets}
-                    keyExtractor={budget => budget.id.toString()}
-                    renderItem={({ item }) => <BudgetCardDetails data={item} />}
-                    showsVerticalScrollIndicator={false}
-                    ListEmptyComponent={() => (
-                        <Center mt={12}>
-                            <Clipboard color={colors.gray[300]} size={32} />
-                            <Text color="gray.300" fontFamily="body" fontSize="sm">
-                                Você ainda não possui {"\n"}
-                                orçamentos ou serviços
-                            </Text>
-                        </Center>
-                    )}
-                />
+                {
+                    isLoading &&
+                    <Loading />
+                }
+
+                {
+                    isError &&
+                    <Center flex={1}>
+                        <Warning color={colors.red[600]} size={32} />
+                        <Text mt={4} textAlign="center" color="gray.300" fontFamily="body" fontSize="sm">
+                            Aconteceu um erro ao buscar seus orçamentos
+                        </Text>
+                    </Center>
+                }
+
+                {
+                    isSuccess &&
+                    <FlatList
+                        data={data.budgets}
+                        keyExtractor={(budget) => budget.id.toString()}
+                        renderItem={({ item }) => <BudgetCardDetails data={item} onPress={() => handleNavigateBudget(item.id)} />}
+                        showsVerticalScrollIndicator={false}
+                        ListEmptyComponent={() => (
+                            <Center flex={1}>
+                                <Clipboard color={colors.gray[300]} size={32} />
+                                <Text mt={4} textAlign="center" color="gray.300" fontFamily="body" fontSize="sm">
+                                    Você ainda não possui orçamentos
+                                </Text>
+                            </Center>
+                        )}
+                    />
+                }
 
             </VStack >
         </VStack >

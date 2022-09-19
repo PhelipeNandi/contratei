@@ -29,6 +29,7 @@ export function AddNewCreditCard() {
                 <Input
                     mt={5}
                     placeholder="Número do cartão"
+                    keyboardType="numeric"
                     InputLeftElement={<Icon as={<DotsThree color={colors.secondary[700]} />} ml={4} />}
                 />
 
@@ -43,6 +44,7 @@ export function AddNewCreditCard() {
                     <Box flex={1} pl={2}>
                         <Input
                             placeholder="CVV"
+                            keyboardType="numeric"
                             InputLeftElement={<Icon as={<Lock color={colors.secondary[700]} />} ml={4} />}
                         />
                     </Box>

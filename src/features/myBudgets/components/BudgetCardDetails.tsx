@@ -7,7 +7,7 @@ import { normalizeDateCardBudget } from '../../../utils/formatDates';
 import { normalizeStatus, normalizeServiceType, normalizeBudgetValue } from '../../../utils/formatStrings';
 
 type Props = IPressableProps & {
-    data?: Budget
+    data: Budget
 }
 
 export function BudgetCardDetails({ data, ...rest }: Props) {

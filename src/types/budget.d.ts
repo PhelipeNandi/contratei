@@ -18,3 +18,9 @@ export interface CreateNewBudget {
     serviceType: string;
     description: string;
 }
+
+export interface BudgetResponse {
+    budgets: Budget[];
+    currentPage: number;
+    totalPages: number;
+}
