@@ -7,7 +7,7 @@ export async function createNewBudgetRequest(data: CreateNewBudget, user: User):
     try {
         const response = await Api.post("budget", {
             title: data.title,
-            status: "ABERTO",
+            status: "OPEN",
             priority: data.priorityLevel,
             serviceType: data.serviceType,
             description: data.description,

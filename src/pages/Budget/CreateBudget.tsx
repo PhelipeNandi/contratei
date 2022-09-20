@@ -1,12 +1,14 @@
 import { useEffect } from 'react';
-import { Alert } from 'react-native';
 import { VStack, ScrollView, Text } from 'native-base';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup';
+import { useMutation, useQueryClient } from 'react-query';
+import { useNavigation } from '@react-navigation/native';
 
 import { CreateNewBudget } from '../../types/budget';
 import { useAuthContext } from '../../hooks/useAuthContext';
+import { propsTab } from '../../routes/Navigators/Models';
 
 import { Header } from '../../components/ui/Header';
 import { Input } from '../../components/form/Input';
@@ -23,6 +25,8 @@ const createNewBudgetForm: yup.SchemaOf<CreateNewBudget> = yup.object({
 
 export function CreateBudget() {
     const { user } = useAuthContext();
+    const { navigate } = useNavigation<propsTab>();
+    const queryClient = useQueryClient();
 
     const {
         control,
@@ -41,21 +45,21 @@ export function CreateBudget() {
             reset({
                 title: "",
                 description: "",
-                priorityLevel: "",
+                priorityLevel: "COMBINE",
                 serviceType: ""
             });
         }
     }, [isSubmitSuccessful])
 
-    async function handleCreateNewBudget(data: CreateNewBudget) {
-        createNewBudgetRequest(data, user)
-            .then(result => {
-                Alert.alert("Sucesso", result)
-            })
-            .catch(error => {
-                Alert.alert("Error", error)
-            });
-    }
+    const {
+        mutate,
+        isLoading
+    } = useMutation((data: CreateNewBudget) => createNewBudgetRequest(data, user), {
+        onSuccess: () => {
+            queryClient.invalidateQueries("myBudgets");
+            navigate("myBudgetsTab");
+        }
+    });
 
     return (
         <VStack flex={1}>
@@ -134,7 +138,9 @@ export function CreateBudget() {
                         mt={2}
                         mb={8}
                         title="Salvar"
-                        onPress={handleSubmit(handleCreateNewBudget)}
+                        isLoading={isLoading}
+                        isLoadingText="Salvando"
+                        onPress={handleSubmit((values) => mutate(values))}
                     />
 
                 </VStack>

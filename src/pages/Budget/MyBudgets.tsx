@@ -30,7 +30,7 @@ export function MyBudgets() {
         hasNextPage,
         fetchNextPage,
         isFetchingNextPage
-    } = useInfiniteQuery(['myBudgets', statusBudgetSelect],
+    } = useInfiniteQuery(["myBudgets", statusBudgetSelect],
         ({ queryKey, pageParam = 0 }) => searchMyBudgets(pageParam, user.id, queryKey[1]), {
         getNextPageParam: (page) => {
             if (page.currentPage < page.totalPages) {
@@ -126,7 +126,7 @@ export function MyBudgets() {
                         onEndReached={handleFetchNextPaget}
                         onEndReachedThreshold={0.1}
                         ListFooterComponent={
-                            isFetchingNextPage && <Loading mb={10} />
+                            isFetchingNextPage && <Loading my={10} />
                         }
                     />
                 }
