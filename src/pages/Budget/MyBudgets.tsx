@@ -41,14 +41,14 @@ export function MyBudgets() {
     });
 
     function handleLabelBudgetQuantity() {
-        setLabelBudgetQuantity("Quantidade: " + data.pages.map((budgetResponse) => budgetResponse.budgets).flat()?.length);
+        if (data != null) {
+            setLabelBudgetQuantity("Quantidade: " + data.pages.map((budgetResponse) => budgetResponse.budgets).flat()?.length);
+        }
     }
 
     useEffect(() => {
-        if (isSuccess) {
-            handleLabelBudgetQuantity();
-        }
-    }, [isSuccess]);
+        handleLabelBudgetQuantity();
+    }, [isSuccess, statusBudgetSelect]);
 
     function handleFetchNextPaget() {
         if (hasNextPage) {
