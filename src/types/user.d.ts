@@ -46,3 +46,21 @@ export interface UserResponse {
     kmWorkRange: string;
     hourValue: string;
 }
+
+export interface Provider {
+    id: number;
+    serviceType: string;
+    firstName: string;
+    lastName: string;
+    contactNumber: string;
+    cpf: string;
+    email: string;
+    description: string;
+    kmWorkRange: string;
+    hourValue: string;
+}
+
+export interface ServiceType {
+    id: number;
+    name: string;
+}

@@ -1,5 +1,6 @@
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
+import { ServiceType } from "../../../types/user";
 
 export type propsNavigationStack = {
     splashScreen: undefined,
@@ -17,6 +18,12 @@ export type propsNavigationStack = {
     settings: undefined,
     budget: {
         idBudget: number
+    },
+    filterProvider: {
+        serviceType: ServiceType
+    },
+    provider: {
+        idProvider: number
     }
 }
 

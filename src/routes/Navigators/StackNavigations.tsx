@@ -6,6 +6,8 @@ import {
     RegisterAccount,
     Dashboard,
     SearchProvider,
+    FilterProvider,
+    Provider,
     MyBudgets,
     Budget,
     CreateBudget,
@@ -14,7 +16,7 @@ import {
     Payments,
     AddNewCreditCard,
     Notifications,
-    Settings
+    Settings,
 } from '../../pages';
 
 const Stack = createNativeStackNavigator<propsNavigationStack>();
@@ -53,6 +55,8 @@ export function SearchProviderNavigation() {
     return (
         <Stack.Navigator initialRouteName="searchProvider" screenOptions={{ headerShown: false }}>
             <Stack.Screen name="searchProvider" component={SearchProvider} />
+            <Stack.Screen name="filterProvider" component={FilterProvider} />
+            <Stack.Screen name="provider" component={Provider} />
         </Stack.Navigator>
     )
 }

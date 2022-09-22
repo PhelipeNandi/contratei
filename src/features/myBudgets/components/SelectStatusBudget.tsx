@@ -1,7 +1,5 @@
 import { Select as NativeBaseSelect, ISelectProps } from 'native-base';
 
-import { Status } from '../../../types/budget';
-
 export function SelectStatusBudget({ ...rest }: ISelectProps) {
     return (
         <NativeBaseSelect

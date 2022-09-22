@@ -14,7 +14,7 @@ export function SelectServiceType({ errorMessage, ...rest }: Props) {
                 borderWidth={0}
                 color="secondary.700"
                 placeholderTextColor="secondary.700"
-                shadow={1}
+                shadow={2}
                 rounded="lg"
                 placeholder="Escolha um tipo de serviço"
                 {...rest}

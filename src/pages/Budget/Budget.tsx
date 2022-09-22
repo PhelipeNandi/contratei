@@ -1,13 +1,14 @@
 import { VStack } from 'native-base';
-import { useRoute } from '@react-navigation/native';
+import { RouteProp, useRoute } from '@react-navigation/native';
 import { Header } from '../../components/ui/Header';
 import { useEffect } from 'react';
+import { propsNavigationStack } from '../../routes/Navigators/Models';
 
 export function Budget() {
-    const { params } = useRoute();
+    const route = useRoute<RouteProp<propsNavigationStack, "budget">>();
 
     useEffect(() => {
-        console.log(params.idBudget);
+        console.log(route.params?.idBudget);
     }, []);
 
     return (

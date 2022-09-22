@@ -3,6 +3,8 @@ import { SignIn } from '../pages/Login/SignIn';
 import { RegisterAccount } from '../pages/Login/RegisterAccount';
 import { Dashboard } from './Dashboard/Dashboard';
 import { SearchProvider } from './Provider/SearchProvider';
+import { FilterProvider } from './Provider/FilterProvider';
+import { Provider } from './Provider/Provider';
 import { MyBudgets } from './Budget/MyBudgets';
 import { Budget } from './Budget/Budget';
 import { CreateBudget } from './Budget/CreateBudget';
@@ -19,6 +21,8 @@ export {
     RegisterAccount,
     Dashboard,
     SearchProvider,
+    FilterProvider,
+    Provider,
     MyBudgets,
     Budget,
     CreateBudget,
