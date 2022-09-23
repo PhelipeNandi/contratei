@@ -49,6 +49,6 @@ export function SimpleProviderCard({ data, ...rest }: Props) {
                     </Text>
                 </VStack>
             </HStack>
-        </Pressable >
+        </Pressable>
     );
 }

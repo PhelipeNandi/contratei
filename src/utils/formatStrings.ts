@@ -13,6 +13,21 @@ export const normalizeStatus = (value: string | undefined) => {
     }
 }
 
+export const normalizePriorityLvel = (value: string | undefined) => {
+    if (!value) return '';
+
+    switch (value) {
+        case "TODAY":
+            return "Hoje";
+        case "THIS_WEEK":
+            return "Essa semana";
+        case "THIS_MONTH":
+            return "Esse mês";
+        case "COMBINE":
+            return "A combinar";
+    }
+}
+
 export const normalizeServiceType = (value: string | undefined) => {
     if (!value) return '';
 

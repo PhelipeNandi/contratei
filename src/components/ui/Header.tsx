@@ -72,12 +72,12 @@ export function Header({ title, ...rest }: Props) {
                     alignItems="center"
                 >
                     <IconButton
-                        icon={<Bell color="white" size={24} />}
+                        icon={<Bell color="white" size={24} weight="fill" />}
                         onPress={() => navigation.navigate('notifications')}
                     />
 
                     <IconButton
-                        icon={<DotsThreeVertical color="white" size={24} />}
+                        icon={<DotsThreeVertical color="white" size={24} weight="fill" />}
                         onPress={() => navigation.navigate('settings')}
                     />
                 </HStack>

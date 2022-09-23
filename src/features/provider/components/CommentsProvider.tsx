@@ -12,7 +12,7 @@ export function CommentsProvider({ data }: Props) {
 
     return (
         <HStack
-            my={5}
+            my={4}
             mb={2}
             px={9}
             bg="background"

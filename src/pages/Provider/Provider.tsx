@@ -107,7 +107,7 @@ export function Provider() {
                     </Text>
 
                     <FlatList
-                        mt={2}
+                        mt={4}
                         pl={2}
                         bg="background"
                         horizontal={true}

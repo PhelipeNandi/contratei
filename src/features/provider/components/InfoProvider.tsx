@@ -10,7 +10,7 @@ type Props = {
 
 export function InfoProvider({ data }: Props) {
     return (
-        <VStack px={8} mt={2}>
+        <VStack px={8} mt={4}>
             <MarkedTitleWithValue
                 title="Tipo de Serviço"
                 value="Mecanico"
