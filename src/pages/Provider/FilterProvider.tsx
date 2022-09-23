@@ -7,7 +7,7 @@ import { ArrowLeft } from 'phosphor-react-native';
 import { Provider } from '../../types/user';
 
 import { SelectServiceType } from '../../features/createBudget';
-import { SimpleProviderCard } from '../../features/searchProvider';
+import { SimpleProviderCard } from '../../features/filterProvider/components/SimpleProviderCard';
 
 export function FilterProvider() {
     const providers: Provider[] = [

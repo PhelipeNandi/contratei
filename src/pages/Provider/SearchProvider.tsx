@@ -1,12 +1,12 @@
 import { ListRenderItemInfo } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { HStack, Text, VStack, FlatList, ScrollView, Divider } from 'native-base';
 
 import { Provider, ServiceType } from '../../types/user';
 import { useAuthContext } from '../../hooks/useAuthContext';
+import { propsStack } from '../../routes/Navigators/Models';
 
 import { ProviderCardDetails, ServiceTypeCard } from '../../features/searchProvider';
-import { useNavigation } from '@react-navigation/native';
-import { propsStack } from '../../routes/Navigators/Models';
 
 export function SearchProvider() {
     const providers: Provider[] = [
@@ -190,10 +190,31 @@ export function SearchProvider() {
                         px={5}
                     >
                         <Text fontFamily="body" fontSize="md" color="gray.400">
-                            Melhores fornecedores da {""}
+                            Melhores preços da {""}
                         </Text>
                         <Text fontFamily="body" fontSize="md" color="primary.700">
                             semana
+                        </Text>
+                    </HStack>
+
+                    <FlatList
+                        my={5}
+                        horizontal={true}
+                        data={providers}
+                        keyExtractor={provider => provider.id.toString()}
+                        renderItem={renderProviderCardDetails}
+                        showsHorizontalScrollIndicator={false}
+                    />
+
+                    <HStack
+                        mt={4}
+                        px={5}
+                    >
+                        <Text fontFamily="body" fontSize="md" color="gray.400">
+                            Top fornecedores do {""}
+                        </Text>
+                        <Text fontFamily="body" fontSize="md" color="primary.700">
+                            mês
                         </Text>
                     </HStack>
 

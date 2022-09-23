@@ -20,7 +20,7 @@ export function PerfilProvider() {
                     <Image
                         alt="image"
                         borderRadius={20}
-                        source={{ uri: "https://images.pexels.com/photos/60597/dahlia-red-blossom-bloom-60597.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260" }}
+                        source={{ uri: "https://static.wikia.nocookie.net/ipod/images/d/dc/Apple_Changsha_R617-2022-09.jpg/revision/latest?cb=20220528150453" }}
                     />
                 </AspectRatio>
             </Box>
