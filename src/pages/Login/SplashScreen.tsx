@@ -5,32 +5,40 @@ import Logo from '../../assets/svg/logo_contratei.svg';
 import { propsStack } from '../../routes/Navigators/Models';
 
 import { Button } from '../../components/ui/Button';
+import { Header } from '../../components/ui/Header';
 
 export function SplashScreen() {
     const navigation = useNavigation<propsStack>();
 
     return (
-        <VStack flex={1} alignItems="center" bg="background" px={5} pt={40}>
+        <VStack flex={1}>
 
-            <Logo />
-
-            <Heading color="primary.700" fontSize="title" mt={2} mb={10}>
-                Contratei
-            </Heading>
-
-            <Button
-                w="full"
-                title="Entrar"
-                onPress={() => navigation.navigate('signIn')}
+            <Header
+                title="Entrar ou Cadastrar"
             />
 
-            <Button
-                w="full"
-                mt={5}
-                title="Cadastrar"
-                onPress={() => navigation.navigate('registerAccount')}
-            />
+            <VStack flex={1} px={5} alignItems="center" justifyContent="center" bg="background">
 
+                <Logo />
+
+                <Heading mt={2} mb={10} color="primary.700" fontSize="title">
+                    Contratei
+                </Heading>
+
+                <Button
+                    w="full"
+                    title="Entrar"
+                    onPress={() => navigation.navigate('signIn')}
+                />
+
+                <Button
+                    w="full"
+                    mt={5}
+                    title="Cadastrar"
+                    onPress={() => navigation.navigate('registerAccount')}
+                />
+
+            </VStack>
         </VStack>
     );
 }

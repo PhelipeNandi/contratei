@@ -7,6 +7,7 @@ import { useAuthContext } from '../../hooks/useAuthContext';
 import { propsStack } from '../../routes/Navigators/Models';
 
 import { ProviderCardDetails, ServiceTypeCard } from '../../features/searchProvider';
+import { Header } from '../../components/ui/Header';
 
 export function SearchProvider() {
     const providers: Provider[] = [
@@ -127,14 +128,12 @@ export function SearchProvider() {
     return (
         <VStack flex={1} bg="primary.700">
 
-            <ScrollView>
-                {
-                    !isAuthenticated &&
-                    <Text pt={16} pb={8} textAlign="center" fontFamily="body" fontSize="title" color="white">
-                        Contratei
-                    </Text>
+            {
+                !isAuthenticated &&
+                <Header />
+            }
 
-                }
+            <ScrollView>
 
                 <VStack bg="background">
                     <HStack

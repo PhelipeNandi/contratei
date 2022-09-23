@@ -1,28 +1,17 @@
-import { HStack, IconButton, Heading, StyledProps } from 'native-base';
+import { HStack, IconButton, Heading, StyledProps, Text } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
-import { ArrowLeft, DotsThreeVertical, Bell } from 'phosphor-react-native';
+import { ArrowLeft, DotsThreeVertical, Bell, SignIn } from 'phosphor-react-native';
 
+import { propsStack } from '../../routes/Navigators/Models';
 import { useAuthContext } from '../../hooks/useAuthContext';
 
 type Props = StyledProps & {
-    title: string;
+    title?: string;
 }
 
 export function Header({ title, ...rest }: Props) {
-    const navigation = useNavigation();
+    const navigation = useNavigation<propsStack>();
     const { isAuthenticated } = useAuthContext();
-
-    function handleGoBack() {
-        navigation.goBack();
-    }
-
-    function handleNavigateNotifications() {
-        navigation.navigate('notifications');
-    }
-
-    function handleNavigateSettigns() {
-        navigation.navigate('settings');
-    }
 
     return (
         <HStack
@@ -33,24 +22,48 @@ export function Header({ title, ...rest }: Props) {
             pb={6}
             {...rest}
         >
-            <HStack
-                pl={3}
-                alignItems="center"
-            >
-                <IconButton
-                    icon={<ArrowLeft color="white" size={24} />}
-                    onPress={handleGoBack}
-                />
 
-                <Heading
-                    pl={5}
-                    color="white"
-                    textAlign="center"
-                    fontSize="lg"
+            {
+                !isAuthenticated && !title &&
+                <HStack
+                    flex={1}
+                    justifyContent="space-between"
+                    alignItems="center"
                 >
-                    {title}
-                </Heading>
-            </HStack>
+                    <Text pl={5} fontFamily="body" fontSize="title" color="white">
+                        Contratei
+                    </Text>
+
+                    <IconButton
+                        pr={4}
+                        icon={<SignIn color="white" size={30} />}
+                        onPress={() => navigation.navigate('splashScreen')}
+                    />
+                </HStack>
+            }
+
+            {
+                !!title &&
+                <HStack
+                    pl={3}
+                    alignItems="center"
+                >
+
+                    <IconButton
+                        icon={<ArrowLeft color="white" size={24} />}
+                        onPress={() => navigation.goBack()}
+                    />
+
+                    <Heading
+                        pl={5}
+                        color="white"
+                        textAlign="center"
+                        fontSize="lg"
+                    >
+                        {title}
+                    </Heading>
+                </HStack>
+            }
 
             {
                 isAuthenticated &&
@@ -59,13 +72,13 @@ export function Header({ title, ...rest }: Props) {
                     alignItems="center"
                 >
                     <IconButton
-                        onPress={handleNavigateNotifications}
                         icon={<Bell color="white" size={24} />}
+                        onPress={() => navigation.navigate('notifications')}
                     />
 
                     <IconButton
-                        onPress={handleNavigateSettigns}
                         icon={<DotsThreeVertical color="white" size={24} />}
+                        onPress={() => navigation.navigate('settings')}
                     />
                 </HStack>
             }
