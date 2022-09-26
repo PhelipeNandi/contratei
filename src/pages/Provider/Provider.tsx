@@ -9,8 +9,7 @@ import {
     PerfilProvider,
     InfoProvider,
     PhotosProvider,
-    CommentsProvider,
-    AddNewComment
+    CommentsProvider
 } from '../../features/provider';
 
 import { Photo, Comment } from '../../types/provider';
@@ -96,13 +95,13 @@ export function Provider() {
                         Essa aqui é minha descrição como fornecedor
                     </Text>
 
-                    <Text mt={5} px={5} fontFamily="body" fontSize="md" color="primary.700">
+                    <Text mt={5} px={5} fontFamily="body" fontSize="lg" color="primary.700">
                         Informações
                     </Text>
 
                     <InfoProvider />
 
-                    <Text mt={5} px={5} fontFamily="body" fontSize="md" color="primary.700">
+                    <Text mt={5} px={5} fontFamily="body" fontSize="lg" color="primary.700">
                         Fotos
                     </Text>
 
@@ -118,12 +117,12 @@ export function Provider() {
                     />
 
                     <HStack
-                        mt={5}
                         px={5}
+                        my={7}
                         alignItems="center"
                         justifyContent="space-between"
                     >
-                        <Text fontFamily="body" fontSize="md" color="primary.700">
+                        <Text fontFamily="body" fontSize="lg" color="primary.700">
                             Comentários
                         </Text>
                         <Text fontFamily="body" fontSize="xs" color="primary.700">
@@ -133,24 +132,22 @@ export function Provider() {
 
                     {
                         comments.map((comment, index) => {
-                            return <CommentsProvider key={index}
+                            return <CommentsProvider
+                                key={index}
                                 data={comment}
                             />
                         })
                     }
-
-                    <AddNewComment />
-
                 </VStack>
             </ScrollView>
 
             <Fab
                 renderInPortal={false}
                 shadow={2}
-                placement="bottom-left"
-                size="sm"
+                placement="bottom-right"
+                size="md"
                 bg="primary.700"
-                icon={<Plus color="white" size="20" />}
+                icon={<Plus color="white" size="15" />}
             />
         </VStack >
     );

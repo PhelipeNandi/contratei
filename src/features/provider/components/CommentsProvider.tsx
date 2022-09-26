@@ -12,9 +12,8 @@ export function CommentsProvider({ data }: Props) {
 
     return (
         <HStack
-            my={4}
-            mb={2}
-            px={9}
+            mb={7}
+            px={7}
             bg="background"
             justifyContent="space-between"
         >
