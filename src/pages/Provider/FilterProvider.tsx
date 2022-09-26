@@ -1,80 +1,47 @@
 import { ListRenderItemInfo } from 'react-native';
-import { Text, VStack, HStack, IconButton, Box, FlatList } from 'native-base';
+import { Text, VStack, HStack, IconButton, Box, FlatList, Center, useTheme } from 'native-base';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { propsNavigationStack, propsStack } from '../../routes/Navigators/Models';
-import { ArrowLeft } from 'phosphor-react-native';
+import { ArrowLeft, Warning } from 'phosphor-react-native';
+import { useInfiniteQuery } from 'react-query';
 
 import { Provider } from '../../types/user';
 
+import { Loading } from '../../components/ui/Loading';
 import { SelectServiceType } from '../../features/createBudget';
+import { searchProvidersByServiceType } from '../../features/filterProvider';
 import { SimpleProviderCard } from '../../features/filterProvider/components/SimpleProviderCard';
+import { useState } from 'react';
 
 export function FilterProvider() {
-    const providers: Provider[] = [
-        {
-            id: 5,
-            serviceType: 'MECANICO',
-            firstName: 'Fornecedor',
-            lastName: '5',
-            contactNumber: '(48) 99999-9999',
-            cpf: '223.642.369-16',
-            email: 'mecanico@provider.com',
-            description: 'Descrição do Mecanico',
-            kmWorkRange: '50.0',
-            hourValue: '100.00',
-        }
-        , {
-            id: 4,
-            serviceType: 'PEDREIRO',
-            firstName: 'Fornecedor',
-            lastName: '4',
-            contactNumber: '(48) 99999-9999',
-            cpf: '177.607.715-68',
-            email: 'pedreiro@provider.com',
-            description: 'Descrição do Pedreiro',
-            kmWorkRange: '50.0',
-            hourValue: '100.00',
-        }
-        , {
-            id: 3,
-            serviceType: 'PINTOR',
-            firstName: 'Fornecedor',
-            lastName: '3',
-            contactNumber: '(48) 99999-9999',
-            cpf: '362.284.438-87',
-            email: 'pintor@provider.com',
-            description: 'Descrição do Pintor',
-            kmWorkRange: '50.0',
-            hourValue: '100.00',
-        }
-        , {
-            id: 2,
-            serviceType: 'MARCENEIRO',
-            firstName: 'Fornecedor',
-            lastName: '2',
-            contactNumber: '(48) 99999-9999',
-            cpf: '347.185.723-04',
-            email: 'marceneiro@provider.com',
-            description: 'Descrição do Marceneiro',
-            kmWorkRange: '50.0',
-            hourValue: '100.00',
-        }
-        , {
-            id: 1,
-            serviceType: 'EMPREGRADO',
-            firstName: 'Fornecedor',
-            lastName: '1',
-            contactNumber: '(48) 99999-9999',
-            cpf: '077.321.526-38',
-            email: 'empregado@provider.com',
-            description: 'Descrição do Empregado',
-            kmWorkRange: '50.0',
-            hourValue: '100.00',
-        }
-    ]
-
     const route = useRoute<RouteProp<propsNavigationStack, "filterProvider">>();
     const navigation = useNavigation<propsStack>();
+    const { colors } = useTheme();
+    const [serviceTypeSelect, setServiceTypeSelect] = useState(route.params?.serviceType.name);
+
+    const {
+        data,
+        isSuccess,
+        isLoading,
+        isError,
+        hasNextPage,
+        fetchNextPage,
+        isFetchingNextPage
+    } = useInfiniteQuery(["providersByServiceType", serviceTypeSelect],
+        ({ queryKey, pageParam = 0 }) => searchProvidersByServiceType(pageParam, queryKey[1]), {
+        getNextPageParam: (page) => {
+            if (page.currentPage < page.totalPages) {
+                return page.currentPage + 1;
+            }
+            return false;
+        }
+    });
+
+    function handleFetchNextPaget() {
+        if (hasNextPage) {
+            fetchNextPage();
+        }
+    }
 
     function renderProviderCard({ item }: ListRenderItemInfo<Provider>) {
         return <SimpleProviderCard
@@ -114,16 +81,43 @@ export function FilterProvider() {
                 borderWidth={1}
                 borderColor="primary.700"
                 defaultValue={route.params?.serviceType.name}
+                onValueChange={setServiceTypeSelect}
             />
 
-            <FlatList
-                mt={5}
-                bg="background"
-                data={providers}
-                keyExtractor={provider => provider.id.toString()}
-                renderItem={renderProviderCard}
-                showsVerticalScrollIndicator={false}
-            />
+            {
+                isLoading &&
+                <Loading />
+            }
+
+            {
+                isError &&
+                <Center flex={1}>
+                    <Warning color={colors.red[600]} size={32} />
+                    <Text mt={4} textAlign="center" color="gray.300" fontFamily="body" fontSize="sm">
+                        Aconteceu um erro ao buscar {"\n"}
+                        os fornecedores
+                    </Text>
+                </Center>
+            }
+
+            {
+                isSuccess &&
+                <FlatList
+                    mt={5}
+                    bg="background"
+                    data={data.pages.map((providerResponse) => providerResponse.providers).flat()}
+                    keyExtractor={provider => provider.id.toString()}
+                    renderItem={renderProviderCard}
+                    showsVerticalScrollIndicator={false}
+                    onEndReached={handleFetchNextPaget}
+                    onEndReachedThreshold={0.1}
+                    ListFooterComponent={
+                        isFetchingNextPage && <Loading my={10} />
+                    }
+                />
+            }
+
+
         </VStack>
     );
 }

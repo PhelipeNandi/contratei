@@ -64,3 +64,9 @@ export interface ServiceType {
     id: number;
     name: string;
 }
+
+export interface ProviderResponse {
+    providers: Provider[];
+    currentPage: number;
+    totalPages: number;
+}
