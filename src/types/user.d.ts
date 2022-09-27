@@ -1,27 +1,6 @@
-export interface RegisterNewUser {
-    type: 'Consumidor' | 'Fornecedor';
-    firstName: string;
-    lastName: string;
-    contactNumber: string;
-    cpf: string;
-    email: string;
-    password: string;
-}
-
-export interface SignInData {
-    email: string;
-    password: string;
-}
-
-export interface AuthResponse {
-    type: string,
-    params: {
-        access_token: string
-    }
-}
-
 export interface User {
     id: number;
+    password: string;
     type: 'Consumidor' | 'Fornecedor';
     firstName: string;
     lastName: string;
@@ -32,10 +11,24 @@ export interface User {
     description?: string;
     kmWorkRange?: string;
     hourValue?: string;
+    profilePicture?: string;
+}
+
+export interface ChangePersonalInformation {
+    firstName: string;
+    lastName: string;
+    contactNumber: string;
+    cpf: string;
+    email: string;
+    description?: string;
+    kmWorkRange?: string;
+    hourValue?: string;
+    profilePicture?: string;
 }
 
 export interface UserResponse {
     id: number;
+    password: string;
     isProvider: boolean;
     firstName: string;
     lastName: string;
@@ -45,28 +38,5 @@ export interface UserResponse {
     description: string;
     kmWorkRange: string;
     hourValue: string;
-}
-
-export interface Provider {
-    id: number;
-    serviceType: string;
-    firstName: string;
-    lastName: string;
-    contactNumber: string;
-    cpf: string;
-    email: string;
-    description: string;
-    kmWorkRange: string;
-    hourValue: string;
-}
-
-export interface ServiceType {
-    id: number;
-    name: string;
-}
-
-export interface ProviderResponse {
-    providers: Provider[];
-    currentPage: number;
-    totalPages: number;
+    profilePicture: string;
 }

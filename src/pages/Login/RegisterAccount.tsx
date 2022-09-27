@@ -11,7 +11,7 @@ import { RadioButton } from '../../components/form/RadioButton';
 import { Button } from '../../components/ui/Button';
 import { normalizeCPF, normalizeContactNumberValue } from '../../utils/masks';
 
-import { RegisterNewUser } from '../../types/user';
+import { RegisterNewUser } from '../../types/authentication';
 
 const registerNewUserForm: yup.SchemaOf<RegisterNewUser> = yup.object({
     type: yup.mixed().oneOf(['Consumidor', 'Fornecedor']).required("Tipo obrigatório"),

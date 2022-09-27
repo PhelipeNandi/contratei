@@ -2,7 +2,7 @@ import { VStack, Text, HStack } from 'native-base';
 
 import { MarkedTitleWithValue } from '../../../components/ui/MarkedTitleWithValue';
 
-import { Provider } from '../../../types/user';
+import { Provider } from '../../../types/provider';
 
 type Props = {
     data?: Provider;

@@ -1,5 +1,5 @@
 import { Api } from "../../../lib/Api";
-import { RegisterNewUser } from "../../../types/user";
+import { RegisterNewUser } from "../../../types/authentication";
 
 export async function registerAccountRequest(data: RegisterNewUser): Promise<string> {
     try {

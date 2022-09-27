@@ -16,7 +16,7 @@ import { Budget as BudgetType } from '../../types/budget';
 import { Header } from '../../components/ui/Header';
 import { CardDetails, ProgressStatusBudget, CardProvider } from '../../features/budget';
 import { normalizeServiceType, normalizePriorityLvel } from '../../utils/formatStrings';
-import { Provider } from '../../types/user';
+import { Provider } from '../../types/provider';
 
 export function Budget() {
     const route = useRoute<RouteProp<propsNavigationStack, "budget">>();

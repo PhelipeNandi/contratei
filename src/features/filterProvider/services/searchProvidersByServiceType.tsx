@@ -1,5 +1,5 @@
 import { Api } from "../../../lib/Api";
-import { ProviderResponse } from "../../../types/user";
+import { ProviderResponse } from "../../../types/provider";
 
 export async function searchProvidersByServiceType(pageParam: number, serviceType: string): Promise<ProviderResponse> {
     try {

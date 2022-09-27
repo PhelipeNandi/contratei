@@ -1,6 +1,6 @@
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
-import { ServiceType } from "../../../types/user";
+import { ServiceType } from "../../../types/provider";
 
 export type propsNavigationStack = {
     splashScreen: undefined,

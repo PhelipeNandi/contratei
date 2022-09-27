@@ -1,5 +1,5 @@
 import { Pressable, IPressableProps, HStack, Avatar, VStack, Text, Box } from 'native-base';
-import { Provider } from '../../../types/user';
+import { Provider } from '../../../types/provider';
 
 type Props = IPressableProps & {
     data: Provider;

@@ -3,7 +3,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { Api } from "../lib/Api";
 import { signInRequest, signInGoogleRequest } from "../features/authentication";
-import { User, SignInData } from "../types/user";
+import { User } from "../types/user";
+import { SignInData } from "../types/authentication";
 
 interface AuthContextType {
     isAuthenticated: boolean;

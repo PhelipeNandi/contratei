@@ -37,7 +37,14 @@ export function Dashboard() {
                 pb={8}
                 bg="primary.700"
             >
-                <Avatar bg="gray.500" size="lg" source={{ uri: "https://avatars.githubusercontent.com/u/46757393?v=4" }} />
+                <Avatar
+                    bg="gray.500"
+                    size="lg"
+                    source={{
+                        uri: user.profilePicture ? `data:image/gif;base64,${user.profilePicture}`
+                            : "https://avatars.githubusercontent.com/u/46757393?v=4"
+                    }}
+                />
 
                 <VStack pl={8}>
                     <HStack>
@@ -51,9 +58,9 @@ export function Dashboard() {
                 </VStack>
             </HStack>
 
-            <VStack flex={1} roundedTop={32} px={8} bg="background">
+            <VStack flex={1} roundedTop={32} px={5} bg="background">
 
-                <HStack mt={3} justifyContent="space-between">
+                <HStack mt={3} mx={2} justifyContent="space-between">
                     <CardNavigation
                         title={`Meus\nOrçamentos`}
                         colorCard="red.500"

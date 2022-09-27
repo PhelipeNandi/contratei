@@ -11,21 +11,20 @@ export function MenuNavigation({ title, icon: Icon, ...rest }: Props) {
 
     return (
         <Pressable {...rest}>
-            <Box>
+            <Box
+                p={5}
+                shadow={3}
+                bg="primary.700"
+                rounded="lg"
+            >
                 <HStack alignItems="center">
-                    <Icon color={colors.primary[700]} size={24} weight="bold" />
+                    <Icon color={colors.white} size={20} weight="fill" />
 
-                    <Text pl={3} fontFamily="mono" fontSize="menu" color="primary.700">
+                    <Text pl={3} textAlign="center" fontFamily="mono" fontSize="menu" color="white">
                         {title}
                     </Text>
                 </HStack>
             </Box>
-
-            <Divider
-                mt={2}
-                thickness={1}
-                bg="primary.700"
-            />
         </Pressable>
     );
 }

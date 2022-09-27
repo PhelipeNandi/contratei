@@ -1,6 +1,6 @@
 import * as AuthSession from 'expo-auth-session';
 
-import { AuthResponse } from "../../../types/user";
+import { AuthResponse } from "../../../types/authentication";
 
 export async function signInGoogleRequest() {
     const CLIENT_ID = '1046192833257-u78sr0ut46n0bog32lqum1tuoe0jo4po.apps.googleusercontent.com';

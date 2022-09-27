@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Pressable, IPressableProps, AspectRatio, Image, Stack, Heading, Text, Center, Divider, HStack } from 'native-base';
 import { Smiley } from 'phosphor-react-native';
 
-import { Provider } from '../../../types/user';
+import { Provider } from '../../../types/provider';
 
 type Props = IPressableProps & {
   data: Provider;

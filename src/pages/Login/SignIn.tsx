@@ -7,7 +7,7 @@ import { Envelope, Key, GoogleLogo } from 'phosphor-react-native';
 import Login from '../../assets/svg/login.svg';
 
 import { useAuthContext } from '../../hooks/useAuthContext';
-import { SignInData } from '../../types/user';
+import { SignInData } from '../../types/authentication';
 import { Header } from '../../components/ui/Header';
 import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/form/Input';

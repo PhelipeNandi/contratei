@@ -5,7 +5,7 @@ import { propsNavigationStack, propsStack } from '../../routes/Navigators/Models
 import { ArrowLeft, Warning } from 'phosphor-react-native';
 import { useInfiniteQuery } from 'react-query';
 
-import { Provider } from '../../types/user';
+import { Provider } from '../../types/provider';
 
 import { Loading } from '../../components/ui/Loading';
 import { SelectServiceType } from '../../features/createBudget';

@@ -2,7 +2,7 @@ import { ListRenderItemInfo } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { HStack, Text, VStack, FlatList, ScrollView, Divider } from 'native-base';
 
-import { Provider, ServiceType } from '../../types/user';
+import { Provider, ServiceType } from '../../types/provider';
 import { useAuthContext } from '../../hooks/useAuthContext';
 import { propsStack } from '../../routes/Navigators/Models';
 

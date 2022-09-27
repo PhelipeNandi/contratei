@@ -1,5 +1,6 @@
 import { Api } from "../../../lib/Api";
-import { SignInData, User, UserResponse } from "../../../types/user";
+import { SignInData } from "../../../types/authentication";
+import { User, UserResponse } from "../../../types/user";
 
 async function handleSignIn(data: SignInData): Promise<string> {
     try {
@@ -39,6 +40,7 @@ export async function signInRequest(data: SignInData): Promise<User> {
 
         return {
             id: user.id,
+            password: user.password,
             type: user.isProvider ? "Fornecedor" : "Consumidor",
             firstName: user.firstName,
             lastName: user.lastName,
@@ -48,7 +50,8 @@ export async function signInRequest(data: SignInData): Promise<User> {
             token: token,
             description: user.description,
             kmWorkRange: user.kmWorkRange,
-            hourValue: user.hourValue
+            hourValue: user.hourValue,
+            profilePicture: user.profilePicture
         }
     } catch (error) {
         if (error instanceof Error) {
