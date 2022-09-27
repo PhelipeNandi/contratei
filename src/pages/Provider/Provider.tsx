@@ -8,15 +8,18 @@ import { propsNavigationStack, propsStack } from '../../routes/Navigators/Models
 import {
     PerfilProvider,
     InfoProvider,
-    PhotosProvider,
-    CommentsProvider
+    PhotosProvider
 } from '../../features/provider';
+import { CardCommentProvider } from '../../features/commentsProvider';
 
 import { Photo, Comment } from '../../types/provider';
+import { useProviderContext } from '../../hooks/useProviderContext';
+import { useEffect } from 'react';
 
 export function Provider() {
     const route = useRoute<RouteProp<propsNavigationStack, "provider">>();
     const navigation = useNavigation<propsStack>();
+    const { provider } = useProviderContext();
 
     const urls: Photo[] = [
         {
@@ -50,7 +53,7 @@ export function Provider() {
                 id: 1,
                 url: "https://avatars.githubusercontent.com/u/46757393?v=4"
             },
-            rating: 9.2,
+            rating: "9.2",
             description: "Meu comentário"
         }, {
             idComent: 2,
@@ -60,7 +63,7 @@ export function Provider() {
                 id: 1,
                 url: "https://avatars.githubusercontent.com/u/46757393?v=4"
             },
-            rating: 9.2,
+            rating: "9.2",
             description: "Meu comentário"
         }, {
             idComent: 1,
@@ -70,7 +73,7 @@ export function Provider() {
                 id: 1,
                 url: "https://avatars.githubusercontent.com/u/46757393?v=4"
             },
-            rating: 9.2,
+            rating: "9.2",
             description: "Meu comentário"
         }
     ]
@@ -88,11 +91,11 @@ export function Provider() {
 
                 <VStack>
                     <Text mt={5} px={5} fontFamily="body" fontSize="subTitle" color="primary.700">
-                        Fornecedor 1
+                        {provider.firstName} {provider.lastName}
                     </Text>
 
                     <Text px={10} mt={4} fontFamily="body" fontSize="xs" color="gray.400">
-                        Essa aqui é minha descrição como fornecedor
+                        {provider.lastName}
                     </Text>
 
                     <Text mt={5} px={5} fontFamily="body" fontSize="lg" color="primary.700">
@@ -125,14 +128,15 @@ export function Provider() {
                         <Text fontFamily="body" fontSize="lg" color="primary.700">
                             Comentários
                         </Text>
-                        <Text fontFamily="body" fontSize="xs" color="primary.700">
+                        <Text fontFamily="body" fontSize="xs" color="primary.700"
+                            onPress={() => navigation.navigate("commentsProvider")}>
                             Ver todos
                         </Text>
                     </HStack>
 
                     {
                         comments.map((comment, index) => {
-                            return <CommentsProvider
+                            return <CardCommentProvider
                                 key={index}
                                 data={comment}
                             />

@@ -8,6 +8,7 @@ import { propsStack } from '../../routes/Navigators/Models';
 
 import { ProviderCardDetails, ServiceTypeCard } from '../../features/searchProvider';
 import { Header } from '../../components/ui/Header';
+import { useProviderContext } from '../../hooks/useProviderContext';
 
 export function SearchProvider() {
     const providers: Provider[] = [
@@ -98,12 +99,25 @@ export function SearchProvider() {
 
     const { navigate } = useNavigation<propsStack>();
     const { isAuthenticated } = useAuthContext();
+    const { searchProvider } = useProviderContext();
+
+    async function handleNaviteProvider(provider: Provider) {
+        await searchProvider(provider.id)
+            .then(() => {
+                navigate("provider");
+            })
+            .catch((error) => {
+                if (error instanceof Error) {
+                    console.log(error.message);
+                }
+            });
+    }
 
     function renderProviderCard({ item }: ListRenderItemInfo<Provider>) {
         return <ProviderCardDetails
             maxW={80}
             data={item}
-            onPress={() => navigate("provider", { idProvider: item.id })}
+            onPress={() => handleNaviteProvider(item)}
         />
     }
 
@@ -117,7 +131,7 @@ export function SearchProvider() {
         return <ProviderCardDetails
             maxW={48}
             data={item}
-            onPress={() => navigate("provider", { idProvider: item.id })}
+            onPress={() => handleNaviteProvider(item)}
         />
     }
 

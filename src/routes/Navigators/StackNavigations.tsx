@@ -17,7 +17,10 @@ import {
     AddNewCreditCard,
     Notifications,
     Settings,
+    CommentsProvider,
+    CreateNewCommentProvider,
 } from '../../pages';
+import { ProviderProvider } from '../../contexts/authProvider';
 
 const Stack = createNativeStackNavigator<propsNavigationStack>();
 
@@ -57,11 +60,15 @@ export function BudgetNavigation() {
 
 export function SearchProviderNavigation() {
     return (
-        <Stack.Navigator initialRouteName="searchProvider" screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="searchProvider" component={SearchProvider} />
-            <Stack.Screen name="filterProvider" component={FilterProvider} />
-            <Stack.Screen name="provider" component={Provider} />
-        </Stack.Navigator>
+        <ProviderProvider>
+            <Stack.Navigator initialRouteName="searchProvider" screenOptions={{ headerShown: false }}>
+                <Stack.Screen name="searchProvider" component={SearchProvider} />
+                <Stack.Screen name="filterProvider" component={FilterProvider} />
+                <Stack.Screen name="provider" component={Provider} />
+                <Stack.Screen name="commentsProvider" component={CommentsProvider} />
+                <Stack.Screen name="createNewCommentProvider" component={CreateNewCommentProvider} />
+            </Stack.Navigator>
+        </ProviderProvider>
     )
 }
 

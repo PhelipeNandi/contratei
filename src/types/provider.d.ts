@@ -27,11 +27,16 @@ export interface Photo {
     url: string;
 }
 
+export interface NewCommentProvider {
+    rating: string;
+    description: string;
+}
+
 export interface Comment {
     idComent: number;
     idConsumer: number;
     name: string;
     photo: Photo;
-    rating: number;
+    rating: string;
     description: string;
 }

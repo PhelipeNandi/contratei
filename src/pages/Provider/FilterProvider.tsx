@@ -12,10 +12,12 @@ import { SelectServiceType } from '../../features/createBudget';
 import { searchProvidersByServiceType } from '../../features/filterProvider';
 import { SimpleProviderCard } from '../../features/filterProvider/components/SimpleProviderCard';
 import { useState } from 'react';
+import { useProviderContext } from '../../hooks/useProviderContext';
 
 export function FilterProvider() {
     const route = useRoute<RouteProp<propsNavigationStack, "filterProvider">>();
     const navigation = useNavigation<propsStack>();
+    const { searchProvider } = useProviderContext();
     const { colors } = useTheme();
     const [serviceTypeSelect, setServiceTypeSelect] = useState(route.params?.serviceType.name);
 
@@ -43,12 +45,24 @@ export function FilterProvider() {
         }
     }
 
+    async function handleNaviteProvider(provider: Provider) {
+        await searchProvider(provider.id)
+            .then(() => {
+                navigation.navigate("provider");
+            })
+            .catch((error) => {
+                if (error instanceof Error) {
+                    console.log(error.message);
+                }
+            });
+    }
+
     function renderProviderCard({ item }: ListRenderItemInfo<Provider>) {
         return <SimpleProviderCard
             mx={5}
             mt={3}
             data={item}
-            onPress={() => navigation.navigate("provider", { idProvider: item.id })}
+            onPress={() => handleNaviteProvider(item)}
         />
     }
 

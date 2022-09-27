@@ -22,9 +22,9 @@ export type propsNavigationStack = {
     filterProvider: {
         serviceType: ServiceType
     },
-    provider: {
-        idProvider: number
-    }
+    provider: undefined,
+    commentsProvider: undefined,
+    createNewCommentProvider: undefined
 }
 
 export type propsNavigationTab = {

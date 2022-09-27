@@ -7,7 +7,7 @@ type Props = {
     data: Comment;
 }
 
-export function CommentsProvider({ data }: Props) {
+export function CardCommentProvider({ data }: Props) {
     const { colors } = useTheme();
 
     return (

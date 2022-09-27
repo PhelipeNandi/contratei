@@ -5,6 +5,8 @@ import { Dashboard } from './Dashboard/Dashboard';
 import { SearchProvider } from './Provider/SearchProvider';
 import { FilterProvider } from './Provider/FilterProvider';
 import { Provider } from './Provider/Provider';
+import { CommentsProvider } from './Provider/CommentsProvider';
+import { CreateNewCommentProvider } from './Provider/CreateNewCommentProvider';
 import { MyBudgets } from './Budget/MyBudgets';
 import { Budget } from './Budget/Budget';
 import { CreateBudget } from './Budget/CreateBudget';
@@ -23,6 +25,8 @@ export {
     SearchProvider,
     FilterProvider,
     Provider,
+    CommentsProvider,
+    CreateNewCommentProvider,
     MyBudgets,
     Budget,
     CreateBudget,
