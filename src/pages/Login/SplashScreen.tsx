@@ -28,7 +28,7 @@ export function SplashScreen() {
                 <Button
                     w="full"
                     title="Entrar"
-                    variant="PRIMARIO"
+                    variant="primary"
                     onPress={() => navigation.navigate('signIn')}
                 />
 
@@ -36,7 +36,7 @@ export function SplashScreen() {
                     w="full"
                     mt={5}
                     title="Cadastrar"
-                    variant="PRIMARIO"
+                    variant="primary"
                     onPress={() => navigation.navigate('registerAccount')}
                 />
 

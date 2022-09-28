@@ -138,7 +138,7 @@ export function CreateBudget() {
                         mt={2}
                         mb={8}
                         title="Salvar"
-                        variant="PRIMARIO"
+                        variant="primary"
                         isLoading={isLoading}
                         isLoadingText="Salvando"
                         onPress={handleSubmit((values) => mutate(values))}

@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
-import { ListRenderItemInfo } from 'react-native';
-import { VStack, FlatList } from 'native-base';
-import { AddressBook } from 'phosphor-react-native';
+import { VStack, ScrollView } from 'native-base';
 
 import { UserAdress } from '../../../types/user';
 
+import { Alert } from '../../../components/form/Alert';
 import { AdressCard } from '../../../features/adresses';
 import { Button } from '../../../components/ui/Button';
 import { Header } from '../../../components/ui/Header';
@@ -16,6 +15,23 @@ export function Adresses() {
 
     const userAdresses: UserAdress[] = [
         {
+            id: 3,
+            city: "Tubarão",
+            district: "Monte Castelo",
+            numberStreet: "80",
+            postCode: "88702-440",
+            state: "SC",
+            street: "José Bressan"
+        }, {
+            id: 2,
+            city: "Tubarão",
+            district: "Monte Castelo",
+            numberStreet: "80",
+            postCode: "88702-440",
+            state: "SC",
+            street: "José Bressan"
+        },
+        {
             id: 1,
             city: "Tubarão",
             district: "Monte Castelo",
@@ -26,32 +42,36 @@ export function Adresses() {
         }
     ]
 
-    function renderAdressCard({ item }: ListRenderItemInfo<UserAdress>) {
-        return <AdressCard data={item} />
-    }
+    const [showAlert, setShowAlert] = useState(false);
 
     return (
         <VStack flex={1} bg="background">
             <Header title="Endereços" />
 
-            <VStack mt={10}>
+            <VStack mt={5} flex={1}>
+                <ScrollView>
+                    {
+                        userAdresses.map((userAdress) => {
+                            return (
+                                <AdressCard
+                                    px={4}
+                                    mb={5}
+                                    data={userAdress}
+                                    key={userAdress.id.toString()}
+                                    onPress={() => setShowAlert(true)}
+                                />
+                            )
+                        })
+                    }
 
-                <FlatList
-                    px={4}
-                    data={userAdresses}
-                    keyExtractor={userAdress => userAdress.id.toString()}
-                    renderItem={renderAdressCard}
-                    showsVerticalScrollIndicator={false}
-                />
-
-                <Button
-                    mt={10}
-                    mx={5}
-                    title="Adicionar"
-                    variant="PRIMARIO"
-                    onPress={() => navigation.navigate("addNewAddress")}
-                />
-
+                    <Button
+                        mx={5}
+                        my={2}
+                        title="Adicionar"
+                        variant="primary"
+                        onPress={() => navigation.navigate("addNewAddress")}
+                    />
+                </ScrollView>
             </VStack>
         </VStack>
     );

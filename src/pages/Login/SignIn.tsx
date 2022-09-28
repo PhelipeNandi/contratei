@@ -84,7 +84,7 @@ export function SignIn() {
                     mt={5}
                     w="full"
                     title="Entrar"
-                    variant="PRIMARIO"
+                    variant="primary"
                     onPress={handleSubmit(handleSignIn)}
                 />
 
@@ -92,7 +92,7 @@ export function SignIn() {
 
                 <Button
                     w="full"
-                    variant="PRIMARIO"
+                    variant="primary"
                     title="Entrar com Google"
                     onPress={handleSignInGoogle}
                     leftIcon={<Icon as={<GoogleLogo color={colors.white} />} />}

@@ -2,12 +2,12 @@ import { Button as ButtonNativeBase, IButtonProps, Heading } from 'native-base';
 
 type Props = IButtonProps & {
     title: string;
-    variant: "PRIMARIO" | "SUCESSO" | "AVISO" | "PERIGO" | "INFO";
+    variant: "primary" | "sucess" | "warning" | "danger" | "info";
 }
 
 export function Button({ title, variant, ...rest }: Props) {
     switch (variant) {
-        case "PRIMARIO":
+        case "primary":
             return (
                 <ButtonNativeBase
                     h={14}
@@ -15,6 +15,7 @@ export function Button({ title, variant, ...rest }: Props) {
                     fontSize="sm"
                     rounded="sm"
                     _pressed={{ bg: "primary.700" }}
+                    _disabled={{ bg: "gray.700" }}
                     {...rest}
                 >
                     <Heading color="white" fontSize="sm">
@@ -22,7 +23,7 @@ export function Button({ title, variant, ...rest }: Props) {
                     </Heading>
                 </ButtonNativeBase>
             );
-        case "SUCESSO":
+        case "sucess":
             return (
                 <ButtonNativeBase
                     h={14}
@@ -30,6 +31,7 @@ export function Button({ title, variant, ...rest }: Props) {
                     fontSize="sm"
                     rounded="sm"
                     _pressed={{ bg: "green.700" }}
+                    _disabled={{ bg: "gray.700" }}
                     {...rest}
                 >
                     <Heading color="white" fontSize="sm">
@@ -37,7 +39,7 @@ export function Button({ title, variant, ...rest }: Props) {
                     </Heading>
                 </ButtonNativeBase>
             );
-        case "AVISO":
+        case "warning":
             return (
                 <ButtonNativeBase
                     h={14}
@@ -45,6 +47,7 @@ export function Button({ title, variant, ...rest }: Props) {
                     fontSize="sm"
                     rounded="sm"
                     _pressed={{ bg: "yellow.700" }}
+                    _disabled={{ bg: "gray.700" }}
                     {...rest}
                 >
                     <Heading color="white" fontSize="sm">
@@ -52,7 +55,7 @@ export function Button({ title, variant, ...rest }: Props) {
                     </Heading>
                 </ButtonNativeBase>
             );
-        case "PERIGO":
+        case "danger":
             return (
                 <ButtonNativeBase
                     h={14}
@@ -60,6 +63,7 @@ export function Button({ title, variant, ...rest }: Props) {
                     fontSize="sm"
                     rounded="sm"
                     _pressed={{ bg: "red.700" }}
+                    _disabled={{ bg: "gray.700" }}
                     {...rest}
                 >
                     <Heading color="white" fontSize="sm">
@@ -67,7 +71,7 @@ export function Button({ title, variant, ...rest }: Props) {
                     </Heading>
                 </ButtonNativeBase>
             );
-        case "INFO":
+        case "info":
             return (
                 <ButtonNativeBase
                     h={14}
@@ -75,6 +79,7 @@ export function Button({ title, variant, ...rest }: Props) {
                     fontSize="sm"
                     rounded="sm"
                     _pressed={{ bg: "secondary.700" }}
+                    _disabled={{ bg: "gray.700" }}
                     {...rest}
                 >
                     <Heading color="white" fontSize="sm">

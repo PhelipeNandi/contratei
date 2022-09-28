@@ -189,7 +189,7 @@ export function RegisterAccount() {
                         w="full"
                         mt={5}
                         title="Cadastrar"
-                        variant="PRIMARIO"
+                        variant="primary"
                         onPress={handleSubmit(handleRegisterAccount)}
                     />
 
