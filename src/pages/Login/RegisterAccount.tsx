@@ -79,7 +79,7 @@ export function RegisterAccount() {
 
             <VStack flex={1} roundedTop={32} bg="background">
 
-                <ScrollView flex={1} mt={10} mx={8}>
+                <ScrollView flex={1} mt={10} mx={8} showsVerticalScrollIndicator={false}>
 
                     <Controller
                         control={control}
