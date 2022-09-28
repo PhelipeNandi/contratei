@@ -274,7 +274,7 @@ export function PersonalInformation() {
                     <Button
                         mt={8}
                         title="Salvar"
-                        variant="primary"
+                        variant="sucess"
                         isLoading={isLoading}
                         isLoadingText="Salvando"
                         onPress={handleSubmit((value) => mutate(value))}

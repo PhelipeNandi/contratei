@@ -1,15 +1,14 @@
-import { useState, useEffect } from 'react';
 import { VStack, ScrollView, Collapse } from 'native-base';
+import { useNavigation } from '@react-navigation/native';
 
 import { UserAdress } from '../../../types/user';
+import { propsStack } from '../../../routes/Navigators/Models';
+import { useAdressContext } from '../../../hooks/useAdressContext';
 
+import { Header } from '../../../components/ui/Header';
 import { Alert } from '../../../components/form/Alert';
 import { AdressCard } from '../../../features/adresses';
 import { Button } from '../../../components/ui/Button';
-import { Header } from '../../../components/ui/Header';
-import { useNavigation } from '@react-navigation/native';
-import { propsStack } from '../../../routes/Navigators/Models';
-import { useAdressContext } from '../../../hooks/useAdressContext';
 
 export function Adresses() {
     const navigation = useNavigation<propsStack>();

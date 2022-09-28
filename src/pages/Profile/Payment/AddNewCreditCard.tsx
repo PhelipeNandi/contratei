@@ -53,7 +53,7 @@ export function AddNewCreditCard() {
                 <Button
                     mt={8}
                     title="Cadastrar"
-                    variant="primary"
+                    variant="sucess"
                 />
 
             </VStack >
