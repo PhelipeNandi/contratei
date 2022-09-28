@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { HStack, VStack } from 'native-base';
+import { VStack } from 'native-base';
 import { useQuery } from 'react-query';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -74,6 +74,7 @@ export function AddNewAdress() {
                             placeholder="CEP"
                             value={value}
                             onChangeText={onChange}
+                            keyboardType="numeric"
                             errorMessage={errors.postCode?.message}
                         />
                     )}
@@ -119,6 +120,7 @@ export function AddNewAdress() {
                             placeholder="Número"
                             value={value}
                             onChangeText={onChange}
+                            keyboardType="numeric"
                             errorMessage={errors.numberStreet?.message}
                         />
                     )}

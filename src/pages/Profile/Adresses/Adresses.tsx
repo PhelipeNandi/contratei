@@ -1,5 +1,7 @@
+import { useState, useEffect } from 'react';
 import { ListRenderItemInfo } from 'react-native';
 import { VStack, FlatList } from 'native-base';
+import { AddressBook } from 'phosphor-react-native';
 
 import { UserAdress } from '../../../types/user';
 
