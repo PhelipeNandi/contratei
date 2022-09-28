@@ -1,9 +1,9 @@
 import { ListRenderItemInfo } from 'react-native';
 import { VStack, Text, ScrollView, FlatList, Fab, HStack, Avatar } from 'native-base';
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { Plus } from 'phosphor-react-native';
 
-import { propsNavigationStack, propsStack } from '../../routes/Navigators/Models';
+import { propsStack } from '../../routes/Navigators/Models';
 
 import {
     PerfilProvider,
@@ -14,10 +14,8 @@ import { CardCommentProvider } from '../../features/commentsProvider';
 
 import { Photo, Comment } from '../../types/provider';
 import { useProviderContext } from '../../hooks/useProviderContext';
-import { useEffect } from 'react';
 
 export function Provider() {
-    const route = useRoute<RouteProp<propsNavigationStack, "provider">>();
     const navigation = useNavigation<propsStack>();
     const { provider } = useProviderContext();
 

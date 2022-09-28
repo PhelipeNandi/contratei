@@ -4,7 +4,6 @@ import { useQuery } from 'react-query';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup';
-import { RouteProp, useRoute } from '@react-navigation/native';
 import { AddressBook } from 'phosphor-react-native';
 
 import { NewAdress } from '../../../types/user';
@@ -15,6 +14,8 @@ import { Button } from '../../../components/ui/Button';
 import { Modal } from '../../../components/form/Modal';
 import { searchAdressViaCep } from '../../../features/addNewAdress';
 import { propsNavigationStack } from '../../../routes/Navigators/Models';
+import { useAdressContext } from '../../../hooks/useAdressContext';
+import { useNavigation } from '@react-navigation/native';
 
 const addNewAdressForm: yup.SchemaOf<NewAdress> = yup.object({
     state: yup.string().required("Estado obrigatório"),
@@ -26,22 +27,21 @@ const addNewAdressForm: yup.SchemaOf<NewAdress> = yup.object({
 });
 
 export function AddNewAdress() {
-    const route = useRoute<RouteProp<propsNavigationStack, "addNewAdress">>();
+    const adressContext = useAdressContext();
+    const navigation = useNavigation();
     const [disable, setDisable] = useState<boolean>(true);
     const [searchPostalCode, setSearchPostalCode] = useState<boolean>(false);
     const [showModal, setShowModal] = useState<boolean>(false);
-    const [isEditing, setIsEditing] = useState<boolean>(false);
 
     useEffect(() => {
-        if (route.params) {
-            setValue("postCode", route.params?.adress.postCode);
-            setValue("street", route.params?.adress.street);
-            setValue("district", route.params?.adress.district);
-            setValue("city", route.params?.adress.city);
-            setValue("state", route.params?.adress.state);
-            setValue("numberStreet", route.params?.adress.numberStreet);
+        if (adressContext.adress) {
+            setValue("postCode", adressContext.adress.postCode);
+            setValue("street", adressContext.adress.street);
+            setValue("district", adressContext.adress.district);
+            setValue("city", adressContext.adress.city);
+            setValue("state", adressContext.adress.state);
+            setValue("numberStreet", adressContext.adress.numberStreet);
             setDisable(false);
-            setIsEditing(true);
         }
     }, []);
 
@@ -180,7 +180,7 @@ export function AddNewAdress() {
 
                 <HStack mt={5} space={4}>
                     {
-                        isEditing &&
+                        adressContext.isEditing &&
                         <Button
                             flex={1}
                             title="Excluir"
@@ -193,6 +193,10 @@ export function AddNewAdress() {
                         flex={1}
                         title="Salvar"
                         variant="sucess"
+                        onPress={() => {
+                            adressContext.setIsModalOpen(true);
+                            navigation.goBack();
+                        }}
                     />
                 </HStack>
 

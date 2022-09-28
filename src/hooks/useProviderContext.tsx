@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { ProviderContext } from "../contexts/authProvider";
+import { ProviderContext } from "../contexts/providerContext";
 
 export function useProviderContext() {
     const context = useContext(ProviderContext);

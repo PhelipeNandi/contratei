@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { VStack, ScrollView } from 'native-base';
+import { VStack, ScrollView, Collapse } from 'native-base';
 
 import { UserAdress } from '../../../types/user';
 
@@ -9,6 +9,7 @@ import { Button } from '../../../components/ui/Button';
 import { Header } from '../../../components/ui/Header';
 import { useNavigation } from '@react-navigation/native';
 import { propsStack } from '../../../routes/Navigators/Models';
+import { useAdressContext } from '../../../hooks/useAdressContext';
 
 export function Adresses() {
     const navigation = useNavigation<propsStack>();
@@ -45,13 +46,21 @@ export function Adresses() {
         }
     ]
 
-    const [showAlert, setShowAlert] = useState(false);
+    const adressContext = useAdressContext();
 
     return (
         <VStack flex={1} bg="background">
             <Header title="Endereços" />
 
-            <VStack mt={5} flex={1}>
+            <Collapse mt={2} isOpen={adressContext.isModalOpen}>
+                <Alert
+                    status="success"
+                    header="Cadastro realizado com sucesso!"
+                    onPress={() => adressContext.setIsModalOpen(false)}
+                />
+            </Collapse>
+
+            <VStack mt={3} flex={1}>
                 <ScrollView>
                     {
                         userAdresses.map((userAdress) => {
@@ -61,7 +70,11 @@ export function Adresses() {
                                     mb={3}
                                     data={userAdress}
                                     key={userAdress.id.toString()}
-                                    onPress={() => navigation.navigate("addNewAdress", { adress: userAdress })}
+                                    onPress={() => {
+                                        adressContext.setAdress(userAdress);
+                                        adressContext.setIsEditing(true);
+                                        navigation.navigate("addNewAdress");
+                                    }}
                                 />
                             )
                         })
@@ -73,10 +86,17 @@ export function Adresses() {
                         mb={5}
                         title="Adicionar"
                         variant="primary"
-                        onPress={() => navigation.navigate("addNewAdress")}
+                        onPress={() => {
+                            adressContext.setAdress(null);
+                            adressContext.setIsEditing(false);
+                            navigation.navigate("addNewAdress");
+                        }}
                     />
+
                 </ScrollView>
+
             </VStack>
+
         </VStack>
     );
 }

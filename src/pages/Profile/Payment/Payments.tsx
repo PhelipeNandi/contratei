@@ -41,6 +41,7 @@ export function Payments() {
                     <Button
                         mt={5}
                         title="Novo cartão de crédito"
+                        variant="primary"
                         onPress={handleNavigateAddNewCreditCard}
                     />
 

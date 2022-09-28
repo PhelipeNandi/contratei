@@ -1,16 +1,15 @@
-import { Alert as NativeBaseAlert, IAlertProps, VStack, HStack, Text, IconButton, Box, CloseIcon, Collapse, Center } from 'native-base';
+import { GestureResponderEvent } from 'react-native';
+import { Alert as NativeBaseAlert, IAlertProps, VStack, HStack, Text, IconButton, CloseIcon, Collapse } from 'native-base';
 
 type Props = IAlertProps & {
     status: "success" | "error" | "info" | "warning";
     header: string;
+    onPress: (onPress: GestureResponderEvent) => void;
 }
 
-export function Alert({ status, header, ...rest }: Props) {
+export function Alert({ status, header, onPress, ...rest }: Props) {
     return (
         <NativeBaseAlert
-            maxW={80}
-            top={32}
-            position="absolute"
             alignSelf="center"
             borderRadius="lg"
             status={status}
@@ -29,6 +28,7 @@ export function Alert({ status, header, ...rest }: Props) {
                         _focus={{ borderWidth: 0 }}
                         icon={<CloseIcon size="3" />}
                         _icon={{ color: "coolGray.600" }}
+                        onPress={onPress}
                     />
                 </HStack>
             </VStack>
