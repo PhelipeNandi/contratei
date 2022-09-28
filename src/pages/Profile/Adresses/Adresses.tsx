@@ -48,6 +48,7 @@ export function Adresses() {
                     mt={10}
                     mx={5}
                     title="Adicionar"
+                    variant="PRIMARIO"
                     onPress={() => navigation.navigate("addNewAddress")}
                 />
 

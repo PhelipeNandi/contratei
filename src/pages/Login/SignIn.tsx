@@ -82,18 +82,20 @@ export function SignIn() {
 
                 <Button
                     mt={5}
-                    title="Entrar"
                     w="full"
+                    title="Entrar"
+                    variant="PRIMARIO"
                     onPress={handleSubmit(handleSignIn)}
                 />
 
                 <Divider my="5" thickness="2" bg="secondary.700" />
 
                 <Button
-                    leftIcon={<Icon as={<GoogleLogo color={colors.white} />} />}
-                    title="Entrar com Google"
                     w="full"
+                    variant="PRIMARIO"
+                    title="Entrar com Google"
                     onPress={handleSignInGoogle}
+                    leftIcon={<Icon as={<GoogleLogo color={colors.white} />} />}
                 />
             </VStack>
         </VStack >

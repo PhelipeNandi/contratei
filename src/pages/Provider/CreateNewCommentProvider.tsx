@@ -96,6 +96,7 @@ export function CreateNewCommentProvider() {
                 <Button
                     mt={5}
                     title="Salvar"
+                    variant="PRIMARIO"
                     isLoading={isLoading}
                     isLoadingText="Salvando"
                     onPress={handleSubmit((value) => mutate(value))}

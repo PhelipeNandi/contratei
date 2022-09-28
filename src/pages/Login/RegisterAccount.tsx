@@ -185,7 +185,13 @@ export function RegisterAccount() {
                         )}
                     />
 
-                    <Button mt={5} title="Cadastrar" w="full" onPress={handleSubmit(handleRegisterAccount)} />
+                    <Button
+                        w="full"
+                        mt={5}
+                        title="Cadastrar"
+                        variant="PRIMARIO"
+                        onPress={handleSubmit(handleRegisterAccount)}
+                    />
 
                 </ScrollView>
             </VStack>

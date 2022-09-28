@@ -159,6 +159,7 @@ export function AddNewAdress() {
                 <Button
                     mt={5}
                     title="Salvar"
+                    variant="PRIMARIO"
                 />
 
             </VStack>
