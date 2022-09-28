@@ -1,6 +1,5 @@
-import { useAuthContext } from "../../../hooks/useAuthContext";
 import { Api } from "../../../lib/Api";
-import { ChangePersonalInformation, User, UserResponse } from "../../../types/user";
+import { ChangePersonalInformation, User } from "../../../types/user";
 
 export async function changePersonalInformation(data: ChangePersonalInformation, user: User): Promise<User> {
     try {

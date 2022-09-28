@@ -1,26 +1,26 @@
 import { createContext, useState } from "react";
 
-import { UserAdress } from "../types/user";
+import { UserAddress } from "../types/user";
 
-interface AdressContextType {
-    adress: UserAdress | null;
-    setAdress: (adress: UserAdress) => void;
+interface AddressContextType {
+    address: UserAddress | null;
+    setAddress: (address: UserAddress) => void;
     isEditing: boolean;
     setIsEditing: (isEditing: boolean) => void;
     isModalOpen: boolean,
     setIsModalOpen: (isModalOpen: boolean) => void;
 }
 
-export const AdressContext = createContext({} as AdressContextType);
+export const AddressContext = createContext({} as AddressContextType);
 
-export function AdressProvider({ children }) {
-    const [adress, setAdress] = useState<UserAdress | null>();
+export function AddressProvider({ children }) {
+    const [address, setAddress] = useState<UserAddress | null>();
     const [isEditing, setIsEditing] = useState<boolean>(false);
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
     return (
-        <AdressContext.Provider value={{ adress, setAdress, isEditing, setIsEditing, isModalOpen, setIsModalOpen }}>
+        <AddressContext.Provider value={{ address, setAddress, isEditing, setIsEditing, isModalOpen, setIsModalOpen }}>
             {children}
-        </AdressContext.Provider>
+        </AddressContext.Provider>
     );
 }

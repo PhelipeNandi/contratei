@@ -57,7 +57,7 @@ export function Profile() {
                         mt={4}
                         title="Endereços"
                         icon={AddressBook}
-                        onPress={() => navigation.navigate('adressNavigation')}
+                        onPress={() => navigation.navigate('addressNavigation')}
                     />
 
                     <MenuNavigation

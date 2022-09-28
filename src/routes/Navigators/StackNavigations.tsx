@@ -15,15 +15,15 @@ import {
     PersonalInformation,
     Payments,
     AddNewCreditCard,
-    Adresses,
-    AddNewAdress,
+    Addresses,
+    AddNewAddress,
     Notifications,
     Settings,
     CommentsProvider,
     CreateNewCommentProvider,
 } from '../../pages';
 import { ProviderProvider } from '../../contexts/providerContext';
-import { AdressProvider } from '../../contexts/adressContext';
+import { AddressProvider } from '../../contexts/adressContext';
 
 const Stack = createNativeStackNavigator<propsNavigationStack>();
 
@@ -90,20 +90,20 @@ export function ProfileNavigation() {
             <Stack.Screen name="personalInformation" component={PersonalInformation} />
             <Stack.Screen name="payments" component={Payments} />
             <Stack.Screen name="addNewCreditCard" component={AddNewCreditCard} />
-            <Stack.Screen name="adressNavigation" component={AdressNavigation} />
+            <Stack.Screen name="addressNavigation" component={AddressNavigation} />
             <Stack.Screen name="notifications" component={Notifications} />
             <Stack.Screen name="settings" component={Settings} />
         </Stack.Navigator>
     )
 }
 
-export function AdressNavigation() {
+export function AddressNavigation() {
     return (
-        <AdressProvider>
-            <Stack.Navigator initialRouteName="adresses" screenOptions={{ headerShown: false }}>
-                <Stack.Screen name="adresses" component={Adresses} />
-                <Stack.Screen name="addNewAdress" component={AddNewAdress} />
+        <AddressProvider>
+            <Stack.Navigator initialRouteName="addresses" screenOptions={{ headerShown: false }}>
+                <Stack.Screen name="addresses" component={Addresses} />
+                <Stack.Screen name="addNewAddress" component={AddNewAddress} />
             </Stack.Navigator>
-        </AdressProvider>
+        </AddressProvider>
     )
 }

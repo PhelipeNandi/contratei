@@ -44,7 +44,7 @@ export interface ChangePersonalInformation {
     backgroundImage?: string;
 }
 
-export interface UserAdress {
+export interface UserAddress {
     id: number;
     state: string;
     city: string;
@@ -52,10 +52,10 @@ export interface UserAdress {
     street: string;
     numberStreet: string;
     postCode: string;
-    isMainAdress: boolean;
+    isMainAddress: boolean;
 }
 
-export interface UserAdressResponse {
+export interface UserAddressResponse {
     state: string;
     city: string;
     district: string;
@@ -63,7 +63,7 @@ export interface UserAdressResponse {
     postCode: string;
 }
 
-export interface NewAdress {
+export interface NewAddress {
     state: string;
     city: string;
     district: string;

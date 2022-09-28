@@ -1,12 +1,12 @@
 import { VStack, Box, Pressable, IPressableProps, Heading, Text, HStack } from 'native-base';
 import { MarkedTitleWithValue } from '../../../components/ui/MarkedTitleWithValue';
-import { UserAdress } from '../../../types/user';
+import { UserAddress } from '../../../types/user';
 
 type Props = IPressableProps & {
-    data: UserAdress;
+    data: UserAddress;
 }
 
-export function AdressCard({ data, ...rest }: Props) {
+export function AddressCard({ data, ...rest }: Props) {
     return (
         <Pressable {...rest}>
             <Box
@@ -22,7 +22,7 @@ export function AdressCard({ data, ...rest }: Props) {
             >
                 <VStack ml={5}>
                     <Heading fontFamily="body" size="sm" color="primary.700">
-                        {data.isMainAdress ? "Endereço Principal" : "Endereço Secundário"}
+                        {data.isMainAddress ? "Endereço Principal" : "Endereço Secundário"}
                     </Heading>
 
                     <MarkedTitleWithValue

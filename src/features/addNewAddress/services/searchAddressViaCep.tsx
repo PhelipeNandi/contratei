@@ -1,7 +1,7 @@
 import { ViaCep } from "../../../lib/Api";
-import { UserAdressResponse } from "../../../types/user";
+import { UserAddressResponse } from "../../../types/user";
 
-export async function searchAdressViaCep(cep: string): Promise<UserAdressResponse> {
+export async function searchAddressViaCep(cep: string): Promise<UserAddressResponse> {
     try {
         const response = await ViaCep.get(cep + "/json");
 

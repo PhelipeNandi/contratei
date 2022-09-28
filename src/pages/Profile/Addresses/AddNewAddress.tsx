@@ -6,18 +6,17 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup';
 import { AddressBook } from 'phosphor-react-native';
 
-import { NewAdress } from '../../../types/user';
+import { NewAddress } from '../../../types/user';
 
 import { Header } from '../../../components/ui/Header';
 import { Input } from '../../../components/form/Input';
 import { Button } from '../../../components/ui/Button';
 import { Modal } from '../../../components/form/Modal';
-import { searchAdressViaCep } from '../../../features/addNewAdress';
-import { propsNavigationStack } from '../../../routes/Navigators/Models';
-import { useAdressContext } from '../../../hooks/useAdressContext';
+import { searchAddressViaCep } from '../../../features/addNewAddress';
+import { useAddressContext } from '../../../hooks/useAddressContext';
 import { useNavigation } from '@react-navigation/native';
 
-const addNewAdressForm: yup.SchemaOf<NewAdress> = yup.object({
+const addNewAddressForm: yup.SchemaOf<NewAddress> = yup.object({
     state: yup.string().required("Estado obrigatório"),
     city: yup.string().required("Cidade obrigatório"),
     district: yup.string().required("Bairro obrigatório"),
@@ -26,21 +25,21 @@ const addNewAdressForm: yup.SchemaOf<NewAdress> = yup.object({
     postCode: yup.string().required("Cep obrigatório"),
 });
 
-export function AddNewAdress() {
-    const adressContext = useAdressContext();
+export function AddNewAddress() {
+    const addressContext = useAddressContext();
     const navigation = useNavigation();
     const [disable, setDisable] = useState<boolean>(true);
     const [searchPostalCode, setSearchPostalCode] = useState<boolean>(false);
     const [showModal, setShowModal] = useState<boolean>(false);
 
     useEffect(() => {
-        if (adressContext.adress) {
-            setValue("postCode", adressContext.adress.postCode);
-            setValue("street", adressContext.adress.street);
-            setValue("district", adressContext.adress.district);
-            setValue("city", adressContext.adress.city);
-            setValue("state", adressContext.adress.state);
-            setValue("numberStreet", adressContext.adress.numberStreet);
+        if (addressContext.address) {
+            setValue("postCode", addressContext.address.postCode);
+            setValue("street", addressContext.address.street);
+            setValue("district", addressContext.address.district);
+            setValue("city", addressContext.address.city);
+            setValue("state", addressContext.address.state);
+            setValue("numberStreet", addressContext.address.numberStreet);
             setDisable(false);
         }
     }, []);
@@ -52,8 +51,8 @@ export function AddNewAdress() {
         setValue,
         getValues,
         formState: { errors, isSubmitSuccessful }
-    } = useForm<NewAdress>({
-        resolver: yupResolver(addNewAdressForm)
+    } = useForm<NewAddress>({
+        resolver: yupResolver(addNewAddressForm)
     });
 
     const postalCodeValue = watch("postCode");
@@ -61,7 +60,7 @@ export function AddNewAdress() {
     const {
         data,
         isLoading
-    } = useQuery('adress', () => searchAdressViaCep(getValues("postCode")), {
+    } = useQuery('address', () => searchAddressViaCep(getValues("postCode")), {
         enabled: searchPostalCode,
         onSuccess: (data) => {
             setValue("postCode", data.postCode);
@@ -180,7 +179,7 @@ export function AddNewAdress() {
 
                 <HStack mt={5} space={4}>
                     {
-                        adressContext.isEditing &&
+                        addressContext.isEditing &&
                         <Button
                             flex={1}
                             title="Excluir"
@@ -194,7 +193,7 @@ export function AddNewAdress() {
                         title="Salvar"
                         variant="sucess"
                         onPress={() => {
-                            adressContext.setIsModalOpen(true);
+                            addressContext.setIsModalOpen(true);
                             navigation.goBack();
                         }}
                     />
