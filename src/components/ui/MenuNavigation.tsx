@@ -12,7 +12,7 @@ export function MenuNavigation({ title, icon: Icon, ...rest }: Props) {
     return (
         <Pressable {...rest}>
             <Box
-                p={5}
+                p={3}
                 shadow={3}
                 bg="primary.700"
                 rounded="lg"

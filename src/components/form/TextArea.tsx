@@ -16,7 +16,7 @@ export function TextArea({ errorMessage, ...rest }: Props) {
                 fontSize="md"
                 fontFamily="body"
                 color="secondary.700"
-                placeholderTextColor="secondary.700"
+                placeholderTextColor="gray.300"
                 shadow={1}
                 rounded="lg"
                 _focus={{

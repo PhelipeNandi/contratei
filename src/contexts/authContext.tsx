@@ -13,6 +13,7 @@ interface AuthContextType {
     signIn: (data: SignInData) => Promise<void>;
     signInGoogle(): void;
     logOut(): void;
+    changePersonalInformationUser(dataUser: User): void;
 }
 
 export const AuthContext = createContext({} as AuthContextType);
@@ -62,8 +63,14 @@ export function AuthProvider({ children }) {
             });
     }
 
+    function changePersonalInformationUser(dataUser: User) {
+        if (dataUser) {
+            setUser(dataUser);
+        }
+    }
+
     return (
-        <AuthContext.Provider value={{ isAuthenticated: !!user, isLoading, user, signIn, signInGoogle, logOut }}>
+        <AuthContext.Provider value={{ isAuthenticated: !!user, isLoading, user, signIn, signInGoogle, logOut, changePersonalInformationUser }}>
             {children}
         </AuthContext.Provider>
     );

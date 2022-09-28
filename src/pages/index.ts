@@ -14,6 +14,8 @@ import { Profile } from './Profile/Profile';
 import { PersonalInformation } from './Profile/PersonalInformation';
 import { Payments } from './Profile/Payment/Payments';
 import { AddNewCreditCard } from './Profile/Payment/AddNewCreditCard';
+import { Adresses } from './Profile/Adresses/Adresses';
+import { AddNewAdress } from './Profile/Adresses/AddNewAdress';
 import { Notifications } from './Profile/Notifications';
 import { Settings } from './Profile/Settings';
 
@@ -34,6 +36,8 @@ export {
     PersonalInformation,
     Payments,
     AddNewCreditCard,
+    Adresses,
+    AddNewAdress,
     Notifications,
     Settings
 }

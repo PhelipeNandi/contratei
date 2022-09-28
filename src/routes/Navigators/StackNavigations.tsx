@@ -15,6 +15,8 @@ import {
     PersonalInformation,
     Payments,
     AddNewCreditCard,
+    Adresses,
+    AddNewAdress,
     Notifications,
     Settings,
     CommentsProvider,
@@ -87,6 +89,8 @@ export function ProfileNavigation() {
             <Stack.Screen name="personalInformation" component={PersonalInformation} />
             <Stack.Screen name="payments" component={Payments} />
             <Stack.Screen name="addNewCreditCard" component={AddNewCreditCard} />
+            <Stack.Screen name="adresses" component={Adresses} />
+            <Stack.Screen name="addNewAddress" component={AddNewAdress} />
             <Stack.Screen name="notifications" component={Notifications} />
             <Stack.Screen name="settings" component={Settings} />
         </Stack.Navigator>

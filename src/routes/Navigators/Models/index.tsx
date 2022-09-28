@@ -14,6 +14,8 @@ export type propsNavigationStack = {
     personalInformation: undefined,
     payments: undefined,
     addNewCreditCard: undefined,
+    adresses: undefined,
+    addNewAddress: undefined,
     notifications: undefined,
     settings: undefined,
     budget: {

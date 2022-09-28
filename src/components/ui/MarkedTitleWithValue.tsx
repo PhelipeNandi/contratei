@@ -1,19 +1,21 @@
-import { HStack, Text } from 'native-base';
+import { Box, IBoxProps, HStack, Text } from 'native-base';
 
-type Props = {
+type Props = IBoxProps & {
     title: string;
     value: string;
 }
 
-export function MarkedTitleWithValue({ title, value }: Props) {
+export function MarkedTitleWithValue({ title, value, ...rest }: Props) {
     return (
-        <HStack>
-            <Text fontFamily="body" fontSize="xs" color="gray.700">
-                {title}: {""}
-            </Text>
-            <Text fontFamily="body" fontSize="xs" color="gray.300">
-                {value}
-            </Text>
-        </HStack>
+        <Box {...rest}>
+            <HStack>
+                <Text fontFamily="body" fontSize="xs" color="gray.700">
+                    {title}: {""}
+                </Text>
+                <Text fontFamily="body" fontSize="xs" color="gray.300">
+                    {value}
+                </Text>
+            </HStack>
+        </Box>
     );
 }

@@ -1,7 +1,7 @@
 import { VStack, Avatar, Text, ScrollView } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { useAuthContext } from '../../hooks/useAuthContext';
-import { Bell, Gear, User, SignOut, Cardholder, Camera } from 'phosphor-react-native';
+import { Bell, Gear, User, SignOut, Cardholder, AddressBook } from 'phosphor-react-native';
 
 import { MenuNavigation } from '../../components/ui/MenuNavigation';
 import { propsStack } from '../../routes/Navigators/Models';
@@ -35,47 +35,52 @@ export function Profile() {
                         }}
                     />
 
-                    <Text mt={3} textAlign="center" fontFamily="body" fontSize="title" color="primary.700">
+                    <Text mt={3} textAlign="center" fontFamily="body" fontSize="subTitle" color="primary.700">
                         {user.firstName} {user.lastName}
                     </Text>
 
-                    <ScrollView>
+                    <MenuNavigation
+                        mt={7}
+                        title="Informações Pessoais"
+                        icon={User}
+                        onPress={() => navigation.navigate('personalInformation')}
+                    />
 
-                        <MenuNavigation
-                            mt={7}
-                            title="Informações Pessoais"
-                            icon={User}
-                            onPress={() => navigation.navigate('personalInformation')}
-                        />
+                    <MenuNavigation
+                        mt={4}
+                        title="Pagamentos"
+                        icon={Cardholder}
+                        onPress={() => navigation.navigate('payments')}
+                    />
 
-                        <MenuNavigation
-                            mt={4}
-                            title="Pagamentos"
-                            icon={Cardholder}
-                            onPress={() => navigation.navigate('payments')}
-                        />
+                    <MenuNavigation
+                        mt={4}
+                        title="Endereços"
+                        icon={AddressBook}
+                        onPress={() => navigation.navigate('adresses')}
+                    />
 
-                        <MenuNavigation
-                            mt={4}
-                            title="Notificações"
-                            icon={Bell}
-                            onPress={() => navigation.navigate('notifications')}
-                        />
+                    <MenuNavigation
+                        mt={4}
+                        title="Notificações"
+                        icon={Bell}
+                        onPress={() => navigation.navigate('notifications')}
+                    />
 
-                        <MenuNavigation
-                            mt={4}
-                            title="Configurações"
-                            icon={Gear}
-                            onPress={() => navigation.navigate('settings')}
-                        />
+                    <MenuNavigation
+                        mt={4}
+                        title="Configurações"
+                        icon={Gear}
+                        onPress={() => navigation.navigate('settings')}
+                    />
 
-                        <MenuNavigation
-                            mt={4}
-                            title="Sair"
-                            icon={SignOut}
-                            onPress={handleLogOut}
-                        />
-                    </ScrollView>
+                    <MenuNavigation
+                        mt={4}
+                        title="Sair"
+                        icon={SignOut}
+                        onPress={handleLogOut}
+                    />
+
                 </VStack>
             </VStack>
         </VStack >

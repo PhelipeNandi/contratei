@@ -16,6 +16,8 @@ import { Input } from '../../components/form/Input';
 import { Button } from '../../components/ui/Button';
 import { TextArea } from '../../components/form/TextArea';
 import { changePersonalInformation } from '../../features/personalInformation.tsx';
+import { useNavigation } from '@react-navigation/native';
+import { propsStack } from '../../routes/Navigators/Models';
 
 const changePersonalInformationForm: yup.SchemaOf<ChangePersonalInformation> = yup.object({
     firstName: yup.string().required("Nome obrigatório"),
@@ -26,12 +28,14 @@ const changePersonalInformationForm: yup.SchemaOf<ChangePersonalInformation> = y
     description: yup.string().nullable(),
     kmWorkRange: yup.string().nullable(),
     hourValue: yup.string().nullable(),
-    profilePicture: yup.string().nullable()
+    profilePicture: yup.string().nullable(),
+    backgroundImage: yup.string().nullable()
 });
 
 export function PersonalInformation() {
-    const { user } = useAuthContext();
     const { colors } = useTheme();
+    const navigation = useNavigation<propsStack>();
+    const { user, changePersonalInformationUser } = useAuthContext();
     const [imageProfile, setImageProfile] = useState(user.profilePicture);
 
     const {
@@ -51,7 +55,8 @@ export function PersonalInformation() {
             description: user.description,
             kmWorkRange: user.kmWorkRange,
             hourValue: user.hourValue,
-            profilePicture: user.profilePicture
+            profilePicture: user.profilePicture,
+            backgroundImage: user.backgroundImage
         }
     });
 
@@ -85,9 +90,18 @@ export function PersonalInformation() {
     }
 
     const {
+        isSuccess,
         isLoading,
-        mutate
+        data,
+        mutate,
     } = useMutation((data: ChangePersonalInformation) => changePersonalInformation(data, user));
+
+    useEffect(() => {
+        if (isSuccess) {
+            changePersonalInformationUser(data);
+            navigation.navigate("profile");
+        }
+    }, [isSuccess]);
 
     return (
         <VStack flex={1}>

@@ -1,27 +1,79 @@
+import { useAuthContext } from "../../../hooks/useAuthContext";
 import { Api } from "../../../lib/Api";
-import { ChangePersonalInformation, User } from "../../../types/user";
+import { ChangePersonalInformation, User, UserResponse } from "../../../types/user";
 
-export async function changePersonalInformation(data: ChangePersonalInformation, user: User): Promise<string> {
+export async function changePersonalInformation(data: ChangePersonalInformation, user: User): Promise<User> {
     try {
-        const changePersonalInformationUrl = user.type === "Consumidor" ? "login/create-consumer-user" : "login/create-provider-user";
-
-        const response = await Api.post(changePersonalInformationUrl, {
-            id: user.id,
-            password: user.password,
-            type: user.type,
+        if (user.type === "Consumidor") {
+            return handleChangePersonalInformationConsumer(data, user);
+        } else {
+            return handleChangePersonalInformationProvider(data, user);
+        }
+    } catch (error) {
+        if (error instanceof Error) {
+            throw new Error(error.message);
+        }
+    }
+}
+async function handleChangePersonalInformationConsumer(data: ChangePersonalInformation, user: User): Promise<User> {
+    try {
+        const response = await Api.put("consumer/" + user.id, {
             firstName: data.firstName,
             lastName: data.lastName,
             contactNumber: data.contactNumber,
             cpf: data.cpf,
             email: data.email,
-            description: data.description,
-            kmWorkRange: data.kmWorkRange,
-            hourValue: data.hourValue,
             profilePicture: data.profilePicture
         });
 
-        if (response.status === 200) {
-            return "Cadastro atualizado com sucesso!"
+        return {
+            id: response.data.id,
+            password: response.data.password,
+            type: "Consumidor",
+            firstName: response.data.firstName,
+            lastName: response.data.lastName,
+            contactNumber: response.data.contactNumber,
+            cpf: response.data.cpf,
+            email: response.data.email,
+            token: user.token,
+            profilePicture: response.data.profilePicture
+        }
+    } catch (error) {
+        if (error instanceof Error) {
+            throw new Error(error.message);
+        }
+    }
+}
+
+async function handleChangePersonalInformationProvider(data: ChangePersonalInformation, user: User): Promise<User> {
+    try {
+        const response = await Api.put("consumer/" + user.id, {
+            firstName: data.firstName,
+            lastName: data.lastName,
+            contactNumber: data.contactNumber,
+            cpf: data.cpf,
+            email: data.email,
+            profilePicture: data.profilePicture,
+            description: data.description,
+            hourValue: data.hourValue,
+            backgroundImage: data.backgroundImage
+        });
+
+        return {
+            id: response.data.id,
+            password: response.data.password,
+            type: "Fornecedor",
+            firstName: response.data.firstName,
+            lastName: response.data.lastName,
+            contactNumber: response.data.contactNumber,
+            cpf: response.data.cpf,
+            email: response.data.email,
+            token: user.token,
+            description: response.data.description,
+            kmWorkRange: response.data.kmWorkRange,
+            hourValue: response.data.hourValue,
+            profilePicture: response.data.profilePicture,
+            backgroundImage: response.data.backgroundImage
         }
     } catch (error) {
         if (error instanceof Error) {

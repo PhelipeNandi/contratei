@@ -51,7 +51,8 @@ export async function signInRequest(data: SignInData): Promise<User> {
             description: user.description,
             kmWorkRange: user.kmWorkRange,
             hourValue: user.hourValue,
-            profilePicture: user.profilePicture
+            profilePicture: user.profilePicture,
+            backgroundImage: user.backgroundImage
         }
     } catch (error) {
         if (error instanceof Error) {
