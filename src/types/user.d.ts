@@ -52,6 +52,7 @@ export interface UserAdress {
     street: string;
     numberStreet: string;
     postCode: string;
+    isMainAdress: boolean;
 }
 
 export interface UserAdressResponse {

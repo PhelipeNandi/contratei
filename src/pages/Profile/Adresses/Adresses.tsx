@@ -21,7 +21,8 @@ export function Adresses() {
             numberStreet: "80",
             postCode: "88702-440",
             state: "SC",
-            street: "José Bressan"
+            street: "José Bressan",
+            isMainAdress: true
         }, {
             id: 2,
             city: "Tubarão",
@@ -29,7 +30,8 @@ export function Adresses() {
             numberStreet: "80",
             postCode: "88702-440",
             state: "SC",
-            street: "José Bressan"
+            street: "José Bressan",
+            isMainAdress: false
         },
         {
             id: 1,
@@ -38,7 +40,8 @@ export function Adresses() {
             numberStreet: "80",
             postCode: "88702-440",
             state: "SC",
-            street: "José Bressan"
+            street: "José Bressan",
+            isMainAdress: false
         }
     ]
 
@@ -54,11 +57,11 @@ export function Adresses() {
                         userAdresses.map((userAdress) => {
                             return (
                                 <AdressCard
-                                    px={4}
-                                    mb={5}
+                                    px={2}
+                                    mb={3}
                                     data={userAdress}
                                     key={userAdress.id.toString()}
-                                    onPress={() => setShowAlert(true)}
+                                    onPress={() => navigation.navigate("addNewAdress", { adress: userAdress })}
                                 />
                             )
                         })
@@ -66,10 +69,11 @@ export function Adresses() {
 
                     <Button
                         mx={5}
-                        my={2}
+                        mt={2}
+                        mb={5}
                         title="Adicionar"
                         variant="primary"
-                        onPress={() => navigation.navigate("addNewAddress")}
+                        onPress={() => navigation.navigate("addNewAdress")}
                     />
                 </ScrollView>
             </VStack>

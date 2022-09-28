@@ -16,13 +16,13 @@ export function AdressCard({ data, ...rest }: Props) {
                 bg="white"
                 rounded="lg"
                 borderWidth="1"
-                borderLeftWidth={8}
+                borderLeftWidth={12}
                 justifyContent="center"
                 borderColor="primary.700"
             >
                 <VStack ml={5}>
                     <Heading fontFamily="body" size="sm" color="primary.700">
-                        Endereço Principal
+                        {data.isMainAdress ? "Endereço Principal" : "Endereço Secundário"}
                     </Heading>
 
                     <MarkedTitleWithValue

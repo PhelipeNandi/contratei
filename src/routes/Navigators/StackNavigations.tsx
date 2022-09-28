@@ -90,7 +90,7 @@ export function ProfileNavigation() {
             <Stack.Screen name="payments" component={Payments} />
             <Stack.Screen name="addNewCreditCard" component={AddNewCreditCard} />
             <Stack.Screen name="adresses" component={Adresses} />
-            <Stack.Screen name="addNewAddress" component={AddNewAdress} />
+            <Stack.Screen name="addNewAdress" component={AddNewAdress} />
             <Stack.Screen name="notifications" component={Notifications} />
             <Stack.Screen name="settings" component={Settings} />
         </Stack.Navigator>

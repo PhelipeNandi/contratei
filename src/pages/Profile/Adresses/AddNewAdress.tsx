@@ -1,16 +1,20 @@
 import { useEffect, useState } from 'react';
-import { VStack } from 'native-base';
+import { HStack, VStack, Button as NativeBaseButton } from 'native-base';
 import { useQuery } from 'react-query';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup';
+import { RouteProp, useRoute } from '@react-navigation/native';
+import { AddressBook } from 'phosphor-react-native';
 
 import { NewAdress } from '../../../types/user';
 
 import { Header } from '../../../components/ui/Header';
 import { Input } from '../../../components/form/Input';
 import { Button } from '../../../components/ui/Button';
+import { Modal } from '../../../components/form/Modal';
 import { searchAdressViaCep } from '../../../features/addNewAdress';
+import { propsNavigationStack } from '../../../routes/Navigators/Models';
 
 const addNewAdressForm: yup.SchemaOf<NewAdress> = yup.object({
     state: yup.string().required("Estado obrigatório"),
@@ -22,8 +26,24 @@ const addNewAdressForm: yup.SchemaOf<NewAdress> = yup.object({
 });
 
 export function AddNewAdress() {
+    const route = useRoute<RouteProp<propsNavigationStack, "addNewAdress">>();
     const [disable, setDisable] = useState<boolean>(true);
     const [searchPostalCode, setSearchPostalCode] = useState<boolean>(false);
+    const [showModal, setShowModal] = useState<boolean>(false);
+    const [isEditing, setIsEditing] = useState<boolean>(false);
+
+    useEffect(() => {
+        if (route.params) {
+            setValue("postCode", route.params?.adress.postCode);
+            setValue("street", route.params?.adress.street);
+            setValue("district", route.params?.adress.district);
+            setValue("city", route.params?.adress.city);
+            setValue("state", route.params?.adress.state);
+            setValue("numberStreet", route.params?.adress.numberStreet);
+            setDisable(false);
+            setIsEditing(true);
+        }
+    }, []);
 
     const {
         control,
@@ -54,7 +74,9 @@ export function AddNewAdress() {
     });
 
     useEffect(() => {
-        if (postalCodeValue != undefined && postalCodeValue.length >= 8) {
+        if (postalCodeValue === undefined || postalCodeValue.length < 8) {
+            setSearchPostalCode(false);
+        } else {
             setSearchPostalCode(true);
         }
     }, [postalCodeValue]);
@@ -156,11 +178,43 @@ export function AddNewAdress() {
                     )}
                 />
 
-                <Button
-                    mt={5}
-                    title="Salvar"
-                    variant="primary"
-                />
+                <HStack mt={5} space={4}>
+                    {
+                        isEditing &&
+                        <Button
+                            flex={1}
+                            title="Excluir"
+                            variant="danger"
+                            onPress={() => setShowModal(true)}
+                        />
+                    }
+
+                    <Button
+                        flex={1}
+                        title="Salvar"
+                        variant="sucess"
+                    />
+                </HStack>
+
+                <Modal
+                    header="Exclusão"
+                    body="Você tem certeza que quer excluir esse endereço?"
+                    icon={AddressBook}
+                    isOpen={showModal}
+                    onClose={() => setShowModal(false)}
+                >
+                    <NativeBaseButton.Group space={2}>
+                        <Button
+                            title="Cancelar"
+                            variant="primary"
+                            onPress={() => setShowModal(false)}
+                        />
+                        <Button
+                            title="Excluir"
+                            variant="danger"
+                        />
+                    </NativeBaseButton.Group>
+                </Modal>
 
             </VStack>
 
