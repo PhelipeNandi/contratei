@@ -64,7 +64,7 @@ export function AddNewAdress() {
 
             <Header title="Castrar novo Endereço" />
 
-            <VStack flex={1} mt={24} mx={8}>
+            <VStack flex={1} mt={16} mx={8}>
 
                 <Controller
                     control={control}
@@ -120,6 +120,21 @@ export function AddNewAdress() {
                             value={value}
                             onChangeText={onChange}
                             errorMessage={errors.numberStreet?.message}
+                        />
+                    )}
+                />
+
+                <Controller
+                    control={control}
+                    name="state"
+                    render={({ field: { value, onChange } }) => (
+                        <Input
+                            mt={4}
+                            isDisabled={disable}
+                            placeholder="Estado"
+                            value={value}
+                            onChangeText={onChange}
+                            errorMessage={errors.state?.message}
                         />
                     )}
                 />
