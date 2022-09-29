@@ -1,9 +1,11 @@
 import { Api } from "../../../lib/Api";
 import { Provider } from "../../../types/provider";
 
-export async function searchProviderById(idProvider: number): Promise<Provider> {
+export async function searchProviderById(idProvider: number, isAuthenticated: boolean): Promise<Provider> {
     try {
-        const response = await Api.get("provider/find-by-id", { params: { id: idProvider } });
+        const url = isAuthenticated ? "provider/find-by-id" : "provider/find-by-id";
+
+        const response = await Api.get(url, { params: { id: idProvider } });
 
         return {
             id: response.data.id,

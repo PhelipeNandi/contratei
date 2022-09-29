@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { ListRenderItemInfo } from 'react-native';
 import { Text, VStack, HStack, IconButton, Box, FlatList, Center, useTheme } from 'native-base';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
@@ -6,12 +7,12 @@ import { ArrowLeft, Warning } from 'phosphor-react-native';
 import { useInfiniteQuery } from 'react-query';
 
 import { Provider } from '../../types/provider';
+import { useAuthContext } from '../../hooks/useAuthContext';
 
 import { Loading } from '../../components/ui/Loading';
 import { SelectServiceType } from '../../features/createBudget';
 import { searchProvidersByServiceType } from '../../features/filterProvider';
 import { SimpleProviderCard } from '../../features/filterProvider/components/SimpleProviderCard';
-import { useState } from 'react';
 import { useProviderContext } from '../../hooks/useProviderContext';
 
 export function FilterProvider() {
@@ -20,6 +21,7 @@ export function FilterProvider() {
     const { searchProvider } = useProviderContext();
     const { colors } = useTheme();
     const [serviceTypeSelect, setServiceTypeSelect] = useState(route.params?.serviceType.name);
+    const { isAuthenticated } = useAuthContext();
 
     const {
         data,
@@ -30,7 +32,7 @@ export function FilterProvider() {
         fetchNextPage,
         isFetchingNextPage
     } = useInfiniteQuery(["providersByServiceType", serviceTypeSelect],
-        ({ queryKey, pageParam = 0 }) => searchProvidersByServiceType(pageParam, queryKey[1]), {
+        ({ queryKey, pageParam = 0 }) => searchProvidersByServiceType(pageParam, queryKey[1], isAuthenticated), {
         getNextPageParam: (page) => {
             if (page.currentPage < page.totalPages) {
                 return page.currentPage + 1;

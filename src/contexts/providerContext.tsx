@@ -2,6 +2,7 @@ import { createContext, useState } from "react";
 
 import { Provider } from "../types/provider";
 import { searchProviderById } from "../features/searchProvider";
+import { useAuthContext } from "../hooks/useAuthContext";
 
 interface ProviderContextType {
     provider: Provider | null;
@@ -12,9 +13,10 @@ export const ProviderContext = createContext({} as ProviderContextType);
 
 export function ProviderProvider({ children }) {
     const [provider, setProvider] = useState<Provider | null>();
+    const { isAuthenticated } = useAuthContext();
 
     async function searchProvider(idProvider: number) {
-        await searchProviderById(idProvider)
+        await searchProviderById(idProvider, isAuthenticated)
             .then(provider => {
                 setProvider(provider);
             })
