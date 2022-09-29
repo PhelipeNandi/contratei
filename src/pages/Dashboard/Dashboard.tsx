@@ -63,7 +63,7 @@ export function Dashboard() {
                 <HStack mt={3} mx={2} justifyContent="space-between">
                     <CardNavigation
                         title={`Meus\nOrçamentos`}
-                        colorCard="red.500"
+                        colorCard="red.700"
                         colorFont="white"
                         icon={Briefcase}
                         onPress={() => navigateTab('myBudgetsTab')}

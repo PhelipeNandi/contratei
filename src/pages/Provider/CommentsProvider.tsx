@@ -1,49 +1,44 @@
 import { ListRenderItemInfo } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { VStack, HStack, Box, IconButton, Text, FlatList, Fab } from 'native-base';
-import { ArrowLeft, Plus } from 'phosphor-react-native';
+import { VStack, HStack, Box, IconButton, Text, FlatList, Fab, Center, useTheme } from 'native-base';
+import { ArrowLeft, Plus, Warning } from 'phosphor-react-native';
 import { propsStack } from '../../routes/Navigators/Models';
+import { useInfiniteQuery } from 'react-query';
 
 import { Comment } from '../../types/provider';
 
-import { CardCommentProvider } from '../../features/commentsProvider';
+import { CardCommentProvider, searchCommentsByIdProvider } from '../../features/commentsProvider';
+import { useProviderContext } from '../../hooks/useProviderContext';
+import { Loading } from '../../components/ui/Loading';
 
 export function CommentsProvider() {
     const navigation = useNavigation<propsStack>();
+    const { provider } = useProviderContext();
+    const { colors } = useTheme();
 
-    const comments: Comment[] = [
-        {
-            idComent: 3,
-            idConsumer: 1,
-            name: "Phelipe Nandi",
-            photo: {
-                id: 1,
-                url: "https://avatars.githubusercontent.com/u/46757393?v=4"
-            },
-            rating: "9.2",
-            description: "Meu comentário"
-        }, {
-            idComent: 2,
-            idConsumer: 1,
-            name: "Phelipe Nandi",
-            photo: {
-                id: 1,
-                url: "https://avatars.githubusercontent.com/u/46757393?v=4"
-            },
-            rating: "9.2",
-            description: "Meu comentário"
-        }, {
-            idComent: 1,
-            idConsumer: 1,
-            name: "Phelipe Nandi",
-            photo: {
-                id: 1,
-                url: "https://avatars.githubusercontent.com/u/46757393?v=4"
-            },
-            rating: "9.2",
-            description: "Meu comentário"
+    const {
+        data,
+        isSuccess,
+        isLoading,
+        isError,
+        hasNextPage,
+        fetchNextPage,
+        isFetchingNextPage
+    } = useInfiniteQuery("comments",
+        ({ pageParam = 0 }) => searchCommentsByIdProvider(pageParam, 5, provider.id), {
+        getNextPageParam: (page) => {
+            if (page.currentPage < page.totalPages) {
+                return page.currentPage + 1;
+            }
+            return false;
         }
-    ]
+    });
+
+    function handleFetchNextPaget() {
+        if (hasNextPage) {
+            fetchNextPage();
+        }
+    }
 
     function renderCommentsProvider({ item }: ListRenderItemInfo<Comment>) {
         return <CardCommentProvider
@@ -73,14 +68,39 @@ export function CommentsProvider() {
                 </Text>
             </HStack>
 
-            <FlatList
-                mt={10}
-                bg="background"
-                data={comments}
-                keyExtractor={comment => comment.idComent.toString()}
-                renderItem={renderCommentsProvider}
-                showsVerticalScrollIndicator={false}
-            />
+            {
+                isLoading &&
+                <Loading />
+            }
+
+            {
+                isError &&
+                <Center flex={1}>
+                    <Warning color={colors.red[600]} size={32} />
+                    <Text mt={4} textAlign="center" color="gray.300" fontFamily="body" fontSize="sm">
+                        Aconteceu um erro ao buscar {"\n"}
+                        os comentários
+                    </Text>
+                </Center>
+            }
+
+            {
+                isSuccess &&
+                <FlatList
+                    mt={10}
+                    bg="background"
+                    data={data.pages.map((commentResponse) => commentResponse.comments).flat()}
+                    keyExtractor={comment => comment.idComent.toString()}
+                    renderItem={renderCommentsProvider}
+                    showsVerticalScrollIndicator={false}
+                    onEndReached={handleFetchNextPaget}
+                    onEndReachedThreshold={0.1}
+                    ListFooterComponent={
+                        isFetchingNextPage && <Loading my={10} />
+                    }
+                />
+            }
+
 
             <Fab
                 renderInPortal={false}

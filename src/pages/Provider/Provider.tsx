@@ -1,7 +1,7 @@
 import { ListRenderItemInfo } from 'react-native';
-import { VStack, Text, ScrollView, FlatList, Fab, HStack, Avatar } from 'native-base';
+import { VStack, Text, ScrollView, FlatList, Fab, HStack, Center, useTheme } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
-import { Plus } from 'phosphor-react-native';
+import { Plus, Warning } from 'phosphor-react-native';
 
 import { propsStack } from '../../routes/Navigators/Models';
 
@@ -10,14 +10,17 @@ import {
     InfoProvider,
     PhotosProvider
 } from '../../features/provider';
-import { CardCommentProvider } from '../../features/commentsProvider';
+import { CardCommentProvider, searchCommentsByIdProvider } from '../../features/commentsProvider';
 
 import { Photo, Comment } from '../../types/provider';
 import { useProviderContext } from '../../hooks/useProviderContext';
+import { useQuery } from 'react-query';
+import { Loading } from '../../components/ui/Loading';
 
 export function Provider() {
     const navigation = useNavigation<propsStack>();
     const { provider } = useProviderContext();
+    const { colors } = useTheme();
 
     const urls: Photo[] = [
         {
@@ -42,39 +45,12 @@ export function Provider() {
         }
     ]
 
-    const comments: Comment[] = [
-        {
-            idComent: 3,
-            idConsumer: 1,
-            name: "Phelipe Nandi",
-            photo: {
-                id: 1,
-                url: "https://avatars.githubusercontent.com/u/46757393?v=4"
-            },
-            rating: "9.2",
-            description: "Meu comentário"
-        }, {
-            idComent: 2,
-            idConsumer: 1,
-            name: "Phelipe Nandi",
-            photo: {
-                id: 1,
-                url: "https://avatars.githubusercontent.com/u/46757393?v=4"
-            },
-            rating: "9.2",
-            description: "Meu comentário"
-        }, {
-            idComent: 1,
-            idConsumer: 1,
-            name: "Phelipe Nandi",
-            photo: {
-                id: 1,
-                url: "https://avatars.githubusercontent.com/u/46757393?v=4"
-            },
-            rating: "9.2",
-            description: "Meu comentário"
-        }
-    ]
+    const {
+        data,
+        isSuccess,
+        isLoading,
+        isError
+    } = useQuery('commentProvider', () => searchCommentsByIdProvider(0, 3, provider.id));
 
     function renderPhotosProvider({ item }: ListRenderItemInfo<Photo>) {
         return <PhotosProvider
@@ -108,6 +84,7 @@ export function Provider() {
 
                     <FlatList
                         mt={4}
+                        mb={data === undefined || data.comments.length != 0 ? 1 : 4}
                         pl={2}
                         bg="background"
                         horizontal={true}
@@ -117,23 +94,42 @@ export function Provider() {
                         showsHorizontalScrollIndicator={false}
                     />
 
-                    <HStack
-                        px={5}
-                        my={7}
-                        alignItems="center"
-                        justifyContent="space-between"
-                    >
-                        <Text fontFamily="body" fontSize="lg" color="primary.700">
-                            Comentários
-                        </Text>
-                        <Text fontFamily="body" fontSize="xs" color="primary.700"
-                            onPress={() => navigation.navigate("commentsProvider")}>
-                            Ver todos
-                        </Text>
-                    </HStack>
+                    {
+                        (data === undefined || data.comments.length != 0) &&
+                        <HStack
+                            px={5}
+                            my={5}
+                            alignItems="center"
+                            justifyContent="space-between"
+                        >
+                            <Text fontFamily="body" fontSize="lg" color="primary.700">
+                                Comentários
+                            </Text>
+                            <Text fontFamily="body" fontSize="xs" color="primary.700"
+                                onPress={() => navigation.navigate("commentsProvider")}>
+                                Ver todos
+                            </Text>
+                        </HStack>
+                    }
 
                     {
-                        comments.map((comment, index) => {
+                        isLoading &&
+                        <Loading />
+                    }
+
+                    {
+                        isError &&
+                        <Center flex={1}>
+                            <Warning color={colors.red[600]} size={32} />
+                            <Text mt={4} textAlign="center" color="gray.300" fontFamily="body" fontSize="sm">
+                                Aconteceu um erro ao buscar seus orçamentos
+                            </Text>
+                        </Center>
+                    }
+
+                    {
+                        isSuccess &&
+                        data.comments.map((comment, index) => {
                             return <CardCommentProvider
                                 key={index}
                                 data={comment}

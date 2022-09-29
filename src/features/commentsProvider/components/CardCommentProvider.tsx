@@ -10,6 +10,14 @@ type Props = {
 export function CardCommentProvider({ data }: Props) {
     const { colors } = useTheme();
 
+    function colorRating(rating: number) {
+        if (rating < 6) {
+            return "red.700";
+        } else {
+            return "green.700"
+        }
+    }
+
     return (
         <HStack
             mb={7}
@@ -18,7 +26,14 @@ export function CardCommentProvider({ data }: Props) {
             justifyContent="space-between"
         >
             <HStack space={3}>
-                <Avatar bg="gray.500" size="lg" source={{ uri: "https://avatars.githubusercontent.com/u/46757393?v=4" }} />
+                <Avatar
+                    bg="gray.500"
+                    size="lg"
+                    source={{
+                        uri: data.photo ? `data:image/gif;base64,${data.photo}`
+                            : "https://avatars.githubusercontent.com/u/46757393?v=4"
+                    }}
+                />
 
                 <Box
                     w={64}
@@ -33,8 +48,8 @@ export function CardCommentProvider({ data }: Props) {
                             </Text>
 
                             <HStack pr={1} space={2} justifyContent="space-between">
-                                <Text fontFamily="mono" fontSize="md" color="gray.300">
-                                    {data.rating}
+                                <Text fontFamily="mono" fontSize="md" color={colorRating(Number(data.rating) * 2)}>
+                                    {Number(data.rating) * 2}
                                 </Text>
 
                                 <DotsThreeVertical color={colors.primary[700]} />

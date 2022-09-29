@@ -36,7 +36,13 @@ export interface Comment {
     idComent: number;
     idConsumer: number;
     name: string;
-    photo: Photo;
+    photo: string;
     rating: string;
     description: string;
+}
+
+export interface CommentResponse {
+    comments: Comment[],
+    currentPage: number;
+    totalPages: number;
 }

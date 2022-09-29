@@ -3,10 +3,6 @@ import { NewCommentProvider } from "../../../types/provider";
 
 export async function createNewCommentProviderRequest(data: NewCommentProvider, idConsumer: number, idProvider: number) {
     try {
-        console.log("Data: ", data);
-        console.log("Provider: ", idProvider);
-        console.log("Consumer: ", idConsumer);
-
         const response = await Api.post("consumer/create-comment", {
             provider: {
                 id: idProvider,

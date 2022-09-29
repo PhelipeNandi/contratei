@@ -1,18 +1,20 @@
 import { useNavigation } from '@react-navigation/native';
-import { VStack, HStack, Box, Text, IconButton } from 'native-base';
+import { VStack, HStack, Box, Text, IconButton, Collapse } from 'native-base';
 import { ArrowLeft } from 'phosphor-react-native';
 import { propsStack } from '../../routes/Navigators/Models';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup';
 
 import { createNewCommentProviderRequest, SelectRatingProvider } from '../../features/createNewCommentProvider';
+import { Alert } from '../../components/form/Alert';
 import { TextArea } from '../../components/form/TextArea';
 import { Button } from '../../components/ui/Button';
 import { NewCommentProvider } from '../../types/provider';
 import { useAuthContext } from '../../hooks/useAuthContext';
 import { useProviderContext } from '../../hooks/useProviderContext';
+import { useState } from 'react';
 
 const createNewCommentProviderForm: yup.SchemaOf<NewCommentProvider> = yup.object({
     rating: yup.string().required("Nota obrigatória"),
@@ -23,6 +25,8 @@ export function CreateNewCommentProvider() {
     const navigation = useNavigation<propsStack>();
     const { user } = useAuthContext();
     const { provider } = useProviderContext();
+    const queryClient = useQueryClient();
+    const [showAlert, setShowAlert] = useState<boolean>(false);
 
     const {
         control,
@@ -36,9 +40,19 @@ export function CreateNewCommentProvider() {
     });
 
     const {
+        isError,
         isLoading,
         mutate
-    } = useMutation((data: NewCommentProvider) => createNewCommentProviderRequest(data, user.id, provider.id));
+    } = useMutation((data: NewCommentProvider) => createNewCommentProviderRequest(data, user.id, provider.id), {
+        onSuccess: () => {
+            queryClient.invalidateQueries("comments");
+            queryClient.invalidateQueries("commentProvider");
+            navigation.goBack();
+        },
+        onError: () => {
+            setShowAlert(true);
+        }
+    });
 
     return (
         <VStack flex={1} bg="background">
@@ -62,7 +76,18 @@ export function CreateNewCommentProvider() {
                 </Text>
             </HStack>
 
-            <VStack mt={16} mx={5}>
+            {
+                isError &&
+                <Collapse mt={8} isOpen={showAlert}>
+                    <Alert
+                        status="error"
+                        header="Ocorreu um erro ao cadastrar seu comentário!"
+                        onPress={() => setShowAlert(false)}
+                    />
+                </Collapse>
+            }
+
+            <VStack mt={showAlert ? 4 : 16} mx={5}>
 
                 <Controller
                     control={control}
