@@ -9,6 +9,7 @@ export interface Provider {
     description: string;
     kmWorkRange: string;
     hourValue: string;
+    rating: string;
 }
 
 export interface ServiceType {

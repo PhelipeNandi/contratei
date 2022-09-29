@@ -1,7 +1,8 @@
 import { VStack, HStack, Avatar, Text, Box, useTheme } from 'native-base';
+import { DotsThreeVertical, Smiley, SmileySad } from 'phosphor-react-native';
 
-import { DotsThreeVertical } from 'phosphor-react-native';
 import { Comment } from '../../../types/provider';
+import { normalizeRatingProvider } from '../../../utils/formatStrings';
 
 type Props = {
     data: Comment;
@@ -9,14 +10,6 @@ type Props = {
 
 export function CardCommentProvider({ data }: Props) {
     const { colors } = useTheme();
-
-    function colorRating(rating: number) {
-        if (rating < 6) {
-            return "red.700";
-        } else {
-            return "green.700"
-        }
-    }
 
     return (
         <HStack
@@ -47,12 +40,16 @@ export function CardCommentProvider({ data }: Props) {
                                 {data.name}
                             </Text>
 
-                            <HStack pr={1} space={2} justifyContent="space-between">
-                                <Text fontFamily="mono" fontSize="md" color={colorRating(Number(data.rating) * 2)}>
-                                    {Number(data.rating) * 2}
-                                </Text>
+                            <HStack pr={3} space={2} justifyContent="space-between">
+                                {
+                                    normalizeRatingProvider(data.rating) < 6
+                                        ? <SmileySad size={23} color={colors.red[700]} weight="regular" />
+                                        : <Smiley size={23} color={colors.green[700]} weight="regular" />
+                                }
 
-                                <DotsThreeVertical color={colors.primary[700]} />
+                                <Text textAlign="center" fontFamily="mono" fontSize="md" color="primary.700">
+                                    {normalizeRatingProvider(data.rating)}
+                                </Text>
                             </HStack>
                         </HStack>
                         <Text my={2} mx={3} fontFamily="mono" fontSize="xs" color="gray.500">

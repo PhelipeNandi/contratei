@@ -1,8 +1,9 @@
 import React from 'react';
 import { Pressable, IPressableProps, HStack, Avatar, VStack, Text, useTheme } from 'native-base';
-import { Smiley } from 'phosphor-react-native';
+import { Smiley, SmileySad } from 'phosphor-react-native';
 
 import { Provider } from '../../../types/provider';
+import { normalizeRatingProvider } from '../../../utils/formatStrings';
 
 type Props = IPressableProps & {
     data: Provider;
@@ -38,9 +39,14 @@ export function SimpleProviderCard({ data, ...rest }: Props) {
 
                 <VStack justifyContent="space-between">
                     <HStack justifyContent="flex-end" alignItems="center" space={1}>
-                        <Smiley size={23} color={colors.green[700]} weight="regular" />
+                        {
+                            normalizeRatingProvider(data.rating) < 6
+                                ? <SmileySad size={23} color={colors.red[700]} weight="regular" />
+                                : <Smiley size={23} color={colors.green[700]} weight="regular" />
+                        }
+
                         <Text textAlign="center" fontFamily="mono" fontSize="md" color="primary.700">
-                            9.2
+                            {normalizeRatingProvider(data.rating)}
                         </Text>
                     </HStack>
 

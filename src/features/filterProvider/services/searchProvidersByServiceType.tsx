@@ -24,7 +24,8 @@ export async function searchProvidersByServiceType(pageParam: number, serviceTyp
                 email: provider.email,
                 description: provider.description,
                 kmWorkRange: provider.kmWorkRange,
-                hourValue: provider.hourValue
+                hourValue: provider.hourValue,
+                rating: provider.score
             })),
             currentPage: data.number,
             totalPages: data.totalPages

@@ -17,7 +17,8 @@ export async function searchProviderById(idProvider: number, isAuthenticated: bo
             email: response.data.email,
             description: response.data.description,
             kmWorkRange: response.data.kmWorkRange,
-            hourValue: response.data.hourValue
+            hourValue: response.data.hourValue,
+            rating: response.data.score
         }
     } catch (error) {
         if (error instanceof Error) {

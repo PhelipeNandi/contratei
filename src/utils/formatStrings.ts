@@ -39,3 +39,9 @@ export const normalizeBudgetValue = (value: string | undefined) => {
 
     return "R$ " + Number(value).toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, "$1.");
 }
+
+export const normalizeRatingProvider = (value: string | undefined): number => {
+    if (!value) return 0;
+
+    return Number((Number(value) * 2).toFixed(2));
+}
