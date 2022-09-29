@@ -50,6 +50,15 @@ export function AddressCard({ data, ...rest }: Props) {
                         title="Estado"
                         value={data.state}
                     />
+
+                    {
+                        data.complement &&
+                        <MarkedTitleWithValue
+                            title="Complemento"
+                            value={data.complement}
+                        />
+                    }
+
                 </VStack>
             </Box>
         </Pressable>

@@ -45,6 +45,7 @@ export function Budget() {
         description: 'Descrição do Empregado',
         kmWorkRange: '50.0',
         hourValue: '100.00',
+        rating: "5"
     }
 
     return (

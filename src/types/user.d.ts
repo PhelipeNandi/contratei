@@ -52,7 +52,8 @@ export interface UserAddress {
     street: string;
     numberStreet: string;
     postCode: string;
-    isMainAddress: boolean;
+    complement: string;
+    isMainAddress: string;
 }
 
 export interface UserAddressResponse {
@@ -70,4 +71,6 @@ export interface NewAddress {
     street: string;
     numberStreet: string;
     postCode: string;
+    complement: string;
+    isMainAddress: string;
 }
