@@ -66,6 +66,8 @@ export function AuthProvider({ children }) {
     function changePersonalInformationUser(dataUser: User) {
         if (dataUser) {
             setUser(dataUser);
+            AsyncStorage.removeItem('@contratei:user');
+            AsyncStorage.setItem('@contratei:user', JSON.stringify(dataUser));
         }
     }
 
