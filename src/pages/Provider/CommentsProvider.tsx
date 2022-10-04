@@ -104,7 +104,7 @@ export function CommentsProvider() {
             }
 
             {
-                !isNewCommentDisable &&
+                isNewCommentDisable &&
                 <Fab
                     renderInPortal={false}
                     shadow={2}

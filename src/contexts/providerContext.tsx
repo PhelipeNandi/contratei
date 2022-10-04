@@ -17,15 +17,15 @@ export const ProviderContext = createContext({} as ProviderContextType);
 export function ProviderProvider({ children }) {
     const [provider, setProvider] = useState<Provider | null>();
     const { user, isAuthenticated } = useAuthContext();
-    const [isNewCommentDisable, setNewCommentDisable] = useState<boolean>(false);
+    const [isNewCommentDisable, setNewCommentDisable] = useState<boolean>(true);
 
     useEffect(() => {
         async function isNewCommentAbleForConsumerRequest() {
-            if (user.type === "Consumidor" && provider != null) {
+            if (isAuthenticated && user.type === "Consumidor" && provider != null) {
                 await isNewCommentAbleForConsumer(user.id, provider.id)
                     .then((response) => {
                         if (response === true) {
-                            setNewCommentDisable(true);
+                            setNewCommentDisable(false);
                         }
                     })
                     .catch((error) => {
