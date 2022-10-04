@@ -21,7 +21,9 @@ export function ProviderProvider({ children }) {
 
     useEffect(() => {
         async function isNewCommentAbleForConsumerRequest() {
-            if (isAuthenticated && user.type === "Consumidor" && provider != null) {
+            const isConsumerAuthenticated = user != null && isAuthenticated && user.type === "Consumidor";
+
+            if (isConsumerAuthenticated && provider != null) {
                 await isNewCommentAbleForConsumer(user.id, provider.id)
                     .then((response) => {
                         if (response === true) {
