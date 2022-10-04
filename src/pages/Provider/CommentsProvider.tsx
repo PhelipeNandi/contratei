@@ -10,10 +10,12 @@ import { Comment } from '../../types/provider';
 import { CardCommentProvider, searchCommentsByIdProvider } from '../../features/commentsProvider';
 import { useProviderContext } from '../../hooks/useProviderContext';
 import { Loading } from '../../components/ui/Loading';
+import { useAuthContext } from '../../hooks/useAuthContext';
 
 export function CommentsProvider() {
     const navigation = useNavigation<propsStack>();
-    const { provider } = useProviderContext();
+    const { isAuthenticated } = useAuthContext();
+    const { provider, isNewCommentDisable } = useProviderContext();
     const { colors } = useTheme();
 
     const {
@@ -25,7 +27,7 @@ export function CommentsProvider() {
         fetchNextPage,
         isFetchingNextPage
     } = useInfiniteQuery("comments",
-        ({ pageParam = 0 }) => searchCommentsByIdProvider(pageParam, 5, provider.id), {
+        ({ pageParam = 0 }) => searchCommentsByIdProvider(pageParam, 5, provider.id, isAuthenticated), {
         getNextPageParam: (page) => {
             if (page.currentPage < page.totalPages) {
                 return page.currentPage + 1;
@@ -101,16 +103,19 @@ export function CommentsProvider() {
                 />
             }
 
+            {
+                !isNewCommentDisable &&
+                <Fab
+                    renderInPortal={false}
+                    shadow={2}
+                    placement="bottom-right"
+                    size="md"
+                    bg="primary.700"
+                    icon={<Plus color="white" size="15" />}
+                    onPress={() => navigation.navigate("createNewCommentProvider")}
+                />
+            }
 
-            <Fab
-                renderInPortal={false}
-                shadow={2}
-                placement="bottom-right"
-                size="md"
-                bg="primary.700"
-                icon={<Plus color="white" size="15" />}
-                onPress={() => navigation.navigate("createNewCommentProvider")}
-            />
         </VStack>
     );
 }

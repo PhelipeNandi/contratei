@@ -1,19 +1,43 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 
 import { Provider } from "../types/provider";
-import { searchProviderById } from "../features/searchProvider";
 import { useAuthContext } from "../hooks/useAuthContext";
+
+import { searchProviderById } from "../features/searchProvider";
+import { isNewCommentAbleForConsumer } from "../features/commentsProvider";
 
 interface ProviderContextType {
     provider: Provider | null;
     searchProvider: (idProvider: number) => Promise<void>;
+    isNewCommentDisable: boolean;
 }
 
 export const ProviderContext = createContext({} as ProviderContextType);
 
 export function ProviderProvider({ children }) {
     const [provider, setProvider] = useState<Provider | null>();
-    const { isAuthenticated } = useAuthContext();
+    const { user, isAuthenticated } = useAuthContext();
+    const [isNewCommentDisable, setNewCommentDisable] = useState<boolean>(false);
+
+    useEffect(() => {
+        async function isNewCommentAbleForConsumerRequest() {
+            if (user.type === "Consumidor" && provider != null) {
+                await isNewCommentAbleForConsumer(user.id, provider.id)
+                    .then((response) => {
+                        if (response === true) {
+                            setNewCommentDisable(true);
+                        }
+                    })
+                    .catch((error) => {
+                        if (error instanceof Error) {
+                            console.log(error);
+                        }
+                    });
+            }
+        }
+
+        isNewCommentAbleForConsumerRequest();
+    }, [provider]);
 
     async function searchProvider(idProvider: number) {
         await searchProviderById(idProvider, isAuthenticated)
@@ -28,7 +52,7 @@ export function ProviderProvider({ children }) {
     }
 
     return (
-        <ProviderContext.Provider value={{ provider, searchProvider }}>
+        <ProviderContext.Provider value={{ provider, searchProvider, isNewCommentDisable }}>
             {children}
         </ProviderContext.Provider>
     );
