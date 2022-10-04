@@ -104,13 +104,14 @@ export function CommentsProvider() {
             }
 
             {
-                isNewCommentDisable &&
+                !isNewCommentDisable &&
                 <Fab
                     renderInPortal={false}
                     shadow={2}
                     placement="bottom-right"
                     size="md"
                     bg="primary.700"
+                    isDisabled={isNewCommentDisable}
                     icon={<Plus color="white" size="15" />}
                     onPress={() => navigation.navigate("createNewCommentProvider")}
                 />
