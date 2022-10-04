@@ -8,6 +8,7 @@ export type propsNavigationStack = {
     registerAccount: undefined,
     dashboard: undefined,
     searchProvider: undefined,
+    searchProviderNavigation: undefined,
     myBudgets: undefined,
     createBudget: undefined,
     profile: undefined,

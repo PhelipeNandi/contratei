@@ -29,10 +29,8 @@ const Stack = createNativeStackNavigator<propsNavigationStack>();
 
 export function LoginNavigation() {
     return (
-        <Stack.Navigator initialRouteName="searchProvider" screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="searchProvider" component={SearchProvider} />
-            <Stack.Screen name="filterProvider" component={FilterProvider} />
-            <Stack.Screen name="provider" component={Provider} />
+        <Stack.Navigator initialRouteName="searchProviderNavigation" screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="searchProviderNavigation" component={SearchProviderNavigation} />
             <Stack.Screen name="splashScreen" component={SplashScreen} />
             <Stack.Screen name="signIn" component={SignIn} />
             <Stack.Screen name="registerAccount" component={RegisterAccount} />
@@ -47,7 +45,7 @@ export function DashboardNavigation() {
             <Stack.Screen name="myBudgets" component={MyBudgets} />
             <Stack.Screen name="budget" component={Budget} />
             <Stack.Screen name="createBudget" component={CreateBudget} />
-            <Stack.Screen name="searchProvider" component={SearchProvider} />
+            <Stack.Screen name="searchProviderNavigation" component={SearchProviderNavigation} />
         </Stack.Navigator>
     )
 }

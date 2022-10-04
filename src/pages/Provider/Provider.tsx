@@ -16,9 +16,11 @@ import { Photo, Comment } from '../../types/provider';
 import { useProviderContext } from '../../hooks/useProviderContext';
 import { useQuery } from 'react-query';
 import { Loading } from '../../components/ui/Loading';
+import { useAuthContext } from '../../hooks/useAuthContext';
 
 export function Provider() {
     const navigation = useNavigation<propsStack>();
+    const { isAuthenticated } = useAuthContext();
     const { provider } = useProviderContext();
     const { colors } = useTheme();
 
@@ -50,7 +52,7 @@ export function Provider() {
         isSuccess,
         isLoading,
         isError
-    } = useQuery('commentProvider', () => searchCommentsByIdProvider(0, 3, provider.id));
+    } = useQuery('commentProvider', () => searchCommentsByIdProvider(0, 3, provider.id, isAuthenticated));
 
     function renderPhotosProvider({ item }: ListRenderItemInfo<Photo>) {
         return <PhotosProvider

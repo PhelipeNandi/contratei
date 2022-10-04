@@ -1,9 +1,11 @@
 import { Api } from "../../../lib/Api";
 import { CommentResponse } from "../../../types/provider";
 
-export async function searchCommentsByIdProvider(pageParam: number, size: number, providerId: number): Promise<CommentResponse> {
+export async function searchCommentsByIdProvider(pageParam: number, size: number, providerId: number, isAuthenticated: boolean): Promise<CommentResponse> {
     try {
-        const response = await Api.get("provider/find-comment-by-provider", {
+        const url = isAuthenticated ? "provider/find-comment-by-provider" : "login/find-comment-by-provider";
+
+        const response = await Api.get(url, {
             params: {
                 page: pageParam,
                 size: size,

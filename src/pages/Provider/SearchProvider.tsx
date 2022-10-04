@@ -23,6 +23,7 @@ export function SearchProvider() {
             description: 'Descrição do Mecanico',
             kmWorkRange: '50.0',
             hourValue: '100.00',
+            rating: "5.0"
         }
         , {
             id: 4,
@@ -35,6 +36,7 @@ export function SearchProvider() {
             description: 'Descrição do Pedreiro',
             kmWorkRange: '50.0',
             hourValue: '100.00',
+            rating: "5.0"
         }
         , {
             id: 3,
@@ -47,6 +49,7 @@ export function SearchProvider() {
             description: 'Descrição do Pintor',
             kmWorkRange: '50.0',
             hourValue: '100.00',
+            rating: "5.0"
         }
         , {
             id: 2,
@@ -59,6 +62,7 @@ export function SearchProvider() {
             description: 'Descrição do Marceneiro',
             kmWorkRange: '50.0',
             hourValue: '100.00',
+            rating: "5.0"
         }
         , {
             id: 1,
@@ -71,6 +75,7 @@ export function SearchProvider() {
             description: 'Descrição do Empregado',
             kmWorkRange: '50.0',
             hourValue: '100.00',
+            rating: "5.0"
         }
     ]
 
