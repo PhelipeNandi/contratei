@@ -34,7 +34,7 @@ export function Addresses() {
                 <Collapse mt={2} isOpen={addressContext.isModalOpen}>
                     <Alert
                         status="success"
-                        header="Cadastro realizado com sucesso!"
+                        header={addressContext.modalMessage}
                         onPress={() => addressContext.setIsModalOpen(false)}
                     />
                 </Collapse>

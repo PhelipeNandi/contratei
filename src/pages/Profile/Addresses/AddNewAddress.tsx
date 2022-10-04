@@ -17,9 +17,10 @@ import { Button } from '../../../components/ui/Button';
 import { Modal } from '../../../components/form/Modal';
 import { Checkbox } from '../../../components/form/Checkbox';
 import { Alert } from '../../../components/form/Alert';
-import { createNewAdress, searchAddressViaCep } from '../../../features/addNewAddress';
+import { createNewAdress, searchAddressViaCep, alterAddress, deleteAddress } from '../../../features/addNewAddress';
 
 const addNewAddressForm: yup.SchemaOf<NewAddress> = yup.object({
+    id: yup.number().nullable(),
     state: yup.string().required("Estado obrigatório"),
     city: yup.string().required("Cidade obrigatório"),
     district: yup.string().required("Bairro obrigatório"),
@@ -39,9 +40,11 @@ export function AddNewAddress() {
     const [searchPostalCode, setSearchPostalCode] = useState<boolean>(false);
     const [showModal, setShowModal] = useState<boolean>(false);
     const [showAlert, setShowAlert] = useState<boolean>(false);
+    const [errorMessage, setErrorMessage] = useState<string>();
 
     useEffect(() => {
         if (addressContext.isEditing) {
+            setValue("id", addressContext.address.id);
             setValue("isMainAddress", addressContext.address.isMainAddress);
             setValue("postCode", addressContext.address.postCode);
             setValue("street", addressContext.address.street);
@@ -87,16 +90,50 @@ export function AddNewAddress() {
         }
     }, [postalCodeValue]);
 
+    function handleOnSucessAddress() {
+        addressContext.setIsModalOpen(true);
+        queryClient.invalidateQueries("myAddresses");
+        navigation.goBack();
+    }
+
     const {
         isLoading: isLoadingMutation,
-        mutate,
+        mutate: mutateCreateNewAddress,
     } = useMutation((data: NewAddress) => createNewAdress(data, user), {
-        onSuccess: () => {
-            addressContext.setIsModalOpen(true);
-            queryClient.invalidateQueries("myAddresses");
-            navigation.goBack();
+        onSuccess: (response) => {
+            addressContext.setModalMessage(response);
+            handleOnSucessAddress();
         },
         onError: () => {
+            setErrorMessage("Erro ao criar endereço, contate o suporte ou tente mais tarde");
+            setShowAlert(true);
+        }
+    });
+
+    const {
+        isLoading: isLoadingAlterAddress,
+        mutate: mutateAlterAddress
+    } = useMutation((data: NewAddress) => alterAddress(data), {
+        onSuccess: (response) => {
+            addressContext.setModalMessage(response);
+            handleOnSucessAddress();
+        },
+        onError: () => {
+            setErrorMessage("Erro ao alterar endereço, contate o suporte ou tente mais tarde");
+            setShowAlert(true);
+        }
+    });
+
+    const {
+        isLoading: isLoadingDeleteAddress,
+        mutate: mutateDeleteAddress
+    } = useMutation((data: NewAddress) => deleteAddress(data.id), {
+        onSuccess: (response) => {
+            addressContext.setModalMessage(response);
+            handleOnSucessAddress();
+        },
+        onError: () => {
+            setErrorMessage("Erro ao excluir endereço, contate o suporte ou tente mais tarde");
             setShowAlert(true);
         }
     });
@@ -109,7 +146,7 @@ export function AddNewAddress() {
             <Collapse mt={2} isOpen={showAlert}>
                 <Alert
                     status="error"
-                    header="Erro ao cadastrar novo endereço"
+                    header={errorMessage}
                     onPress={() => setShowAlert(false)}
                 />
             </Collapse>
@@ -125,7 +162,7 @@ export function AddNewAddress() {
                                 title="Endereço principal?"
                                 value={value}
                                 onChange={onChange}
-                                isChecked={value != null}
+                                isChecked={!!value}
                             />
                         )}
                     />
@@ -251,9 +288,15 @@ export function AddNewAddress() {
                             flex={1}
                             title="Salvar"
                             variant="sucess"
-                            isLoading={isLoadingMutation}
+                            isLoading={isLoadingMutation || isLoadingAlterAddress}
                             isLoadingText="Salvando"
-                            onPress={handleSubmit((value) => mutate(value))}
+                            onPress={handleSubmit((value) => {
+                                if (addressContext.isEditing) {
+                                    mutateAlterAddress(value)
+                                } else {
+                                    mutateCreateNewAddress(value)
+                                }
+                            })}
                         />
                     </HStack>
 
@@ -273,6 +316,9 @@ export function AddNewAddress() {
                             <Button
                                 title="Excluir"
                                 variant="danger"
+                                isLoading={isLoadingDeleteAddress}
+                                isLoadingText="Deletando"
+                                onPress={handleSubmit((value) => mutateDeleteAddress(value))}
                             />
                         </NativeBaseButton.Group>
                     </Modal>

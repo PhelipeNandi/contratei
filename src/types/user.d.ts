@@ -65,6 +65,7 @@ export interface UserAddressResponse {
 }
 
 export interface NewAddress {
+    id?: number;
     state: string;
     city: string;
     district: string;
