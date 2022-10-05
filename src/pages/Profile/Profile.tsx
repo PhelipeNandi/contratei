@@ -13,7 +13,6 @@ export function Profile() {
     function handleLogOut() {
         logOut();
     }
-
     return (
         <VStack flex={1} bg="primary.700" pt={32}>
             <VStack
@@ -39,48 +38,49 @@ export function Profile() {
                         {user.firstName} {user.lastName}
                     </Text>
 
-                    <MenuNavigation
-                        mt={7}
-                        title="Informações Pessoais"
-                        icon={User}
-                        onPress={() => navigation.navigate('personalInformation')}
-                    />
+                    <ScrollView>
+                        <MenuNavigation
+                            mt={7}
+                            title="Informações Pessoais"
+                            icon={User}
+                            onPress={() => navigation.navigate('personalInformation')}
+                        />
 
-                    <MenuNavigation
-                        mt={4}
-                        title="Pagamentos"
-                        icon={Cardholder}
-                        onPress={() => navigation.navigate('payments')}
-                    />
+                        <MenuNavigation
+                            mt={4}
+                            title="Pagamentos"
+                            icon={Cardholder}
+                            onPress={() => navigation.navigate('payments')}
+                        />
 
-                    <MenuNavigation
-                        mt={4}
-                        title="Endereços"
-                        icon={AddressBook}
-                        onPress={() => navigation.navigate('addressNavigation')}
-                    />
+                        <MenuNavigation
+                            mt={4}
+                            title="Endereços"
+                            icon={AddressBook}
+                            onPress={() => navigation.navigate('addressNavigation')}
+                        />
 
-                    <MenuNavigation
-                        mt={4}
-                        title="Notificações"
-                        icon={Bell}
-                        onPress={() => navigation.navigate('notifications')}
-                    />
+                        <MenuNavigation
+                            mt={4}
+                            title="Notificações"
+                            icon={Bell}
+                            onPress={() => navigation.navigate('notifications')}
+                        />
 
-                    <MenuNavigation
-                        mt={4}
-                        title="Configurações"
-                        icon={Gear}
-                        onPress={() => navigation.navigate('settings')}
-                    />
+                        <MenuNavigation
+                            mt={4}
+                            title="Configurações"
+                            icon={Gear}
+                            onPress={() => navigation.navigate('settings')}
+                        />
 
-                    <MenuNavigation
-                        mt={4}
-                        title="Sair"
-                        icon={SignOut}
-                        onPress={handleLogOut}
-                    />
-
+                        <MenuNavigation
+                            my={4}
+                            title="Sair"
+                            icon={SignOut}
+                            onPress={handleLogOut}
+                        />
+                    </ScrollView>
                 </VStack>
             </VStack>
         </VStack >

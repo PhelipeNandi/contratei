@@ -21,6 +21,7 @@ import {
     Settings,
     CommentsProvider,
     CreateNewCommentProvider,
+    SearchBudgets,
 } from '../../pages';
 import { ProviderProvider } from '../../contexts/providerContext';
 import { AddressProvider } from '../../contexts/adressContext';
@@ -81,7 +82,15 @@ export function CreateBudgetNavigation() {
     )
 }
 
-export function ProfileNavigation() {
+export function SearchBudgetsNavigation() {
+    return (
+        <Stack.Navigator initialRouteName="searchBudgets" screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="searchBudgets" component={SearchBudgets} />
+        </Stack.Navigator>
+    )
+}
+
+export function ProfileNavigationConsumer() {
     return (
         <Stack.Navigator initialRouteName="profile" screenOptions={{ headerShown: false }}>
             <Stack.Screen name="profile" component={Profile} />
@@ -92,6 +101,25 @@ export function ProfileNavigation() {
             <Stack.Screen name="notifications" component={Notifications} />
             <Stack.Screen name="settings" component={Settings} />
         </Stack.Navigator>
+    )
+}
+
+export function ProfileNavigationProvider() {
+    return (
+        <ProviderProvider>
+            <Stack.Navigator initialRouteName="profile" screenOptions={{ headerShown: false }}>
+                <Stack.Screen name="profile" component={Profile} />
+                <Stack.Screen name="personalInformation" component={PersonalInformation} />
+                <Stack.Screen name="payments" component={Payments} />
+                <Stack.Screen name="provider" component={Provider} />
+                <Stack.Screen name="commentsProvider" component={CommentsProvider} />
+                <Stack.Screen name="createNewCommentProvider" component={CreateNewCommentProvider} />
+                <Stack.Screen name="addNewCreditCard" component={AddNewCreditCard} />
+                <Stack.Screen name="addressNavigation" component={AddressNavigation} />
+                <Stack.Screen name="notifications" component={Notifications} />
+                <Stack.Screen name="settings" component={Settings} />
+            </Stack.Navigator>
+        </ProviderProvider>
     )
 }
 

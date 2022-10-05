@@ -20,7 +20,7 @@ import { useAuthContext } from '../../hooks/useAuthContext';
 
 export function Provider() {
     const navigation = useNavigation<propsStack>();
-    const { isAuthenticated } = useAuthContext();
+    const { isAuthenticated, isConsumer } = useAuthContext();
     const { provider } = useProviderContext();
     const { colors } = useTheme();
 
@@ -141,14 +141,17 @@ export function Provider() {
                 </VStack>
             </ScrollView>
 
-            <Fab
-                renderInPortal={false}
-                shadow={2}
-                placement="bottom-right"
-                size="md"
-                bg="primary.700"
-                icon={<Plus color="white" size="15" />}
-            />
+            {
+                isConsumer &&
+                <Fab
+                    renderInPortal={false}
+                    shadow={2}
+                    placement="bottom-right"
+                    size="md"
+                    bg="primary.700"
+                    icon={<Plus color="white" size="15" />}
+                />
+            }
         </VStack >
     );
 }

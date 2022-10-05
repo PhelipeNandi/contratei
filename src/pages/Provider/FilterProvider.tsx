@@ -47,7 +47,7 @@ export function FilterProvider() {
         }
     }
 
-    async function handleNaviteProvider(provider: Provider) {
+    async function handleNavigateProvider(provider: Provider) {
         await searchProvider(provider.id)
             .then(() => {
                 navigation.navigate("provider");
@@ -64,7 +64,7 @@ export function FilterProvider() {
             mx={5}
             mt={3}
             data={item}
-            onPress={() => handleNaviteProvider(item)}
+            onPress={() => handleNavigateProvider(item)}
         />
     }
 

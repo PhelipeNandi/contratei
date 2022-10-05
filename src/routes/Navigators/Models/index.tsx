@@ -11,6 +11,7 @@ export type propsNavigationStack = {
     searchProviderNavigation: undefined,
     myBudgets: undefined,
     createBudget: undefined,
+    searchBudgets: undefined,
     profile: undefined,
     personalInformation: undefined,
     payments: undefined,
@@ -36,6 +37,7 @@ export type propsNavigationTab = {
     myBudgetsTab: undefined,
     searchProviderTab: undefined,
     createBudgetTab: undefined,
+    searchBudgetsTab: undefined,
     profileTab: undefined
 }
 

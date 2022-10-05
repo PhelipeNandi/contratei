@@ -4,16 +4,16 @@ import { propsNavigationTab } from './Models';
 
 import {
     DashboardNavigation,
-    ProfileNavigation,
     BudgetNavigation,
     CreateBudgetNavigation,
-    SearchProviderNavigation
+    SearchProviderNavigation,
+    ProfileNavigationConsumer
 } from './StackNavigations';
 import { ButtonCreateBudget } from '../../features/createBudget';
 
 const Tab = createBottomTabNavigator<propsNavigationTab>();
 
-export function ShowBottomTabs() {
+export function ShowConsumerBottomTabs() {
     return (
         <Tab.Navigator
             screenOptions={{
@@ -69,7 +69,7 @@ export function ShowBottomTabs() {
 
             <Tab.Screen
                 name="profileTab"
-                component={ProfileNavigation}
+                component={ProfileNavigationConsumer}
                 options={{
                     tabBarIcon: ({ size, color, focused }) => (
                         <User size={size} color={color} weight={focused ? "fill" : "regular"} />

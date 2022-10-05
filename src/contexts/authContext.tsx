@@ -9,6 +9,7 @@ import { SignInData } from "../types/authentication";
 interface AuthContextType {
     isAuthenticated: boolean;
     isLoading: boolean;
+    isConsumer: boolean;
     user: User | null;
     signIn: (data: SignInData) => Promise<void>;
     signInGoogle(): void;
@@ -21,6 +22,7 @@ export const AuthContext = createContext({} as AuthContextType);
 export function AuthProvider({ children }) {
     const [user, setUser] = useState<User | null>();
     const [isLoading, setLoading] = useState(true);
+    const [isConsumer, setIsConsumer] = useState<boolean>();
 
     useEffect(() => {
         async function loadStorageData() {
@@ -29,6 +31,7 @@ export function AuthProvider({ children }) {
             if (storageUser) {
                 const userJson: User = JSON.parse(storageUser);
                 setUser(userJson);
+                setIsConsumer(userJson.type === "Consumidor");
                 Api.defaults.headers['Authorization'] = `Bearer ${userJson.token}`;
             }
 
@@ -42,6 +45,7 @@ export function AuthProvider({ children }) {
         await signInRequest(data)
             .then((user) => {
                 setUser(user);
+                setIsConsumer(user.type === "Consumidor");
                 AsyncStorage.setItem('@contratei:user', JSON.stringify(user));
             })
             .catch((error) => {
@@ -72,7 +76,7 @@ export function AuthProvider({ children }) {
     }
 
     return (
-        <AuthContext.Provider value={{ isAuthenticated: !!user, isLoading, user, signIn, signInGoogle, logOut, changePersonalInformationUser }}>
+        <AuthContext.Provider value={{ isAuthenticated: !!user, isLoading, isConsumer, user, signIn, signInGoogle, logOut, changePersonalInformationUser }}>
             {children}
         </AuthContext.Provider>
     );

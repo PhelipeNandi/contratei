@@ -106,7 +106,7 @@ export function SearchProvider() {
     const { isAuthenticated } = useAuthContext();
     const { searchProvider } = useProviderContext();
 
-    async function handleNaviteProvider(provider: Provider) {
+    async function handleNavigateProvider(provider: Provider) {
         await searchProvider(provider.id)
             .then(() => {
                 navigate("provider");
@@ -122,7 +122,7 @@ export function SearchProvider() {
         return <ProviderCardDetails
             maxW={80}
             data={item}
-            onPress={() => handleNaviteProvider(item)}
+            onPress={() => handleNavigateProvider(item)}
         />
     }
 
@@ -136,7 +136,7 @@ export function SearchProvider() {
         return <ProviderCardDetails
             maxW={48}
             data={item}
-            onPress={() => handleNaviteProvider(item)}
+            onPress={() => handleNavigateProvider(item)}
         />
     }
 

@@ -18,6 +18,7 @@ import { TextArea } from '../../components/form/TextArea';
 import { changePersonalInformation } from '../../features/personalInformation.tsx';
 import { useNavigation } from '@react-navigation/native';
 import { propsStack } from '../../routes/Navigators/Models';
+import { useProviderContext } from '../../hooks/useProviderContext';
 
 const changePersonalInformationForm: yup.SchemaOf<ChangePersonalInformation> = yup.object({
     firstName: yup.string().required("Nome obrigatório"),
@@ -35,7 +36,8 @@ const changePersonalInformationForm: yup.SchemaOf<ChangePersonalInformation> = y
 export function PersonalInformation() {
     const { colors } = useTheme();
     const navigation = useNavigation<propsStack>();
-    const { user, changePersonalInformationUser } = useAuthContext();
+    const { searchProvider } = useProviderContext();
+    const { user, changePersonalInformationUser, isConsumer } = useAuthContext();
     const [imageProfile, setImageProfile] = useState(user.profilePicture);
 
     const {
@@ -102,6 +104,18 @@ export function PersonalInformation() {
             navigation.navigate("profile");
         }
     }, [isSuccess]);
+
+    async function handleNavigateProvider() {
+        await searchProvider(user.id)
+            .then(() => {
+                navigation.navigate("provider");
+            })
+            .catch((error) => {
+                if (error instanceof Error) {
+                    console.log(error.message);
+                }
+            });
+    }
 
     return (
         <VStack flex={1}>
@@ -270,15 +284,26 @@ export function PersonalInformation() {
                             )}
                         />
                     }
+                    <HStack mt={5} mb={3} space={4}>
+                        {
+                            !isConsumer &&
+                            <Button
+                                flex={1}
+                                title="Ver Perfil"
+                                variant="info"
+                                onPress={handleNavigateProvider}
+                            />
+                        }
 
-                    <Button
-                        mt={8}
-                        title="Salvar"
-                        variant="sucess"
-                        isLoading={isLoading}
-                        isLoadingText="Salvando"
-                        onPress={handleSubmit((value) => mutate(value))}
-                    />
+                        <Button
+                            flex={1}
+                            title="Salvar"
+                            variant="sucess"
+                            isLoading={isLoading}
+                            isLoadingText="Salvando"
+                            onPress={handleSubmit((value) => mutate(value))}
+                        />
+                    </HStack>
 
                 </VStack>
 

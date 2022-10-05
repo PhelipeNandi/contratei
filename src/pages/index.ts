@@ -10,6 +10,7 @@ import { CreateNewCommentProvider } from './Provider/CreateNewCommentProvider';
 import { MyBudgets } from './Budget/MyBudgets';
 import { Budget } from './Budget/Budget';
 import { CreateBudget } from './Budget/CreateBudget';
+import { SearchBudgets } from './Budget/SearchBudgets';
 import { Profile } from './Profile/Profile';
 import { PersonalInformation } from './Profile/PersonalInformation';
 import { Payments } from './Profile/Payment/Payments';
@@ -32,6 +33,7 @@ export {
     MyBudgets,
     Budget,
     CreateBudget,
+    SearchBudgets,
     Profile,
     PersonalInformation,
     Payments,

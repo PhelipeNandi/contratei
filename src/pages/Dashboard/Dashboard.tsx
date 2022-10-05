@@ -14,7 +14,7 @@ import { propsStack, propsTab } from '../../routes/Navigators/Models';
 
 export function Dashboard() {
     const { colors } = useTheme();
-    const { user } = useAuthContext();
+    const { user, isConsumer } = useAuthContext();
     const { navigate: navigateTab } = useNavigation<propsTab>();
     const { navigate: navigateStack } = useNavigation<propsStack>();
 
@@ -31,32 +31,33 @@ export function Dashboard() {
 
     return (
         <VStack flex={1} bg="primary.700">
-            <HStack
-                pt={20}
-                px={12}
-                pb={8}
-                bg="primary.700"
-            >
-                <Avatar
-                    bg="gray.500"
-                    size="lg"
-                    source={{
-                        uri: user.profilePicture ? `data:image/gif;base64,${user.profilePicture}`
-                            : "https://avatars.githubusercontent.com/u/46757393?v=4"
-                    }}
-                />
+            <Center>
+                <HStack
+                    pt={20}
+                    pb={8}
+                    bg="primary.700"
+                >
+                    <Avatar
+                        bg="gray.500"
+                        size="lg"
+                        source={{
+                            uri: user.profilePicture ? `data:image/gif;base64,${user.profilePicture}`
+                                : "https://avatars.githubusercontent.com/u/46757393?v=4"
+                        }}
+                    />
 
-                <VStack pl={8}>
-                    <HStack>
-                        <Text fontFamily="body" fontSize="title" color="white">
-                            Olá {user.firstName},
+                    <VStack pl={8}>
+                        <HStack>
+                            <Text fontFamily="body" fontSize="title" color="white">
+                                Olá {user.firstName},
+                            </Text>
+                        </HStack>
+                        <Text fontFamily="mono" fontSize="md" color="white">
+                            bem vindo de volta!
                         </Text>
-                    </HStack>
-                    <Text fontFamily="mono" fontSize="md" color="white">
-                        bem vindo de volta!
-                    </Text>
-                </VStack>
-            </HStack>
+                    </VStack>
+                </HStack>
+            </Center>
 
             <VStack flex={1} roundedTop={32} px={5} bg="background">
 
@@ -69,24 +70,38 @@ export function Dashboard() {
                         onPress={() => navigateTab('myBudgetsTab')}
                     />
 
-                    <CardNavigation
-                        title={`Criar\nOrçamento`}
-                        colorCard="primary.700"
-                        colorFont="white"
-                        icon={Clipboard}
-                        onPress={() => navigateTab('createBudgetTab')}
-                    />
+                    {
+                        isConsumer
+                            ? <CardNavigation
+                                title={`Criar\nOrçamento`}
+                                colorCard="primary.700"
+                                colorFont="white"
+                                icon={Clipboard}
+                                onPress={() => navigateTab('createBudgetTab')}
+                            />
+                            : <CardNavigation
+                                title={`Buscar\nOrçamentos`}
+                                colorCard="primary.700"
+                                colorFont="white"
+                                icon={Clipboard}
+                                onPress={() => navigateTab('searchBudgetsTab')}
+                            />
+                    }
+
                 </HStack>
 
-                <ButtonNavigation
-                    mt={2}
-                    title="Qual tipo de serviço?"
-                    icon={MagnifyingGlass}
-                    onPress={() => navigateTab('searchProviderTab')}
-                />
+                {
+                    isConsumer &&
+                    <ButtonNavigation
+                        mt={2}
+                        title="Qual tipo de serviço?"
+                        icon={MagnifyingGlass}
+                        onPress={() => navigateTab('searchProviderTab')}
+                    />
+                }
 
                 <Text
-                    mt={6}
+                    mt={isConsumer ? 6 : 10}
                     mb={3}
                     fontFamily="body"
                     fontSize="lg"
