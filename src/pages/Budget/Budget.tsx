@@ -43,8 +43,8 @@ export function Budget() {
         cpf: '077.321.526-38',
         email: 'empregado@provider.com',
         description: 'Descrição do Empregado',
-        kmWorkRange: '50.0',
         hourValue: '100.00',
+        actingRegion: 'CITY',
         rating: "5"
     }
 

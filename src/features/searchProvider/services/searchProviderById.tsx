@@ -16,8 +16,8 @@ export async function searchProviderById(idProvider: number, isAuthenticated: bo
             cpf: response.data.cpf,
             email: response.data.email,
             description: response.data.description,
-            kmWorkRange: response.data.kmWorkRange,
             hourValue: response.data.hourValue,
+            actingRegion: response.data.actingRegion,
             rating: response.data.score
         }
     } catch (error) {

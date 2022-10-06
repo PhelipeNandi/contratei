@@ -46,7 +46,7 @@ async function handleChangePersonalInformationConsumer(data: ChangePersonalInfor
 
 async function handleChangePersonalInformationProvider(data: ChangePersonalInformation, user: User): Promise<User> {
     try {
-        const response = await Api.put("consumer/" + user.id, {
+        const response = await Api.put("provider/" + user.id, {
             firstName: data.firstName,
             lastName: data.lastName,
             contactNumber: data.contactNumber,
@@ -55,6 +55,7 @@ async function handleChangePersonalInformationProvider(data: ChangePersonalInfor
             profilePicture: data.profilePicture,
             description: data.description,
             hourValue: data.hourValue,
+            actingRegion: data.actingRegion,
             backgroundImage: data.backgroundImage
         });
 
@@ -69,8 +70,8 @@ async function handleChangePersonalInformationProvider(data: ChangePersonalInfor
             email: response.data.email,
             token: user.token,
             description: response.data.description,
-            kmWorkRange: response.data.kmWorkRange,
             hourValue: response.data.hourValue,
+            actingRegion: response.data.actingRegion,
             profilePicture: response.data.profilePicture,
             backgroundImage: response.data.backgroundImage
         }

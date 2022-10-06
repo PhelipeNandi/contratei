@@ -9,8 +9,8 @@ export interface User {
     email: string;
     token: string;
     description?: string;
-    kmWorkRange?: string;
     hourValue?: string;
+    actingRegion?: string;
     profilePicture?: string;
     backgroundImage?: string;
 }
@@ -25,8 +25,8 @@ export interface UserResponse {
     cpf: string;
     email: string;
     description: string;
-    kmWorkRange: string;
     hourValue: string;
+    actingRegion?: string;
     profilePicture: string;
     backgroundImage: string;
 }
@@ -38,8 +38,8 @@ export interface ChangePersonalInformation {
     cpf: string;
     email: string;
     description?: string;
-    kmWorkRange?: string;
     hourValue?: string;
+    actingRegion?: string;
     profilePicture?: string;
     backgroundImage?: string;
 }

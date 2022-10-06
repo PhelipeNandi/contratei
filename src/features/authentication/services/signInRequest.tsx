@@ -49,8 +49,8 @@ export async function signInRequest(data: SignInData): Promise<User> {
             email: user.email,
             token: token,
             description: user.description,
-            kmWorkRange: user.kmWorkRange,
             hourValue: user.hourValue,
+            actingRegion: user.actingRegion,
             profilePicture: user.profilePicture,
             backgroundImage: user.backgroundImage
         }

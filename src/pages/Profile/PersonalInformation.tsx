@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { VStack, Avatar, HStack, Box, ScrollView, useTheme, Circle, Pressable } from 'native-base';
+import { useNavigation } from '@react-navigation/native';
 import { useMutation } from 'react-query';
 import { Camera } from 'phosphor-react-native';
 import * as ImagePicker from 'expo-image-picker';
@@ -7,17 +8,16 @@ import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup';
 
-import { ChangePersonalInformation } from '../../types/user';
+import { propsStack } from '../../routes/Navigators/Models';
 import { useAuthContext } from '../../hooks/useAuthContext';
+import { ChangePersonalInformation } from '../../types/user';
 import { normalizeCPF, normalizeContactNumberValue } from '../../utils/masks';
 
 import { Header } from '../../components/ui/Header';
 import { Input } from '../../components/form/Input';
 import { Button } from '../../components/ui/Button';
 import { TextArea } from '../../components/form/TextArea';
-import { changePersonalInformation } from '../../features/personalInformation.tsx';
-import { useNavigation } from '@react-navigation/native';
-import { propsStack } from '../../routes/Navigators/Models';
+import { changePersonalInformation, SelectActingRegion } from '../../features/personalInformation.tsx';
 
 const changePersonalInformationForm: yup.SchemaOf<ChangePersonalInformation> = yup.object({
     firstName: yup.string().required("Nome obrigatório"),
@@ -26,8 +26,8 @@ const changePersonalInformationForm: yup.SchemaOf<ChangePersonalInformation> = y
     cpf: yup.string().required("CPF obrigatório"),
     email: yup.string().email("E-mail inválido").required("E-mail obrigatório"),
     description: yup.string().nullable(),
-    kmWorkRange: yup.string().nullable(),
     hourValue: yup.string().nullable(),
+    actingRegion: yup.string().nullable(),
     profilePicture: yup.string().nullable(),
     backgroundImage: yup.string().nullable()
 });
@@ -53,7 +53,6 @@ export function PersonalInformation() {
             cpf: user.cpf,
             email: user.email,
             description: user.description,
-            kmWorkRange: user.kmWorkRange,
             hourValue: user.hourValue,
             profilePicture: user.profilePicture,
             backgroundImage: user.backgroundImage
@@ -226,7 +225,7 @@ export function PersonalInformation() {
                     />
 
                     {
-                        user.type === "Fornecedor" &&
+                        !isConsumer &&
                         <Controller
                             control={control}
                             name="description"
@@ -244,32 +243,14 @@ export function PersonalInformation() {
                     }
 
                     {
-                        user.type === "Fornecedor" &&
-                        <Controller
-                            control={control}
-                            name="kmWorkRange"
-                            render={({ field: { value, onChange } }) => (
-                                <Input
-                                    mb={5}
-                                    title="Distância de Trabalho"
-                                    placeholder="Distância de Trabalho"
-                                    value={value.toString()}
-                                    onChangeText={onChange}
-                                    keyboardType="numeric"
-                                    errorMessage={errors.kmWorkRange?.message}
-                                />
-                            )}
-                        />
-                    }
-
-                    {
-                        user.type === "Fornecedor" &&
+                        !isConsumer &&
                         <Controller
                             control={control}
                             name="hourValue"
                             render={({ field: { value, onChange } }) => (
                                 <Input
-                                    title="Valor por Hora"
+                                    mb={5}
+                                    title="Valor médio"
                                     placeholder="Valor por Hora"
                                     value={value.toString()}
                                     onChangeText={onChange}
@@ -280,8 +261,26 @@ export function PersonalInformation() {
                         />
                     }
 
+                    {
+                        !isConsumer &&
+                        <Controller
+                            control={control}
+                            name="actingRegion"
+                            render={({ field: { value, onChange } }) => (
+                                <SelectActingRegion
+                                    mb={3}
+                                    title="Região de Atuação"
+                                    selectedValue={value}
+                                    onValueChange={onChange}
+                                    errorMessage={errors.actingRegion?.message}
+                                />
+                            )}
+                        />
+
+                    }
+
                     <Button
-                        my={4}
+                        mb={4}
                         title="Salvar"
                         variant="sucess"
                         isLoading={isLoading}

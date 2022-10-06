@@ -21,8 +21,8 @@ export function SearchProvider() {
             cpf: '223.642.369-16',
             email: 'mecanico@provider.com',
             description: 'Descrição do Mecanico',
-            kmWorkRange: '50.0',
             hourValue: '100.00',
+            actingRegion: 'CITY',
             rating: "5.0"
         }
         , {
@@ -34,8 +34,8 @@ export function SearchProvider() {
             cpf: '177.607.715-68',
             email: 'pedreiro@provider.com',
             description: 'Descrição do Pedreiro',
-            kmWorkRange: '50.0',
             hourValue: '100.00',
+            actingRegion: 'CITY',
             rating: "5.0"
         }
         , {
@@ -47,8 +47,8 @@ export function SearchProvider() {
             cpf: '362.284.438-87',
             email: 'pintor@provider.com',
             description: 'Descrição do Pintor',
-            kmWorkRange: '50.0',
             hourValue: '100.00',
+            actingRegion: 'CITY',
             rating: "5.0"
         }
         , {
@@ -60,8 +60,8 @@ export function SearchProvider() {
             cpf: '347.185.723-04',
             email: 'marceneiro@provider.com',
             description: 'Descrição do Marceneiro',
-            kmWorkRange: '50.0',
             hourValue: '100.00',
+            actingRegion: 'CITY',
             rating: "5.0"
         }
         , {
@@ -73,8 +73,8 @@ export function SearchProvider() {
             cpf: '077.321.526-38',
             email: 'empregado@provider.com',
             description: 'Descrição do Empregado',
-            kmWorkRange: '50.0',
             hourValue: '100.00',
+            actingRegion: 'CITY',
             rating: "5.0"
         }
     ]

@@ -7,8 +7,8 @@ export interface Provider {
     cpf: string;
     email: string;
     description: string;
-    kmWorkRange: string;
     hourValue: string;
+    actingRegion: string;
     rating: string;
 }
 

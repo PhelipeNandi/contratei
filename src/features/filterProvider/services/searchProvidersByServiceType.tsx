@@ -23,8 +23,8 @@ export async function searchProvidersByServiceType(pageParam: number, serviceTyp
                 cpf: provider.cpf,
                 email: provider.email,
                 description: provider.description,
-                kmWorkRange: provider.kmWorkRange,
                 hourValue: provider.hourValue,
+                actingRegion: provider.actingRegion,
                 rating: provider.score
             })),
             currentPage: data.number,
