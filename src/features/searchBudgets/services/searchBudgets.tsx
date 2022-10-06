@@ -2,17 +2,14 @@ import { Api } from '../../../lib/Api';
 
 import { BudgetResponse } from '../../../types/budget';
 
-export async function searchMyBudgets(pageParam: number, userId: number, status: string, isConsumer: boolean): Promise<BudgetResponse> {
+export async function searchBudgets(pageParam: number, userId: number, priorityLevel: string): Promise<BudgetResponse> {
     try {
-        const url = isConsumer ? "budget/find-by-consumer" : "budget/find-by-provider";
-
-        const response = await Api.get(url, {
+        const response = await Api.get("budget/find-open-budgets", {
             params: {
                 page: pageParam,
                 size: 5,
-                consumerId: isConsumer ? userId : null,
-                providerId: !isConsumer ? userId : null,
-                status: status === "ALL" || status === null ? null : status
+                providerId: userId,
+                priorityLevel: priorityLevel === "ALL" || priorityLevel === null ? null : priorityLevel
             }
         });
 
@@ -21,14 +18,11 @@ export async function searchMyBudgets(pageParam: number, userId: number, status:
                 id: budget.id,
                 title: budget.title,
                 status: budget.status,
-                value: budget.value,
                 priorityLevel: budget.priority,
                 serviceType: budget.serviceType,
                 description: budget.description,
                 openingDate: budget.openingDate,
-                completionDate: budget.completionDate,
-                consumerId: budget.consumer.id,
-                providerId: budget.provider ? budget.provider.id : null
+                consumerId: budget.consumer.id
             })),
             currentPage: response.data.number,
             totalPages: response.data.totalPages

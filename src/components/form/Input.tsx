@@ -1,12 +1,17 @@
 import { Input as NativeBaseInput, IInputProps, FormControl, WarningOutlineIcon } from 'native-base';
 
 type Props = IInputProps & {
+    title?: string;
     errorMessage?: string;
 }
 
-export function Input({ errorMessage, ...rest }: Props) {
+export function Input({ title, errorMessage, ...rest }: Props) {
     return (
         <FormControl isInvalid={!!errorMessage}>
+            {
+                title &&
+                <FormControl.Label>{title}</FormControl.Label>
+            }
             <NativeBaseInput
                 bg="white"
                 h={14}

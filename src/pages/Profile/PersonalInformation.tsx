@@ -45,7 +45,7 @@ export function PersonalInformation() {
         handleSubmit,
         watch,
         setValue,
-        formState: { errors, isSubmitSuccessful }
+        formState: { errors }
     } = useForm<ChangePersonalInformation>({
         resolver: yupResolver(changePersonalInformationForm),
         defaultValues: {
@@ -161,6 +161,8 @@ export function PersonalInformation() {
                                 name="firstName"
                                 render={({ field: { value, onChange } }) => (
                                     <Input
+                                        mb={5}
+                                        title="Nome"
                                         placeholder="Nome"
                                         value={value}
                                         onChangeText={onChange}
@@ -176,6 +178,8 @@ export function PersonalInformation() {
                                 name="lastName"
                                 render={({ field: { value, onChange } }) => (
                                     <Input
+                                        mb={5}
+                                        title="Sobrenome"
                                         placeholder="Sobrenome"
                                         value={value}
                                         onChangeText={onChange}
@@ -192,7 +196,8 @@ export function PersonalInformation() {
                         name="email"
                         render={({ field: { value, onChange } }) => (
                             <Input
-                                mt={3}
+                                mb={5}
+                                title="E-mail"
                                 placeholder="E-mail"
                                 autoCapitalize="none"
                                 value={value}
@@ -207,7 +212,8 @@ export function PersonalInformation() {
                         name="cpf"
                         render={({ field: { value, onChange } }) => (
                             <Input
-                                mt={3}
+                                mb={5}
+                                title="CPF"
                                 placeholder="CPF"
                                 value={value}
                                 onChangeText={onChange}
@@ -222,7 +228,8 @@ export function PersonalInformation() {
                         name="contactNumber"
                         render={({ field: { value, onChange } }) => (
                             <Input
-                                mt={3}
+                                mb={5}
+                                title="Telefone"
                                 placeholder="Telefone"
                                 value={value}
                                 onChangeText={onChange}
@@ -239,7 +246,8 @@ export function PersonalInformation() {
                             name="description"
                             render={({ field: { value, onChange } }) => (
                                 <TextArea
-                                    mt={5}
+                                    mb={5}
+                                    title="Descrição"
                                     placeholder="Descrição"
                                     value={value}
                                     onChangeText={onChange}
@@ -256,9 +264,10 @@ export function PersonalInformation() {
                             name="kmWorkRange"
                             render={({ field: { value, onChange } }) => (
                                 <Input
-                                    mt={5}
+                                    mb={5}
+                                    title="Distância de Trabalho"
                                     placeholder="Distância de Trabalho"
-                                    value={value}
+                                    value={value.toString()}
                                     onChangeText={onChange}
                                     keyboardType="numeric"
                                     errorMessage={errors.kmWorkRange?.message}
@@ -274,9 +283,9 @@ export function PersonalInformation() {
                             name="hourValue"
                             render={({ field: { value, onChange } }) => (
                                 <Input
-                                    mt={5}
+                                    title="Valor por Hora"
                                     placeholder="Valor por Hora"
-                                    value={value}
+                                    value={value.toString()}
                                     onChangeText={onChange}
                                     keyboardType="numeric"
                                     errorMessage={errors.hourValue?.message}

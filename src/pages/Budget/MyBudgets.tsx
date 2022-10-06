@@ -17,7 +17,7 @@ import { searchMyBudgets } from '../../features/myBudgets/services/searchMyBudge
 
 export function MyBudgets() {
     const { colors } = useTheme();
-    const { user } = useAuthContext();
+    const { user, isConsumer } = useAuthContext();
     const { navigate } = useNavigation<propsStack>();
     const [labelBudgetQuantity, setLabelBudgetQuantity] = useState<string>("Quantidade: 0");
     const [statusBudgetSelect, setStatusBudgetSelect] = useState<string>();
@@ -31,7 +31,7 @@ export function MyBudgets() {
         fetchNextPage,
         isFetchingNextPage
     } = useInfiniteQuery(["myBudgets", statusBudgetSelect],
-        ({ queryKey, pageParam = 0 }) => searchMyBudgets(pageParam, user.id, queryKey[1]), {
+        ({ queryKey, pageParam = 0 }) => searchMyBudgets(pageParam, user.id, queryKey[1], isConsumer), {
         getNextPageParam: (page) => {
             if (page.currentPage < page.totalPages) {
                 return page.currentPage + 1;

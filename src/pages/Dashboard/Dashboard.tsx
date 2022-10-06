@@ -23,7 +23,7 @@ export function Dashboard() {
         isSuccess,
         isLoading,
         isError
-    } = useQuery('budgets', () => searchMyBudgets(0, user.id, "ALL"));
+    } = useQuery('budgets', () => searchMyBudgets(0, user.id, "ALL", isConsumer));
 
     function handleNavigateBudget(idBudget: number) {
         navigateStack('budget', { idBudget });

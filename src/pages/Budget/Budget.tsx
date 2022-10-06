@@ -15,7 +15,7 @@ import { Budget as BudgetType } from '../../types/budget';
 
 import { Header } from '../../components/ui/Header';
 import { CardDetails, ProgressStatusBudget, CardProvider } from '../../features/budget';
-import { normalizeServiceType, normalizePriorityLvel } from '../../utils/formatStrings';
+import { normalizeServiceType, normalizePriorityLevel } from '../../utils/formatStrings';
 import { Provider } from '../../types/provider';
 
 export function Budget() {
@@ -81,7 +81,7 @@ export function Budget() {
                     <CardDetails
                         title="Nível de Prioridade"
                         icon={HourglassMedium}
-                        description={normalizePriorityLvel(budget.priorityLevel)}
+                        description={normalizePriorityLevel(budget.priorityLevel)}
                     />
 
                     <CardDetails

@@ -13,7 +13,7 @@ export const normalizeStatus = (value: string | undefined) => {
     }
 }
 
-export const normalizePriorityLvel = (value: string | undefined) => {
+export const normalizePriorityLevel = (value: string | undefined) => {
     if (!value) return '';
 
     switch (value) {
