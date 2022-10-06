@@ -1,18 +1,29 @@
 import { VStack, Avatar, Text, ScrollView } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { useAuthContext } from '../../hooks/useAuthContext';
-import { Bell, Gear, User, SignOut, Cardholder, AddressBook } from 'phosphor-react-native';
+import { Bell, Gear, User, SignOut, Cardholder, AddressBook, UserCircle } from 'phosphor-react-native';
 
 import { MenuNavigation } from '../../components/ui/MenuNavigation';
 import { propsStack } from '../../routes/Navigators/Models';
+import { useProviderContext } from '../../hooks/useProviderContext';
 
 export function Profile() {
-    const { user, logOut } = useAuthContext();
+    const { user, logOut, isConsumer } = useAuthContext();
     const navigation = useNavigation<propsStack>();
+    const { searchProvider } = useProviderContext();
 
-    function handleLogOut() {
-        logOut();
+    async function handleNavigateProvider() {
+        await searchProvider(user.id)
+            .then(() => {
+                navigation.navigate("provider");
+            })
+            .catch((error) => {
+                if (error instanceof Error) {
+                    console.log(error.message);
+                }
+            });
     }
+
     return (
         <VStack flex={1} bg="primary.700" pt={32}>
             <VStack
@@ -39,12 +50,21 @@ export function Profile() {
                     </Text>
 
                     <ScrollView>
-                        <MenuNavigation
-                            mt={7}
-                            title="Informações Pessoais"
-                            icon={User}
-                            onPress={() => navigation.navigate('personalInformation')}
-                        />
+                        {
+                            isConsumer
+                                ? <MenuNavigation
+                                    mt={7}
+                                    title="Informações Pessoais"
+                                    icon={User}
+                                    onPress={() => navigation.navigate('personalInformation')}
+                                />
+                                : <MenuNavigation
+                                    mt={7}
+                                    title="Perfil"
+                                    icon={UserCircle}
+                                    onPress={() => handleNavigateProvider()}
+                                />
+                        }
 
                         <MenuNavigation
                             mt={4}
@@ -78,7 +98,7 @@ export function Profile() {
                             my={4}
                             title="Sair"
                             icon={SignOut}
-                            onPress={handleLogOut}
+                            onPress={logOut}
                         />
                     </ScrollView>
                 </VStack>

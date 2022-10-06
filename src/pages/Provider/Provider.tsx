@@ -17,6 +17,7 @@ import { useProviderContext } from '../../hooks/useProviderContext';
 import { useQuery } from 'react-query';
 import { Loading } from '../../components/ui/Loading';
 import { useAuthContext } from '../../hooks/useAuthContext';
+import { Button } from '../../components/ui/Button';
 
 export function Provider() {
     const navigation = useNavigation<propsStack>();
@@ -138,6 +139,18 @@ export function Provider() {
                             />
                         })
                     }
+
+                    {
+                        !isConsumer &&
+                        <Button
+                            mb={4}
+                            mx={8}
+                            variant="primary"
+                            title="Editar"
+                            onPress={() => navigation.navigate("personalInformation")}
+                        />
+                    }
+
                 </VStack>
             </ScrollView>
 
