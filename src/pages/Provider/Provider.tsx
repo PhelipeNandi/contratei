@@ -141,7 +141,7 @@ export function Provider() {
                     }
 
                     {
-                        !isConsumer &&
+                        !isConsumer && isAuthenticated &&
                         <Button
                             mb={4}
                             mx={8}
