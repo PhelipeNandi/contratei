@@ -1,13 +1,15 @@
 import { useState, useEffect } from 'react';
-import { VStack, Avatar, HStack, Box, ScrollView, useTheme, Circle, Pressable } from 'native-base';
+import { ListRenderItemInfo } from 'react-native';
+import { VStack, Avatar, HStack, Box, ScrollView, useTheme, Circle, Pressable, Text, IconButton, FlatList, Center } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { useMutation } from 'react-query';
 import { Camera } from 'phosphor-react-native';
-import * as ImagePicker from 'expo-image-picker';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup';
+import { PlusCircle, Image } from 'phosphor-react-native';
 
+import { Photo } from '../../types/provider';
 import { propsStack } from '../../routes/Navigators/Models';
 import { useAuthContext } from '../../hooks/useAuthContext';
 import { ChangePersonalInformation } from '../../types/user';
@@ -17,7 +19,8 @@ import { Header } from '../../components/ui/Header';
 import { Input } from '../../components/form/Input';
 import { Button } from '../../components/ui/Button';
 import { TextArea } from '../../components/form/TextArea';
-import { changePersonalInformation, SelectActingRegion } from '../../features/personalInformation.tsx';
+import { PhotosProvider } from '../../features/provider';
+import { changePersonalInformation, pickImage, SelectActingRegion } from '../../features/personalInformation.tsx';
 
 const changePersonalInformationForm: yup.SchemaOf<ChangePersonalInformation> = yup.object({
     firstName: yup.string().required("Nome obrigatório"),
@@ -37,6 +40,7 @@ export function PersonalInformation() {
     const navigation = useNavigation<propsStack>();
     const { user, changePersonalInformationUser, isConsumer } = useAuthContext();
     const [imageProfile, setImageProfile] = useState(user.profilePicture);
+    const [photosProvider, setPhotosProvider] = useState([]);
 
     const {
         control,
@@ -54,6 +58,7 @@ export function PersonalInformation() {
             email: user.email,
             description: user.description,
             hourValue: user.hourValue,
+            actingRegion: user.actingRegion,
             profilePicture: user.profilePicture,
             backgroundImage: user.backgroundImage
         }
@@ -71,21 +76,11 @@ export function PersonalInformation() {
     }, [cpfValue]);
 
     async function pickImageProfile() {
-        const image = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            allowsEditing: true,
-            aspect: [4, 3],
-            quality: 1,
-            base64: true
-        });
-
-        if (!image.cancelled) {
-            //@ts-ignore
-            const base64 = image.base64;
-
-            setImageProfile(base64);
-            setValue('profilePicture', base64);
-        }
+        await pickImage()
+            .then((image) => {
+                setImageProfile(image);
+                setValue('profilePicture', image);
+            });
     }
 
     const {
@@ -102,8 +97,21 @@ export function PersonalInformation() {
         }
     }, [isSuccess]);
 
+    function renderPhotosProvider({ item }: ListRenderItemInfo<Photo>) {
+        return <PhotosProvider
+            photos={item}
+        />
+    }
+
+    async function pickPhotoProvider() {
+        await pickImage()
+            .then((image) => {
+
+            });
+    }
+
     return (
-        <VStack flex={1}>
+        <VStack flex={1} bg="background">
 
             <Header title="Informações Pessoais" />
 
@@ -278,20 +286,54 @@ export function PersonalInformation() {
                         />
 
                     }
-
-                    <Button
-                        mb={4}
-                        title="Salvar"
-                        variant="sucess"
-                        isLoading={isLoading}
-                        isLoadingText="Salvando"
-                        onPress={handleSubmit((value) => mutate(value))}
-                    />
-
                 </VStack>
 
-            </ScrollView>
+                {
+                    !isConsumer &&
+                    <VStack space={4}>
+                        <HStack mx={5} justifyContent="space-between" alignItems="center">
+                            <Text fontFamily="body" fontSize="xs" color="gray.300">
+                                Fotos
+                            </Text>
+                            <IconButton
+                                icon={<PlusCircle color={colors.gray[300]} size={20} />}
+                                onPress={() => pickPhotoProvider()}
+                            />
+                        </HStack>
 
-        </VStack>
+                        <FlatList
+                            alignSelf="center"
+                            bg="background"
+                            horizontal={true}
+                            data={photosProvider}
+                            keyExtractor={photo => photo.url}
+                            renderItem={renderPhotosProvider}
+                            showsHorizontalScrollIndicator={false}
+                            ListEmptyComponent={() => (
+                                <Center my={2}>
+                                    <Image color={colors.gray[300]} size={32} />
+                                    <Text mt={4} textAlign="center" color="gray.300" fontFamily="body" fontSize="sm">
+                                        Você ainda não possui {"\n"}
+                                        nenhuma foto cadastrada
+                                    </Text>
+                                </Center>
+                            )}
+                        />
+                    </VStack>
+                }
+
+                <Button
+                    my={5}
+                    mx={5}
+                    title="Salvar"
+                    variant="sucess"
+                    isLoading={isLoading}
+                    isLoadingText="Salvando"
+                    onPress={handleSubmit((value) => mutate(value))}
+                />
+
+            </ScrollView >
+
+        </VStack >
     );
 }

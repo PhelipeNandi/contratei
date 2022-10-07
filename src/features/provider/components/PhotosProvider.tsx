@@ -17,7 +17,7 @@ export function PhotosProvider({ photos, ...rest }: Props) {
                 <Image
                     alt="image"
                     borderRadius={20}
-                    source={{ uri: photos.url }}
+                    source={{ uri: `data:image/gif;base64,${photos.url}` }}
                 />
             </AspectRatio>
         </Box>

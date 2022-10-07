@@ -10,6 +10,8 @@ export interface Provider {
     hourValue: string;
     actingRegion: string;
     rating: string;
+    profilePicture: string;
+    backgroundImage: string;
 }
 
 export interface ServiceType {
@@ -24,7 +26,7 @@ export interface ProviderResponse {
 }
 
 export interface Photo {
-    id: number;
+    id?: number;
     url: string;
 }
 

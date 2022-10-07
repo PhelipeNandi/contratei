@@ -1,4 +1,4 @@
-import { Input as NativeBaseInput, IInputProps, FormControl, WarningOutlineIcon } from 'native-base';
+import { Input as NativeBaseInput, IInputProps, FormControl, WarningOutlineIcon, Text } from 'native-base';
 
 type Props = IInputProps & {
     title?: string;
@@ -10,7 +10,11 @@ export function Input({ title, errorMessage, ...rest }: Props) {
         <FormControl isInvalid={!!errorMessage}>
             {
                 title &&
-                <FormControl.Label>{title}</FormControl.Label>
+                <FormControl.Label>
+                    <Text fontFamily="body" fontSize="xs" color="gray.300">
+                        {title}
+                    </Text>
+                </FormControl.Label>
             }
             <NativeBaseInput
                 bg="white"

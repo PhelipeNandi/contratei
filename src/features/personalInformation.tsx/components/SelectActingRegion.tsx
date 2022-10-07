@@ -1,4 +1,4 @@
-import { Select as NativeBaseSelect, ISelectProps, FormControl, WarningOutlineIcon } from 'native-base';
+import { Select as NativeBaseSelect, ISelectProps, FormControl, WarningOutlineIcon, Text } from 'native-base';
 
 type Props = ISelectProps & {
     title?: string;
@@ -10,7 +10,11 @@ export function SelectActingRegion({ title, errorMessage, ...rest }: Props) {
         <FormControl>
             {
                 title &&
-                <FormControl.Label>{title}</FormControl.Label>
+                <FormControl.Label>
+                    <Text fontFamily="body" fontSize="xs" color="gray.300">
+                        {title}
+                    </Text>
+                </FormControl.Label>
             }
             <NativeBaseSelect
                 h={14}

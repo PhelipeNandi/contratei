@@ -1,4 +1,4 @@
-import { TextArea as NativeBaseTextArea, ITextAreaProps, FormControl, WarningOutlineIcon } from 'native-base';
+import { TextArea as NativeBaseTextArea, ITextAreaProps, FormControl, WarningOutlineIcon, Text } from 'native-base';
 
 type Props = ITextAreaProps & {
     title?: string;
@@ -10,7 +10,11 @@ export function TextArea({ title, errorMessage, ...rest }: Props) {
         <FormControl isInvalid={!!errorMessage}>
             {
                 title &&
-                <FormControl.Label>{title}</FormControl.Label>
+                <FormControl.Label>
+                    <Text fontFamily="body" fontSize="xs" color="gray.300">
+                        {title}
+                    </Text>
+                </FormControl.Label>
             }
             <NativeBaseTextArea
                 bg="white"

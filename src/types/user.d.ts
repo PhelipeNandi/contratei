@@ -26,7 +26,7 @@ export interface UserResponse {
     email: string;
     description: string;
     hourValue: string;
-    actingRegion?: string;
+    actingRegion: string;
     profilePicture: string;
     backgroundImage: string;
 }

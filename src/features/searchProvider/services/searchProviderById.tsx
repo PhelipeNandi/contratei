@@ -18,7 +18,9 @@ export async function searchProviderById(idProvider: number, isAuthenticated: bo
             description: response.data.description,
             hourValue: response.data.hourValue,
             actingRegion: response.data.actingRegion,
-            rating: response.data.score
+            rating: response.data.score,
+            profilePicture: response.data.profilePicture,
+            backgroundImage: response.data.backgroundImage
         }
     } catch (error) {
         if (error instanceof Error) {
