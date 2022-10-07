@@ -40,7 +40,7 @@ export function PersonalInformation() {
     const navigation = useNavigation<propsStack>();
     const { user, changePersonalInformationUser, isConsumer } = useAuthContext();
     const [imageProfile, setImageProfile] = useState(user.profilePicture);
-    const [photosProvider, setPhotosProvider] = useState([]);
+    const [photosProvider, setPhotosProvider] = useState<Photo[]>([]);
 
     const {
         control,
@@ -106,7 +106,12 @@ export function PersonalInformation() {
     async function pickPhotoProvider() {
         await pickImage()
             .then((image) => {
-
+                setPhotosProvider((prevPhotosProvider) => [
+                    ...prevPhotosProvider,
+                    {
+                        url: image
+                    }
+                ])
             });
     }
 
@@ -296,6 +301,7 @@ export function PersonalInformation() {
                                 Fotos
                             </Text>
                             <IconButton
+                                disabled={photosProvider.length >= 5}
                                 icon={<PlusCircle color={colors.gray[300]} size={20} />}
                                 onPress={() => pickPhotoProvider()}
                             />
@@ -306,7 +312,7 @@ export function PersonalInformation() {
                             bg="background"
                             horizontal={true}
                             data={photosProvider}
-                            keyExtractor={photo => photo.url}
+                            keyExtractor={photo => photo.url + Math.random()}
                             renderItem={renderPhotosProvider}
                             showsHorizontalScrollIndicator={false}
                             ListEmptyComponent={() => (
