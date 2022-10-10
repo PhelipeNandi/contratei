@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect } from "react";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useQueryClient } from 'react-query';
 
 import { Api } from "../lib/Api";
 import { signInRequest, signInGoogleRequest } from "../features/authentication";
@@ -20,9 +21,10 @@ interface AuthContextType {
 export const AuthContext = createContext({} as AuthContextType);
 
 export function AuthProvider({ children }) {
+    const queryClient = useQueryClient();
     const [user, setUser] = useState<User | null>();
     const [isLoading, setLoading] = useState(true);
-    const [isConsumer, setIsConsumer] = useState<boolean>();
+    const [isConsumer, setIsConsumer] = useState<boolean | null>();
 
     useEffect(() => {
         async function loadStorageData() {
@@ -47,6 +49,7 @@ export function AuthProvider({ children }) {
                 setUser(user);
                 setIsConsumer(user.type === "Consumidor");
                 AsyncStorage.setItem('@contratei:user', JSON.stringify(user));
+                queryClient.invalidateQueries();
             })
             .catch((error) => {
                 if (error instanceof Error) {
@@ -63,6 +66,7 @@ export function AuthProvider({ children }) {
         AsyncStorage.removeItem('@contratei:user')
             .then(() => {
                 setUser(null);
+                setIsConsumer(null);
                 delete Api.defaults.headers['Authorization'];
             });
     }

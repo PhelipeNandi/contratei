@@ -23,7 +23,9 @@ export function Dashboard() {
         isSuccess,
         isLoading,
         isError
-    } = useQuery('budgets', () => searchMyBudgets(0, user.id, "ALL", isConsumer));
+    } = useQuery("budgets", () => searchMyBudgets(0, user.id, "ALL", isConsumer), {
+        enabled: isConsumer != null
+    });
 
     function handleNavigateBudget(idBudget: number) {
         navigateStack('budget', { idBudget });
@@ -111,7 +113,7 @@ export function Dashboard() {
                 </Text>
 
                 {
-                    isLoading &&
+                    isLoading || isConsumer === null &&
                     <Loading />
                 }
 
