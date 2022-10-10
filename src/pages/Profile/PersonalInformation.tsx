@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import { ListRenderItemInfo } from 'react-native';
-import { VStack, Avatar, HStack, Box, ScrollView, useTheme, Circle, Pressable, Text, IconButton, FlatList, Center } from 'native-base';
+import { VStack, Avatar, HStack, Box, ScrollView, useTheme, Circle, Pressable, Text, IconButton, FlatList, Center, Button as NativeBaseButton } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
-import { useMutation } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import { Camera } from 'phosphor-react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup';
-import { PlusCircle, Image } from 'phosphor-react-native';
+import { PlusCircle, Image, Warning } from 'phosphor-react-native';
 
 import { Photo } from '../../types/provider';
 import { propsStack } from '../../routes/Navigators/Models';
@@ -18,9 +18,16 @@ import { normalizeCPF, normalizeContactNumberValue } from '../../utils/masks';
 import { Header } from '../../components/ui/Header';
 import { Input } from '../../components/form/Input';
 import { Button } from '../../components/ui/Button';
+import { Modal } from '../../components/form/Modal';
 import { TextArea } from '../../components/form/TextArea';
 import { PhotosProvider } from '../../features/provider';
-import { changePersonalInformation, pickImage, SelectActingRegion } from '../../features/personalInformation.tsx';
+import { changePersonalInformation, pickImage, searchPhotosProvider, SelectActingRegion } from '../../features/personalInformation.tsx';
+import { Loading } from '../../components/ui/Loading';
+
+const PhotoSchema: yup.SchemaOf<Photo> = yup.object({
+    id: yup.number().nullable(),
+    url: yup.string().nullable()
+})
 
 const changePersonalInformationForm: yup.SchemaOf<ChangePersonalInformation> = yup.object({
     firstName: yup.string().required("Nome obrigatório"),
@@ -32,7 +39,8 @@ const changePersonalInformationForm: yup.SchemaOf<ChangePersonalInformation> = y
     hourValue: yup.string().nullable(),
     actingRegion: yup.string().nullable(),
     profilePicture: yup.string().nullable(),
-    backgroundImage: yup.string().nullable()
+    backgroundImage: yup.string().nullable(),
+    photosProvider: yup.array().of(PhotoSchema.defined()).nullable()
 });
 
 export function PersonalInformation() {
@@ -41,6 +49,8 @@ export function PersonalInformation() {
     const { user, changePersonalInformationUser, isConsumer } = useAuthContext();
     const [imageProfile, setImageProfile] = useState(user.profilePicture);
     const [photosProvider, setPhotosProvider] = useState<Photo[]>([]);
+    const [photoProviderSelect, setPhotoProviderSelect] = useState<Photo>();
+    const [showModal, setShowModal] = useState<boolean>(false);
 
     const {
         control,
@@ -97,9 +107,23 @@ export function PersonalInformation() {
         }
     }, [isSuccess]);
 
+    const {
+        isSuccess: isSuccessPhotosProvider,
+        isLoading: isLoadingPhotosProvider,
+        isError: isErrorPhotosProvider
+    } = useQuery("photosProviderPersonalInformation", () => searchPhotosProvider(user.id), {
+        onSuccess: (data) => {
+            setPhotosProvider(data);
+        }
+    });
+
     function renderPhotosProvider({ item }: ListRenderItemInfo<Photo>) {
         return <PhotosProvider
             photos={item}
+            onPress={() => {
+                setPhotoProviderSelect(item);
+                setShowModal(true);
+            }}
         />
     }
 
@@ -113,6 +137,17 @@ export function PersonalInformation() {
                     }
                 ])
             });
+    }
+
+    useEffect(() => {
+        if (photosProvider) {
+            setValue("photosProvider", photosProvider);
+        }
+    }, [photosProvider])
+
+    function handleRemovePhotoProvider() {
+        setPhotosProvider(photoProvider => photoProvider.filter(photo => photo.url !== photoProviderSelect.url));
+        setShowModal(false);
     }
 
     return (
@@ -307,24 +342,43 @@ export function PersonalInformation() {
                             />
                         </HStack>
 
-                        <FlatList
-                            alignSelf="center"
-                            bg="background"
-                            horizontal={true}
-                            data={photosProvider}
-                            keyExtractor={photo => photo.url + Math.random()}
-                            renderItem={renderPhotosProvider}
-                            showsHorizontalScrollIndicator={false}
-                            ListEmptyComponent={() => (
-                                <Center my={2}>
-                                    <Image color={colors.gray[300]} size={32} />
-                                    <Text mt={4} textAlign="center" color="gray.300" fontFamily="body" fontSize="sm">
-                                        Você ainda não possui {"\n"}
-                                        nenhuma foto cadastrada
-                                    </Text>
-                                </Center>
-                            )}
-                        />
+                        {
+                            isLoadingPhotosProvider &&
+                            <Loading />
+                        }
+
+                        {
+                            isErrorPhotosProvider &&
+                            <Center my={2}>
+                                <Warning color={colors.gray[300]} size={32} />
+                                <Text mt={4} textAlign="center" color="gray.300" fontFamily="body" fontSize="sm">
+                                    Ocorreu um erro {"\n"}
+                                    ao buscar as fotos
+                                </Text>
+                            </Center>
+                        }
+
+                        {
+                            isSuccessPhotosProvider &&
+                            <FlatList
+                                alignSelf="center"
+                                bg="background"
+                                horizontal={true}
+                                data={photosProvider}
+                                keyExtractor={photo => photo.url + Math.random()}
+                                renderItem={renderPhotosProvider}
+                                showsHorizontalScrollIndicator={false}
+                                ListEmptyComponent={() => (
+                                    <Center my={2}>
+                                        <Image color={colors.gray[300]} size={32} />
+                                        <Text mt={4} textAlign="center" color="gray.300" fontFamily="body" fontSize="sm">
+                                            Você ainda não possui {"\n"}
+                                            nenhuma foto cadastrada
+                                        </Text>
+                                    </Center>
+                                )}
+                            />
+                        }
                     </VStack>
                 }
 
@@ -337,6 +391,27 @@ export function PersonalInformation() {
                     isLoadingText="Salvando"
                     onPress={handleSubmit((value) => mutate(value))}
                 />
+
+                <Modal
+                    header="Exclusão"
+                    body="Você quer remover essa foto?"
+                    icon={Image}
+                    isOpen={showModal}
+                    onClose={() => setShowModal(false)}
+                >
+                    <NativeBaseButton.Group space={2}>
+                        <Button
+                            title="Cancelar"
+                            variant="primary"
+                            onPress={() => setShowModal(false)}
+                        />
+                        <Button
+                            title="Excluir"
+                            variant="danger"
+                            onPress={handleRemovePhotoProvider}
+                        />
+                    </NativeBaseButton.Group>
+                </Modal>
 
             </ScrollView >
 

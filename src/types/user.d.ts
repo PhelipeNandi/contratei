@@ -1,3 +1,5 @@
+import { Photo } from "./provider";
+
 export interface User {
     id: number;
     password: string;
@@ -42,6 +44,7 @@ export interface ChangePersonalInformation {
     actingRegion?: string;
     profilePicture?: string;
     backgroundImage?: string;
+    photosProvider?: Photo[];
 }
 
 export interface UserAddress {
