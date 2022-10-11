@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { VStack, Text, HStack, Avatar, FlatList, Center, useTheme } from 'native-base';
 import { useQuery } from 'react-query';
 import { useNavigation } from '@react-navigation/native';

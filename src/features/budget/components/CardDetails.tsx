@@ -23,10 +23,6 @@ export function CardDetails({
     return (
         <VStack
             my={3}
-            p={5}
-            shadow={2}
-            bg="gray.100"
-            rounded="lg"
             {...rest}
         >
             <HStack alignItems="center" mb={4}>
@@ -38,7 +34,7 @@ export function CardDetails({
 
             {
                 !!description &&
-                <Text color="gray.400" fontSize="md">
+                <Text pl={5} color="gray.400" fontSize="md">
                     {description}
                 </Text>
             }

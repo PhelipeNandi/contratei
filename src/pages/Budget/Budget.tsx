@@ -1,6 +1,8 @@
-import { VStack, ScrollView } from 'native-base';
+import { useEffect } from 'react';
+import { VStack, ScrollView, Divider, Center, Text, useTheme } from 'native-base';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import { propsNavigationStack } from '../../routes/Navigators/Models';
+import { useQuery } from 'react-query';
 import {
     Briefcase,
     ClipboardText,
@@ -8,124 +10,148 @@ import {
     Article,
     CalendarBlank,
     Money,
-    HourglassMedium
+    HourglassMedium,
+    Warning
 } from 'phosphor-react-native';
 
-import { Budget as BudgetType } from '../../types/budget';
+import { normalizeServiceType, normalizePriorityLevel } from '../../utils/formatStrings';
 
 import { Header } from '../../components/ui/Header';
-import { CardDetails, ProgressStatusBudget, CardProvider } from '../../features/budget';
-import { normalizeServiceType, normalizePriorityLevel } from '../../utils/formatStrings';
-import { Provider } from '../../types/provider';
+import { Loading } from '../../components/ui/Loading';
+import { CardDetails, ProgressStatusBudget, CardProvider, getBudgetById } from '../../features/budget';
 
 export function Budget() {
+    const { colors } = useTheme();
     const route = useRoute<RouteProp<propsNavigationStack, "budget">>();
 
-    const budget: BudgetType = {
-        id: 6,
-        consumerId: 1,
-        providerId: 1,
-        serviceType: 'EMPREGADO',
-        status: 'OPEN',
-        title: 'Faxina da casa',
-        description: 'Limpeza do apartamento',
-        openingDate: '18/09/2022',
-        priorityLevel: 'TODAY',
-        value: 'R$ 50,00'
-    }
+    const {
+        data: budget,
+        isSuccess,
+        isLoading,
+        isError
+    } = useQuery("budget", () => getBudgetById(route.params?.idBudget));
 
-    const provider: Provider = {
-        id: 1,
-        serviceType: 'EMPREGRADO',
-        firstName: 'Fornecedor',
-        lastName: '1',
-        contactNumber: '(48) 99999-9999',
-        cpf: '077.321.526-38',
-        email: 'empregado@provider.com',
-        description: 'Descrição do Empregado',
-        hourValue: '100.00',
-        actingRegion: 'CITY',
-        rating: "5"
-    }
+    useEffect(() => {
+        console.log(budget);
+    }, [])
 
     return (
         <VStack flex={1} justifyContent="center" bg="background">
-            <Header title={"Orçamento " + budget.id} />
+            <Header title="Orçamento" />
 
-            <ScrollView>
-                <VStack flex={1} px={6} bg="background">
+            {
+                isLoading &&
+                <Loading />
+            }
 
-                    <CardDetails
-                        title="título"
-                        icon={Article}
-                        description={budget.title}
-                    />
+            {
+                isError &&
+                <Center flex={1}>
+                    <Warning color={colors.red[600]} size={32} />
+                    <Text mt={4} textAlign="center" color="gray.300" fontFamily="body" fontSize="sm">
+                        Aconteceu um erro ao buscar o orçamento
+                    </Text>
+                </Center>
+            }
 
-                    <CardDetails
-                        title="tipo de serviço"
-                        icon={Briefcase}
-                        description={normalizeServiceType(budget.serviceType)}
-                    />
+            {
+                isSuccess &&
+                <ScrollView>
+                    <VStack flex={1} my={2} px={5} bg="background">
 
-
-                    <CardDetails
-                        title="status"
-                        icon={CircleHalf}
-                        children={
-                            <ProgressStatusBudget
-                                status={budget.status}
-                            />
-                        }
-                    />
-
-                    <CardDetails
-                        title="Nível de Prioridade"
-                        icon={HourglassMedium}
-                        description={normalizePriorityLevel(budget.priorityLevel)}
-                    />
-
-                    <CardDetails
-                        title="descrição"
-                        icon={ClipboardText}
-                        description={budget.description}
-                    />
-
-                    <CardDetails
-                        title="data de abertura"
-                        icon={CalendarBlank}
-                        description={budget.openingDate}
-                    />
-
-                    {
-                        !!budget.completionDate &&
                         <CardDetails
-                            title="data de abertura"
-                            icon={CalendarBlank}
-                            description={budget.completionDate}
+                            title="título"
+                            icon={Article}
+                            description={budget.title}
                         />
-                    }
 
-                    <CardDetails
-                        title="valor"
-                        icon={Money}
-                        description={budget.value}
-                    />
+                        <Divider />
 
-                    {
-                        !!budget.providerId &&
                         <CardDetails
-                            title="Fornecedor"
+                            title="tipo de serviço"
                             icon={Briefcase}
+                            description={normalizeServiceType(budget.serviceType)}
+                        />
+
+                        <Divider />
+
+                        <CardDetails
+                            title="status"
+                            icon={CircleHalf}
                             children={
-                                <CardProvider
-                                    data={provider}
+                                <ProgressStatusBudget
+                                    status={budget.status}
                                 />
                             }
                         />
-                    }
+                        <Divider />
 
-                </VStack>
-            </ScrollView>
+                        <CardDetails
+                            title="Nível de Prioridade"
+                            icon={HourglassMedium}
+                            description={normalizePriorityLevel(budget.priorityLevel)}
+                        />
+                        <Divider />
+
+                        <CardDetails
+                            title="descrição"
+                            icon={ClipboardText}
+                            description={budget.description}
+                        />
+                        <Divider />
+
+                        <CardDetails
+                            title="data de abertura"
+                            icon={CalendarBlank}
+                            description={budget.openingDate}
+                        />
+
+
+                        {
+                            budget.completionDate &&
+                            <VStack>
+                                <Divider />
+
+                                <CardDetails
+                                    title="data de finalização"
+                                    icon={CalendarBlank}
+                                    description={budget.completionDate}
+                                />
+                            </VStack>
+                        }
+
+                        {
+                            budget.value &&
+                            <VStack>
+                                <Divider />
+
+                                <CardDetails
+                                    title="valor"
+                                    icon={Money}
+                                    description={budget.value}
+                                />
+
+                                <Divider />
+                            </VStack>
+                        }
+
+                        {
+                            budget.provider &&
+                            <CardDetails
+                                title="Fornecedor"
+                                icon={Briefcase}
+                                children={
+                                    <CardProvider
+                                        pl={5}
+                                        data={budget.provider}
+                                    />
+                                }
+                            />
+                        }
+
+                    </VStack>
+                </ScrollView>
+            }
 
         </VStack>
     );

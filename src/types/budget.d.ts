@@ -1,3 +1,5 @@
+import { ProviderBudget } from "./provider";
+
 export interface Budget {
     id: number;
     title: string;
@@ -9,7 +11,7 @@ export interface Budget {
     openingDate: date;
     completionDate?: date;
     consumerId: number;
-    providerId?: number;
+    provider?: ProviderBudget;
 }
 
 export interface CreateNewBudget {

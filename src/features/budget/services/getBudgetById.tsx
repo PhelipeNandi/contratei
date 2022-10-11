@@ -3,7 +3,7 @@ import { Budget } from "../../../types/budget";
 
 export async function getBudgetById(idBudget: number): Promise<Budget> {
     try {
-        const response = await Api.get("", { params: { id: idBudget } });
+        const response = await Api.get("/budget", { params: { id: idBudget } });
 
         return {
             id: response.data.id,
@@ -14,9 +14,15 @@ export async function getBudgetById(idBudget: number): Promise<Budget> {
             serviceType: response.data.serviceType,
             description: response.data.description,
             openingDate: response.data.openingDate,
-            completionDate: response.data.openingDate,
+            completionDate: response.data.completionDate,
             consumerId: response.data.consumer.id,
-            providerId: response.data.provider ? response.data.provider.id : null
+            provider: response.data.provider ? {
+                id: response.data.provider.id,
+                firstName: response.data.provider.firstName,
+                lastName: response.data.provider.lastName,
+                profilePicture: response.data.provider.profilePicture,
+                contactNumber: response.data.provider.contactNumber
+            } : null
         }
     } catch (error) {
         if (error instanceof Error) {
