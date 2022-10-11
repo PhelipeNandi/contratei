@@ -1,15 +1,12 @@
 import { useState, useEffect } from 'react';
 import { ListRenderItemInfo } from 'react-native';
 import {
-    VStack, Avatar, HStack,
-    Box, ScrollView, useTheme,
-    Circle, Pressable, Text,
-    IconButton, FlatList, Center,
-    Button as NativeBaseButton, AspectRatio, Image
+    VStack, HStack, Box, ScrollView, useTheme,
+    Text, IconButton, FlatList, Center,
+    Button as NativeBaseButton
 } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { useMutation, useQuery } from 'react-query';
-import { Camera } from 'phosphor-react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup';
