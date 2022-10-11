@@ -1,13 +1,19 @@
 import { useState, useEffect } from 'react';
 import { ListRenderItemInfo } from 'react-native';
-import { VStack, Avatar, HStack, Box, ScrollView, useTheme, Circle, Pressable, Text, IconButton, FlatList, Center, Button as NativeBaseButton } from 'native-base';
+import {
+    VStack, Avatar, HStack,
+    Box, ScrollView, useTheme,
+    Circle, Pressable, Text,
+    IconButton, FlatList, Center,
+    Button as NativeBaseButton, AspectRatio, Image
+} from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { useMutation, useQuery } from 'react-query';
 import { Camera } from 'phosphor-react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup';
-import { PlusCircle, Image, Warning } from 'phosphor-react-native';
+import { PlusCircle, Image as IconImage, Warning, PencilSimple } from 'phosphor-react-native';
 
 import { Photo } from '../../types/provider';
 import { propsStack } from '../../routes/Navigators/Models';
@@ -21,7 +27,14 @@ import { Button } from '../../components/ui/Button';
 import { Modal } from '../../components/form/Modal';
 import { TextArea } from '../../components/form/TextArea';
 import { PhotosProvider } from '../../features/provider';
-import { changePersonalInformation, pickImage, searchPhotosProvider, SelectActingRegion } from '../../features/personalInformation.tsx';
+import {
+    changePersonalInformation,
+    pickImage,
+    searchPhotosProvider,
+    SelectActingRegion,
+    PhotoProvider,
+    PhotoCosumer
+} from '../../features/personalInformation.tsx';
 import { Loading } from '../../components/ui/Loading';
 
 const PhotoSchema: yup.SchemaOf<Photo> = yup.object({
@@ -48,6 +61,7 @@ export function PersonalInformation() {
     const navigation = useNavigation<propsStack>();
     const { user, changePersonalInformationUser, isConsumer } = useAuthContext();
     const [imageProfile, setImageProfile] = useState(user.profilePicture);
+    const [backgroundImage, setBackgroundImage] = useState(user.backgroundImage);
     const [photosProvider, setPhotosProvider] = useState<Photo[]>([]);
     const [photoProviderSelect, setPhotoProviderSelect] = useState<Photo>();
     const [showModal, setShowModal] = useState<boolean>(false);
@@ -90,6 +104,14 @@ export function PersonalInformation() {
             .then((image) => {
                 setImageProfile(image);
                 setValue('profilePicture', image);
+            });
+    }
+
+    async function pickBackgroundImage() {
+        await pickImage()
+            .then((image) => {
+                setBackgroundImage(image);
+                setValue('backgroundImage', image);
             });
     }
 
@@ -160,33 +182,24 @@ export function PersonalInformation() {
 
                 <VStack flex={1} px={5} bg="background">
 
-                    <Pressable onPress={pickImageProfile}>
-                        <Avatar
-                            mt={8}
-                            alignSelf="center"
-                            bg="gray.500"
-                            size="2xl"
-                            borderWidth={5}
-                            borderColor="primary.700"
-                            source={{
-                                uri: imageProfile ? `data:image/gif;base64,${imageProfile}`
-                                    : "https://avatars.githubusercontent.com/u/46757393?v=4"
-                            }}
-                        />
-
-                        <Box ml={20} mt={2}>
-                            <Circle
-                                h={8}
-                                w={8}
-                                bottom={2}
-                                alignSelf="center"
-                                bg="primary.700"
-                                position="absolute"
-                            >
-                                <Camera size={20} color={colors.white} />
-                            </Circle>
-                        </Box>
-                    </Pressable>
+                    {
+                        isConsumer
+                            ? <PhotoCosumer
+                                imageProfile={imageProfile}
+                                onPress={pickImageProfile}
+                            />
+                            : <PhotoProvider
+                                backgroundImage={backgroundImage}
+                                imageProfile={imageProfile}
+                                onPress={pickImageProfile}
+                                children={
+                                    <IconButton
+                                        icon={<PencilSimple color="white" size={24} />}
+                                        onPress={pickBackgroundImage}
+                                    />
+                                }
+                            />
+                    }
 
                     <HStack mt={6} justifyContent="space-between">
                         <Box flex={1}>
@@ -371,7 +384,7 @@ export function PersonalInformation() {
                                 showsHorizontalScrollIndicator={false}
                                 ListEmptyComponent={() => (
                                     <Center my={2}>
-                                        <Image color={colors.gray[300]} size={32} />
+                                        <IconImage color={colors.gray[300]} size={32} />
                                         <Text mt={4} textAlign="center" color="gray.300" fontFamily="body" fontSize="sm">
                                             Você ainda não possui {"\n"}
                                             nenhuma foto cadastrada
@@ -396,7 +409,7 @@ export function PersonalInformation() {
                 <Modal
                     header="Exclusão"
                     body="Você quer remover essa foto?"
-                    icon={Image}
+                    icon={IconImage}
                     isOpen={showModal}
                     onClose={() => setShowModal(false)}
                 >
