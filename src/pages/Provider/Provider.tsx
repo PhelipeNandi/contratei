@@ -38,7 +38,7 @@ export function Provider() {
         isSuccess: isSuccessPhotosProvider,
         isLoading: isLoadingPhotosProvider,
         isError: isErrorPhotosProvider
-    } = useQuery('photosProvider', () => searchPhotosProvider(provider.id));
+    } = useQuery('photosProvider', () => searchPhotosProvider(provider.id, isAuthenticated));
 
     function renderPhotosProvider({ item }: ListRenderItemInfo<Photo>) {
         return <PhotosProvider
