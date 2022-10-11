@@ -59,6 +59,15 @@ async function handleChangePersonalInformationProvider(data: ChangePersonalInfor
             backgroundImage: data.backgroundImage
         });
 
+        const responsePhotoProvider = await Api.put("provider/change-photos/" + user.id, {
+            photos: data.photosProvider.map((photo) => ({
+                provider: {
+                    id: user.id
+                },
+                picture: photo.url
+            }))
+        });
+
         return {
             id: response.data.id,
             password: response.data.password,

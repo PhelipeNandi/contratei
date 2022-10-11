@@ -6,7 +6,7 @@ import {
     Button as NativeBaseButton
 } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
-import { useMutation, useQuery } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup';
@@ -55,6 +55,7 @@ const changePersonalInformationForm: yup.SchemaOf<ChangePersonalInformation> = y
 
 export function PersonalInformation() {
     const { colors } = useTheme();
+    const queryClient = useQueryClient();
     const navigation = useNavigation<propsStack>();
     const { user, changePersonalInformationUser, isConsumer } = useAuthContext();
     const [imageProfile, setImageProfile] = useState(user.profilePicture);
@@ -125,6 +126,7 @@ export function PersonalInformation() {
 
     useEffect(() => {
         if (isSuccess) {
+            queryClient.invalidateQueries("photosProvider");
             changePersonalInformationUser(data);
             navigation.navigate("profile");
         }
