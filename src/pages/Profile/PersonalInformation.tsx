@@ -102,16 +102,20 @@ export function PersonalInformation() {
     async function pickImageProfile() {
         await pickImage()
             .then((image) => {
-                setImageProfile(image);
-                setValue('profilePicture', image);
+                if (image) {
+                    setImageProfile(image);
+                    setValue('profilePicture', image);
+                }
             });
     }
 
     async function pickBackgroundImage() {
         await pickImage()
             .then((image) => {
-                setBackgroundImage(image);
-                setValue('backgroundImage', image);
+                if (image) {
+                    setBackgroundImage(image);
+                    setValue('backgroundImage', image);
+                }
             });
     }
 
@@ -153,12 +157,14 @@ export function PersonalInformation() {
     async function pickPhotoProvider() {
         await pickImage()
             .then((image) => {
-                setPhotosProvider((prevPhotosProvider) => [
-                    ...prevPhotosProvider,
-                    {
-                        url: image
-                    }
-                ])
+                if (image) {
+                    setPhotosProvider((prevPhotosProvider) => [
+                        ...prevPhotosProvider,
+                        {
+                            url: image
+                        }
+                    ])
+                }
             });
     }
 
