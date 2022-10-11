@@ -64,7 +64,10 @@ export function Provider() {
     return (
         <VStack flex={1} bg="background">
             <ScrollView>
-                <PerfilProvider />
+                <PerfilProvider
+                    imageProfile={provider.profilePicture}
+                    backgroundImage={provider.backgroundImage}
+                />
 
                 <VStack>
                     <Text mt={5} px={5} fontFamily="body" fontSize="subTitle" color="primary.700">

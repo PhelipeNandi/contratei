@@ -2,7 +2,7 @@ import { VStack, Avatar, Pressable, IPressableProps, Circle, Box, useTheme } fro
 import { Camera } from 'phosphor-react-native';
 
 type Props = IPressableProps & {
-    imageProfile: string;
+    imageProfile?: string;
 }
 
 export function PhotoCosumer({ imageProfile, ...rest }: Props) {

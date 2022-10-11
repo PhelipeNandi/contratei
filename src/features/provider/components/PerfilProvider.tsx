@@ -6,7 +6,12 @@ import { ArrowLeft, PencilSimple } from 'phosphor-react-native';
 import { propsStack } from '../../../routes/Navigators/Models';
 import { useAuthContext } from '../../../hooks/useAuthContext';
 
-export function PerfilProvider() {
+type Props = {
+    imageProfile?: string;
+    backgroundImage?: string;
+}
+
+export function PerfilProvider({ imageProfile, backgroundImage }: Props) {
     const navigation = useNavigation<propsStack>();
     const { isAuthenticated, isConsumer } = useAuthContext();
 
@@ -22,7 +27,10 @@ export function PerfilProvider() {
                     <Image
                         alt="image"
                         borderRadius={20}
-                        source={{ uri: "https://static.wikia.nocookie.net/ipod/images/d/dc/Apple_Changsha_R617-2022-09.jpg/revision/latest?cb=20220528150453" }}
+                        source={{
+                            uri: backgroundImage ? `data:image/gif;base64,${backgroundImage}`
+                                : "https://static.wikia.nocookie.net/ipod/images/d/dc/Apple_Changsha_R617-2022-09.jpg/revision/latest?cb=20220528150453"
+                        }}
                     />
                 </AspectRatio>
             </Box>
@@ -54,7 +62,10 @@ export function PerfilProvider() {
                     borderColor="white"
                     bg="gray.500"
                     size="2xl"
-                    source={{ uri: "https://avatars.githubusercontent.com/u/46757393?v=4" }}
+                    source={{
+                        uri: imageProfile ? `data:image/gif;base64,${imageProfile}`
+                            : "https://avatars.githubusercontent.com/u/46757393?v=4"
+                    }}
                 />
             </Box>
         </VStack>

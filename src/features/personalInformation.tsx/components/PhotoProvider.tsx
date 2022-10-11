@@ -3,9 +3,9 @@ import { Camera } from 'phosphor-react-native';
 import { VStack, Box, AspectRatio, Image, Avatar, Pressable, IPressableProps, Circle, useTheme } from 'native-base';
 
 type Props = IPressableProps & {
-    backgroundImage: string;
-    imageProfile: string;
-    children?: ReactNode;
+    backgroundImage?: string;
+    imageProfile?: string;
+    children: ReactNode;
 }
 
 export function PhotoProvider({ backgroundImage, imageProfile, children, ...rest }: Props) {
