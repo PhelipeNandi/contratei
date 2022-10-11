@@ -1,15 +1,13 @@
 import { VStack, HStack, Avatar, Text, Box, useTheme } from 'native-base';
 
 import { Comment } from '../../../types/provider';
-import { RatingProvider } from '../../commentsProvider';
+import { RatingProvider } from './RatingProvider';
 
 type Props = {
     data: Comment;
 }
 
 export function CardCommentProvider({ data }: Props) {
-    const { colors } = useTheme();
-
     return (
         <HStack
             mb={7}
