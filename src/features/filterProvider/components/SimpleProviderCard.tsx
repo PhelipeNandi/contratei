@@ -1,9 +1,8 @@
 import React from 'react';
 import { Pressable, IPressableProps, HStack, Avatar, VStack, Text, useTheme } from 'native-base';
-import { Smiley, SmileySad } from 'phosphor-react-native';
 
 import { Provider } from '../../../types/provider';
-import { normalizeRatingProvider } from '../../../utils/formatStrings';
+import { RatingProvider } from '../../commentsProvider';
 
 type Props = IPressableProps & {
     data: Provider;
@@ -37,18 +36,13 @@ export function SimpleProviderCard({ data, ...rest }: Props) {
                     </VStack>
                 </HStack>
 
-                <VStack justifyContent="space-between">
-                    <HStack justifyContent="flex-end" alignItems="center" space={1}>
-                        {
-                            normalizeRatingProvider(data.rating) < 6
-                                ? <SmileySad size={23} color={colors.red[700]} weight="regular" />
-                                : <Smiley size={23} color={colors.green[700]} weight="regular" />
-                        }
-
-                        <Text textAlign="center" fontFamily="mono" fontSize="md" color="primary.700">
-                            {normalizeRatingProvider(data.rating)}
-                        </Text>
-                    </HStack>
+                <VStack justifyContent={data.rating ? "space-between" : "flex-end"}>
+                    {
+                        data.rating &&
+                        <RatingProvider
+                            data={data.rating}
+                        />
+                    }
 
                     <Text textAlign="right" fontFamily="mono" fontSize="sm" color="gray.300">
                         R$ {data.hourValue}

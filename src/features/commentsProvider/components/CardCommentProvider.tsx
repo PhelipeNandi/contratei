@@ -1,8 +1,7 @@
 import { VStack, HStack, Avatar, Text, Box, useTheme } from 'native-base';
-import { DotsThreeVertical, Smiley, SmileySad } from 'phosphor-react-native';
 
 import { Comment } from '../../../types/provider';
-import { normalizeRatingProvider } from '../../../utils/formatStrings';
+import { RatingProvider } from '../../commentsProvider';
 
 type Props = {
     data: Comment;
@@ -40,16 +39,13 @@ export function CardCommentProvider({ data }: Props) {
                                 {data.name}
                             </Text>
 
-                            <HStack pr={3} space={2} justifyContent="space-between">
+                            <HStack pr={3} space={2} justifyContent={data.rating ? "space-between" : "flex-end"}>
                                 {
-                                    normalizeRatingProvider(data.rating) < 6
-                                        ? <SmileySad size={23} color={colors.red[700]} weight="regular" />
-                                        : <Smiley size={23} color={colors.green[700]} weight="regular" />
+                                    data.rating &&
+                                    <RatingProvider
+                                        data={data.rating}
+                                    />
                                 }
-
-                                <Text textAlign="center" fontFamily="mono" fontSize="md" color="primary.700">
-                                    {normalizeRatingProvider(data.rating)}
-                                </Text>
                             </HStack>
                         </HStack>
                         <Text my={2} mx={3} fontFamily="mono" fontSize="xs" color="gray.500">
