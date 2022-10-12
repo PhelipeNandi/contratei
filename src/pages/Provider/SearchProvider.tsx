@@ -23,7 +23,9 @@ export function SearchProvider() {
             description: 'Descrição do Mecanico',
             hourValue: '100.00',
             actingRegion: 'CITY',
-            rating: "5.0"
+            rating: "5.0",
+            backgroundImage: null,
+            profilePicture: null
         }
         , {
             id: 4,
@@ -36,7 +38,9 @@ export function SearchProvider() {
             description: 'Descrição do Pedreiro',
             hourValue: '100.00',
             actingRegion: 'CITY',
-            rating: "5.0"
+            rating: "5.0",
+            backgroundImage: null,
+            profilePicture: null
         }
         , {
             id: 3,
@@ -49,7 +53,9 @@ export function SearchProvider() {
             description: 'Descrição do Pintor',
             hourValue: '100.00',
             actingRegion: 'CITY',
-            rating: "5.0"
+            rating: "5.0",
+            backgroundImage: null,
+            profilePicture: null
         }
         , {
             id: 2,
@@ -62,7 +68,9 @@ export function SearchProvider() {
             description: 'Descrição do Marceneiro',
             hourValue: '100.00',
             actingRegion: 'CITY',
-            rating: "5.0"
+            rating: "5.0",
+            backgroundImage: null,
+            profilePicture: null
         }
         , {
             id: 1,
@@ -75,7 +83,9 @@ export function SearchProvider() {
             description: 'Descrição do Empregado',
             hourValue: '100.00',
             actingRegion: 'CITY',
-            rating: "5.0"
+            rating: "5.0",
+            backgroundImage: null,
+            profilePicture: null
         }
     ]
 

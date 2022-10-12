@@ -24,6 +24,7 @@ export type propsNavigationStack = {
     budget: {
         idBudget: number
     },
+    budgetNavigation: undefined,
     filterProvider: {
         serviceType: ServiceType
     },

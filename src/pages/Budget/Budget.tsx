@@ -1,7 +1,7 @@
-import { useEffect } from 'react';
-import { VStack, ScrollView, Divider, Center, Text, useTheme } from 'native-base';
-import { RouteProp, useRoute } from '@react-navigation/native';
-import { propsNavigationStack } from '../../routes/Navigators/Models';
+import { useState } from 'react';
+import { VStack, ScrollView, Divider, Center, Text, useTheme, Button as NativeBaseButton } from 'native-base';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { propsNavigationStack, propsStack } from '../../routes/Navigators/Models';
 import { useQuery } from 'react-query';
 import {
     Briefcase,
@@ -11,18 +11,59 @@ import {
     CalendarBlank,
     Money,
     HourglassMedium,
-    Warning
+    Warning,
+    SuitcaseSimple
 } from 'phosphor-react-native';
 
+import { Provider } from '../../types/provider';
+import { useProviderContext } from '../../hooks/useProviderContext';
 import { normalizeServiceType, normalizePriorityLevel } from '../../utils/formatStrings';
 
 import { Header } from '../../components/ui/Header';
 import { Loading } from '../../components/ui/Loading';
-import { CardDetails, ProgressStatusBudget, CardProvider, getBudgetById } from '../../features/budget';
+import { Modal } from '../../components/form/Modal';
+import { CardDetails, ProgressStatusBudget, CardProvider, getBudgetById, CardProviderOffer } from '../../features/budget';
+import { Button } from '../../components/ui/Button';
 
 export function Budget() {
     const { colors } = useTheme();
+    const navigation = useNavigation<propsStack>();
+    const { searchProvider } = useProviderContext();
+    const [showModal, setShowModal] = useState<boolean>(false);
     const route = useRoute<RouteProp<propsNavigationStack, "budget">>();
+
+    const providerList: Provider[] = [
+        {
+            id: 1,
+            serviceType: 'EMPREGRADO',
+            firstName: 'Fornecedor',
+            lastName: '1',
+            contactNumber: '(48) 99999-9999',
+            cpf: '077.321.526-38',
+            email: 'empregado@provider.com',
+            description: 'Descrição do Empregado',
+            hourValue: '100.00',
+            actingRegion: 'CITY',
+            rating: "5",
+            backgroundImage: null,
+            profilePicture: null
+        },
+        {
+            id: 2,
+            serviceType: 'EMPREGRADO',
+            firstName: 'Fornecedor',
+            lastName: '1',
+            contactNumber: '(48) 99999-9999',
+            cpf: '077.321.526-38',
+            email: 'empregado@provider.com',
+            description: 'Descrição do Empregado',
+            hourValue: '100.00',
+            actingRegion: 'CITY',
+            rating: "5",
+            backgroundImage: null,
+            profilePicture: null
+        }
+    ]
 
     const {
         data: budget,
@@ -31,9 +72,17 @@ export function Budget() {
         isError
     } = useQuery("budget", () => getBudgetById(route.params?.idBudget));
 
-    useEffect(() => {
-        console.log(budget);
-    }, [])
+    async function handleNavigateProvider(idProvider: number) {
+        await searchProvider(idProvider)
+            .then(() => {
+                navigation.navigate("provider");
+            })
+            .catch((error) => {
+                if (error instanceof Error) {
+                    console.log(error.message);
+                }
+            });
+    }
 
     return (
         <VStack flex={1} justifyContent="center" bg="background">
@@ -148,6 +197,46 @@ export function Budget() {
                                 }
                             />
                         }
+
+                        {
+                            providerList.length > 0 &&
+                            <VStack>
+                                <CardDetails
+                                    title="Ofertas"
+                                    icon={SuitcaseSimple}
+                                    children={
+                                        providerList.map((provider, index) => {
+                                            return <CardProviderOffer
+                                                data={provider}
+                                                key={index}
+                                                onPress={() => handleNavigateProvider(provider.id)}
+                                                onPressRefuse={() => setShowModal(true)}
+                                            />
+                                        })
+                                    }
+                                />
+                            </VStack>
+                        }
+
+                        <Modal
+                            header="Recusar"
+                            body="Você tem certeza que quer recusar essa propsta?"
+                            icon={SuitcaseSimple}
+                            isOpen={showModal}
+                            onClose={() => setShowModal(false)}
+                        >
+                            <NativeBaseButton.Group space={2}>
+                                <Button
+                                    title="Cancelar"
+                                    variant="primary"
+                                    onPress={() => setShowModal(false)}
+                                />
+                                <Button
+                                    title="Recusar"
+                                    variant="danger"
+                                />
+                            </NativeBaseButton.Group>
+                        </Modal>
 
                     </VStack>
                 </ScrollView>

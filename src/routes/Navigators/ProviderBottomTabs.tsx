@@ -5,7 +5,6 @@ import { propsNavigationTab } from './Models';
 import {
     DashboardNavigation,
     BudgetNavigation,
-    CreateBudgetNavigation,
     ProfileNavigationProvider,
     SearchBudgetsNavigation
 } from './StackNavigations';

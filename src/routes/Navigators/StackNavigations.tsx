@@ -44,7 +44,7 @@ export function DashboardNavigation() {
         <Stack.Navigator initialRouteName="dashboard" screenOptions={{ headerShown: false }}>
             <Stack.Screen name="dashboard" component={Dashboard} />
             <Stack.Screen name="myBudgets" component={MyBudgets} />
-            <Stack.Screen name="budget" component={Budget} />
+            <Stack.Screen name="budgetNavigation" component={BudgetNavigation} />
             <Stack.Screen name="createBudget" component={CreateBudget} />
             <Stack.Screen name="searchProviderNavigation" component={SearchProviderNavigation} />
         </Stack.Navigator>
@@ -53,10 +53,15 @@ export function DashboardNavigation() {
 
 export function BudgetNavigation() {
     return (
-        <Stack.Navigator initialRouteName="myBudgets" screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="myBudgets" component={MyBudgets} />
-            <Stack.Screen name="budget" component={Budget} />
-        </Stack.Navigator>
+        <ProviderProvider>
+            <Stack.Navigator initialRouteName="myBudgets" screenOptions={{ headerShown: false }}>
+                <Stack.Screen name="myBudgets" component={MyBudgets} />
+                <Stack.Screen name="budget" component={Budget} />
+                <Stack.Screen name="provider" component={Provider} />
+                <Stack.Screen name="commentsProvider" component={CommentsProvider} />
+                <Stack.Screen name="createNewCommentProvider" component={CreateNewCommentProvider} />
+            </Stack.Navigator>
+        </ProviderProvider>
     )
 }
 
