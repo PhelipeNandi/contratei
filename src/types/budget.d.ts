@@ -26,3 +26,9 @@ export interface BudgetResponse {
     currentPage: number;
     totalPages: number;
 }
+
+export interface DocumentProposal {
+    id?: number;
+    url: string;
+    name: string;
+}

@@ -16,20 +16,22 @@ import {
 } from 'phosphor-react-native';
 
 import { Provider } from '../../types/provider';
+import { useAuthContext } from '../../hooks/useAuthContext';
 import { useProviderContext } from '../../hooks/useProviderContext';
 import { normalizeServiceType, normalizePriorityLevel } from '../../utils/formatStrings';
 
 import { Header } from '../../components/ui/Header';
-import { Loading } from '../../components/ui/Loading';
-import { Modal } from '../../components/form/Modal';
-import { CardDetails, ProgressStatusBudget, CardProvider, getBudgetById, CardProviderOffer } from '../../features/budget';
 import { Button } from '../../components/ui/Button';
+import { Modal } from '../../components/form/Modal';
+import { Loading } from '../../components/ui/Loading';
+import { CardDetails, ProgressStatusBudget, CardProvider, getBudgetById, CardProviderOffer } from '../../features/budget';
 
 export function Budget() {
     const { colors } = useTheme();
-    const navigation = useNavigation<propsStack>();
+    const { isConsumer } = useAuthContext();
     const { searchProvider } = useProviderContext();
     const [showModal, setShowModal] = useState<boolean>(false);
+    const navigation = useNavigation<propsStack>();
     const route = useRoute<RouteProp<propsNavigationStack, "budget">>();
 
     const providerList: Provider[] = [
@@ -177,7 +179,7 @@ export function Budget() {
                                 <CardDetails
                                     title="valor"
                                     icon={Money}
-                                    description={budget.value}
+                                    description={"R$: " + budget.value}
                                 />
 
                                 <Divider />
@@ -193,16 +195,19 @@ export function Budget() {
                                     <CardProvider
                                         pl={5}
                                         data={budget.provider}
+                                        onPress={() => handleNavigateProvider(budget.provider.id)}
                                     />
                                 }
                             />
                         }
 
                         {
-                            providerList.length > 0 &&
-                            <VStack>
+                            providerList.length > 0
+                            && budget.status === "OPEN"
+                            && isConsumer
+                            && <VStack>
                                 <CardDetails
-                                    title="Ofertas"
+                                    title="Propostas"
                                     icon={SuitcaseSimple}
                                     children={
                                         providerList.map((provider, index) => {
@@ -211,6 +216,7 @@ export function Budget() {
                                                 key={index}
                                                 onPress={() => handleNavigateProvider(provider.id)}
                                                 onPressRefuse={() => setShowModal(true)}
+                                                onPressOffer={() => navigation.navigate("proposal", { idProposal: 1 })}
                                             />
                                         })
                                     }
