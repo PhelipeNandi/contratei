@@ -1,26 +1,25 @@
 import { ListRenderItemInfo } from 'react-native';
+import { useQuery } from 'react-query';
 import { VStack, Text, ScrollView, FlatList, Fab, HStack, Center, useTheme } from 'native-base';
-import { useNavigation } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { Plus, Warning, Image, ChatCenteredText } from 'phosphor-react-native';
 
-import { propsStack } from '../../routes/Navigators/Models';
+import { Photo } from '../../types/provider';
+import { useAuthContext } from '../../hooks/useAuthContext';
+import { useProviderContext } from '../../hooks/useProviderContext';
+import { propsNavigationStack, propsStack } from '../../routes/Navigators/Models';
 
 import {
     PerfilProvider,
     InfoProvider,
     PhotosProvider
 } from '../../features/provider';
+import { Loading } from '../../components/ui/Loading';
+import { searchPhotosProvider } from '../../features/personalInformation.tsx';
 import { CardCommentProvider, searchCommentsByIdProvider } from '../../features/commentsProvider';
 
-import { Photo, Comment } from '../../types/provider';
-import { useProviderContext } from '../../hooks/useProviderContext';
-import { useQuery } from 'react-query';
-import { Loading } from '../../components/ui/Loading';
-import { useAuthContext } from '../../hooks/useAuthContext';
-import { Button } from '../../components/ui/Button';
-import { searchPhotosProvider } from '../../features/personalInformation.tsx';
-
 export function Provider() {
+    const route = useRoute<RouteProp<propsNavigationStack, "provider">>();
     const navigation = useNavigation<propsStack>();
     const { isAuthenticated, isConsumer } = useAuthContext();
     const { provider } = useProviderContext();
@@ -174,7 +173,7 @@ export function Provider() {
             </ScrollView>
 
             {
-                isConsumer &&
+                isConsumer && route.params?.isHirable &&
                 <Fab
                     renderInPortal={false}
                     shadow={2}

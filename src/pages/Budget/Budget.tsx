@@ -77,7 +77,7 @@ export function Budget() {
     async function handleNavigateProvider(idProvider: number) {
         await searchProvider(idProvider)
             .then(() => {
-                navigation.navigate("provider");
+                navigation.navigate("provider", { isHirable: false });
             })
             .catch((error) => {
                 if (error instanceof Error) {
@@ -205,23 +205,32 @@ export function Budget() {
                             providerList.length > 0
                             && budget.status === "OPEN"
                             && isConsumer
-                            && <VStack>
-                                <CardDetails
-                                    title="Propostas"
-                                    icon={SuitcaseSimple}
-                                    children={
-                                        providerList.map((provider, index) => {
-                                            return <CardProviderOffer
-                                                data={provider}
-                                                key={index}
-                                                onPress={() => handleNavigateProvider(provider.id)}
-                                                onPressRefuse={() => setShowModal(true)}
-                                                onPressOffer={() => navigation.navigate("proposal", { idProposal: 1 })}
-                                            />
-                                        })
-                                    }
-                                />
-                            </VStack>
+                            && <CardDetails
+                                title="Propostas"
+                                icon={SuitcaseSimple}
+                                children={
+                                    providerList.map((provider, index) => {
+                                        return <CardProviderOffer
+                                            data={provider}
+                                            key={index}
+                                            onPress={() => handleNavigateProvider(provider.id)}
+                                            onPressRefuse={() => setShowModal(true)}
+                                            onPressOffer={() => navigation.navigate("proposal", { idProposal: 1 })}
+                                        />
+                                    })
+                                }
+                            />
+                        }
+
+                        {
+                            !isConsumer
+                            && budget.status === "OPEN"
+                            && <Button
+                                my={3}
+                                title="Enviar Proposta"
+                                variant="primary"
+                                onPress={() => navigation.navigate("proposal")}
+                            />
                         }
 
                         <Modal

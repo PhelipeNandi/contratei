@@ -15,7 +15,7 @@ export function Profile() {
     async function handleNavigateProvider() {
         await searchProvider(user.id)
             .then(() => {
-                navigation.navigate("provider");
+                navigation.navigate("provider", { isHirable: true });
             })
             .catch((error) => {
                 if (error instanceof Error) {

@@ -28,12 +28,14 @@ export type propsNavigationStack = {
         idBudget: number
     },
     proposal: {
-        idProposal: number
+        idProposal?: number
     },
     filterProvider: {
         serviceType: ServiceType
     },
-    provider: undefined,
+    provider: {
+        isHirable: boolean
+    },
     commentsProvider: undefined,
     createNewCommentProvider: undefined
 }

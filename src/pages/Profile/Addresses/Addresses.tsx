@@ -85,19 +85,21 @@ export function Addresses() {
                         })
                     }
 
-                    <Button
-                        mx={5}
-                        mt={2}
-                        mb={5}
-                        title="Adicionar"
-                        variant="primary"
-                        onPress={() => {
-                            addressContext.setAddress(null);
-                            addressContext.setIsEditing(false);
-                            navigation.navigate("addNewAddress");
-                        }}
-                    />
+
                 </ScrollView>
+
+                <Button
+                    mx={5}
+                    mt={2}
+                    mb={8}
+                    title="Adicionar"
+                    variant="primary"
+                    onPress={() => {
+                        addressContext.setAddress(null);
+                        addressContext.setIsEditing(false);
+                        navigation.navigate("addNewAddress");
+                    }}
+                />
             </VStack>
         </VStack>
     );

@@ -119,7 +119,7 @@ export function SearchProvider() {
     async function handleNavigateProvider(provider: Provider) {
         await searchProvider(provider.id)
             .then(() => {
-                navigate("provider");
+                navigate("provider", { isHirable: true });
             })
             .catch((error) => {
                 if (error instanceof Error) {
