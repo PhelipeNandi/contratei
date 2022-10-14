@@ -1,10 +1,7 @@
-import { useState } from 'react';
-import { VStack, HStack, Text, IconButton, useTheme, Box, Pressable, ScrollView } from 'native-base';
-import { FilePlus, FilePdf, TrashSimple, WhatsappLogo } from 'phosphor-react-native';
+import { VStack, HStack, Text, IconButton, useTheme, ScrollView } from 'native-base';
+import { WhatsappLogo } from 'phosphor-react-native';
 
 import { ProviderBudget } from '../../types/provider';
-import { DocumentProposal } from '../../types/budget';
-import { pickDocument } from '../../features/proposal';
 import { useAuthContext } from '../../hooks/useAuthContext';
 
 import { Header } from '../../components/ui/Header';
@@ -15,7 +12,6 @@ import { CardProvider } from '../../features/budget';
 export function Proposal() {
     const { colors } = useTheme();
     const { isConsumer } = useAuthContext();
-    const [document, setDocument] = useState<DocumentProposal | null>();
 
     const provider: ProviderBudget =
     {
@@ -26,21 +22,6 @@ export function Proposal() {
         profilePicture: null
     }
 
-    async function pickProposalDocument() {
-        await pickDocument()
-            .then((document) => {
-                setDocument(document);
-            });
-    }
-
-    async function handleRemoveDocument() {
-        setDocument(null);
-    }
-
-    async function handleOpenDocument() {
-
-    }
-
     async function handleSendWhatsappMessageProvider() {
 
     }
@@ -48,7 +29,7 @@ export function Proposal() {
     return (
         <VStack flex={1} justifyContent="center" bg="background">
 
-            <Header title="Oferta" />
+            <Header title="Proposta" />
 
             <ScrollView>
                 <VStack flex={1} mt={5} px={8} bg="background">
@@ -79,39 +60,6 @@ export function Proposal() {
                         shadow={5}
                         title="Descrição"
                     />
-
-                    <HStack mt={5} justifyContent="space-between" alignItems="center">
-                        <Text mb={2} fontFamily="body" fontSize="xs" color="gray.300">
-                            Documento de Proposta
-                        </Text>
-
-                        {
-                            document &&
-                            <IconButton
-                                icon={<TrashSimple color={colors.red[700]} size="20" weight='fill' />}
-                                onPress={handleRemoveDocument}
-                            />
-                        }
-                    </HStack>
-
-                    <Pressable
-                        _pressed={{ backgroundColor: "white" }}
-                        onPress={document ? handleOpenDocument : pickProposalDocument}
-                    >
-                        <Box
-                            py={8}
-                            bg="white"
-                            shadow={1}
-                            borderRadius="lg"
-                            alignItems="center"
-                        >
-                            {
-                                document
-                                    ? <FilePdf color={colors.primary[700]} size={60} />
-                                    : <FilePlus color={colors.primary[700]} size={60} />
-                            }
-                        </Box>
-                    </Pressable>
 
                     {
                         !isConsumer &&
