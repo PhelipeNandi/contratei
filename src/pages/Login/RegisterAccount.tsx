@@ -1,17 +1,20 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { VStack, ScrollView } from 'native-base';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup';
 
-import { registerAccountRequest } from '../../features/registerAccount';
-import { Header } from '../../components/ui/Header';
-import { Input } from '../../components/form/Input';
-import { RadioButton } from '../../components/form/RadioButton';
-import { Button } from '../../components/ui/Button';
+import { RegisterNewUser } from '../../types/authentication';
 import { normalizeCPF, normalizeContactNumberValue } from '../../utils/masks';
 
-import { RegisterNewUser } from '../../types/authentication';
+import { Header } from '../../components/ui/Header';
+import { Input } from '../../components/form/Input';
+import { Button } from '../../components/ui/Button';
+import { RadioButton } from '../../components/form/RadioButton';
+import { SelectServiceType } from '../../features/createBudget';
+import { registerAccountRequest } from '../../features/registerAccount';
+import { useNavigation } from '@react-navigation/native';
+import { propsStack } from '../../routes/Navigators/Models';
 
 const registerNewUserForm: yup.SchemaOf<RegisterNewUser> = yup.object({
     type: yup.mixed().oneOf(['Consumidor', 'Fornecedor']).required("Tipo obrigatório"),
@@ -19,24 +22,36 @@ const registerNewUserForm: yup.SchemaOf<RegisterNewUser> = yup.object({
     lastName: yup.string().required("Sobrenome obrigatório"),
     contactNumber: yup.string().required("Telefone obrigatório"),
     cpf: yup.string().required("CPF obrigatório"),
+    serviceType: yup.string().nullable(),
     email: yup.string().email("E-mail inválido").required("E-mail obrigatório"),
     password: yup.string().min(6, "A senha deve conter pelo menos 6 dígitos").required("Senha obrigatória")
 })
 
 export function RegisterAccount() {
+    const navigation = useNavigation<propsStack>();
+    const [isProvider, setIsProvider] = useState<boolean>(false);
+
     const {
         control,
         handleSubmit,
         watch,
         setValue,
         reset,
+        getValues,
         formState: { errors, isSubmitSuccessful }
     } = useForm<RegisterNewUser>({
         resolver: yupResolver(registerNewUserForm),
         defaultValues: {
-            type: "Consumidor"
+            type: "Consumidor",
+            serviceType: "EMPREGADO"
         }
     });
+
+    const typeValue = watch('type');
+
+    useEffect(() => {
+        typeValue === "Fornecedor" ? setIsProvider(true) : setIsProvider(false);
+    }, [typeValue]);
 
     const contactNumberValue = watch('contactNumber');
     const cpfValue = watch('cpf');
@@ -53,6 +68,7 @@ export function RegisterAccount() {
         if (isSubmitSuccessful) {
             reset({
                 type: "Consumidor",
+                serviceType: "EMPREGADO",
                 firstName: "",
                 lastName: "",
                 contactNumber: "",
@@ -65,6 +81,9 @@ export function RegisterAccount() {
 
     async function handleRegisterAccount(data: RegisterNewUser) {
         await registerAccountRequest(data)
+            .then(() => {
+                navigation.goBack();
+            })
             .catch((error) => {
                 if (error instanceof Error) {
                     console.log(error.message);
@@ -79,7 +98,7 @@ export function RegisterAccount() {
 
             <VStack flex={1} roundedTop={32} bg="background">
 
-                <ScrollView flex={1} mt={10} mx={8} showsVerticalScrollIndicator={false}>
+                <ScrollView mt={10} px={8} showsVerticalScrollIndicator={false}>
 
                     <Controller
                         control={control}
@@ -97,12 +116,27 @@ export function RegisterAccount() {
                         )}
                     />
 
+                    {
+                        isProvider
+                        && <Controller
+                            control={control}
+                            name="serviceType"
+                            render={({ field: { value, onChange } }) => (
+                                <SelectServiceType
+                                    mt={3}
+                                    selectedValue={value}
+                                    onValueChange={onChange}
+                                />
+                            )}
+                        />
+                    }
+
                     <Controller
                         control={control}
                         name="firstName"
                         render={({ field: { value, onChange } }) => (
                             <Input
-                                mt={8}
+                                mt={isProvider ? 3 : 8}
                                 errorMessage={errors.firstName?.message}
                                 placeholder="Nome"
                                 value={value}

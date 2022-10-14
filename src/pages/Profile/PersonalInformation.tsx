@@ -79,7 +79,7 @@ export function PersonalInformation() {
             cpf: user.cpf,
             email: user.email,
             description: user.description,
-            hourValue: user.hourValue,
+            hourValue: user.hourValue ? user.hourValue : "",
             actingRegion: user.actingRegion,
             profilePicture: user.profilePicture,
             backgroundImage: user.backgroundImage
@@ -215,7 +215,6 @@ export function PersonalInformation() {
                                     <Input
                                         mb={5}
                                         title="Nome"
-                                        placeholder="Nome"
                                         value={value}
                                         onChangeText={onChange}
                                         errorMessage={errors.firstName?.message}
@@ -232,7 +231,6 @@ export function PersonalInformation() {
                                     <Input
                                         mb={5}
                                         title="Sobrenome"
-                                        placeholder="Sobrenome"
                                         value={value}
                                         onChangeText={onChange}
                                         errorMessage={errors.lastName?.message}
@@ -250,7 +248,6 @@ export function PersonalInformation() {
                             <Input
                                 mb={5}
                                 title="E-mail"
-                                placeholder="E-mail"
                                 autoCapitalize="none"
                                 value={value}
                                 onChangeText={onChange}
@@ -266,7 +263,6 @@ export function PersonalInformation() {
                             <Input
                                 mb={5}
                                 title="CPF"
-                                placeholder="CPF"
                                 value={value}
                                 onChangeText={onChange}
                                 keyboardType="numeric"
@@ -282,7 +278,6 @@ export function PersonalInformation() {
                             <Input
                                 mb={5}
                                 title="Telefone"
-                                placeholder="Telefone"
                                 value={value}
                                 onChangeText={onChange}
                                 keyboardType="numeric"
@@ -300,7 +295,6 @@ export function PersonalInformation() {
                                 <TextArea
                                     mb={5}
                                     title="Descrição"
-                                    placeholder="Descrição"
                                     value={value}
                                     onChangeText={onChange}
                                     errorMessage={errors.description?.message}
@@ -318,7 +312,6 @@ export function PersonalInformation() {
                                 <Input
                                     mb={5}
                                     title="Valor médio"
-                                    placeholder="Valor por Hora"
                                     value={value.toString()}
                                     onChangeText={onChange}
                                     keyboardType="numeric"

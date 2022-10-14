@@ -10,6 +10,7 @@ export async function registerAccountRequest(data: RegisterNewUser): Promise<str
             lastName: data.lastName,
             contactNumber: data.contactNumber,
             cpf: data.cpf,
+            serviceType: data.type === "Fornecedor" ? data.serviceType : null,
             email: data.email,
             password: data.password
         });

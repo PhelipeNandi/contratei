@@ -4,6 +4,7 @@ export interface RegisterNewUser {
     lastName: string;
     contactNumber: string;
     cpf: string;
+    serviceType?: string;
     email: string;
     password: string;
 }
