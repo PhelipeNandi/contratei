@@ -1,94 +1,19 @@
 import { ListRenderItemInfo } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { HStack, Text, VStack, FlatList, ScrollView, Divider } from 'native-base';
+import { useQuery } from 'react-query';
+import { HStack, Text, VStack, FlatList, ScrollView, Divider, Center, useTheme } from 'native-base';
+import { Warning } from 'phosphor-react-native';
 
+import { propsStack } from '../../routes/Navigators/Models';
 import { Provider, ServiceType } from '../../types/provider';
 import { useAuthContext } from '../../hooks/useAuthContext';
-import { propsStack } from '../../routes/Navigators/Models';
-
-import { ProviderCardDetails, ServiceTypeCard } from '../../features/searchProvider';
-import { Header } from '../../components/ui/Header';
 import { useProviderContext } from '../../hooks/useProviderContext';
 
-export function SearchProvider() {
-    const providers: Provider[] = [
-        {
-            id: 5,
-            serviceType: 'MECANICO',
-            firstName: 'Fornecedor',
-            lastName: '5',
-            contactNumber: '(48) 99999-9999',
-            cpf: '223.642.369-16',
-            email: 'mecanico@provider.com',
-            description: 'Descrição do Mecanico',
-            hourValue: '100.00',
-            actingRegion: 'CITY',
-            rating: "5.0",
-            backgroundImage: null,
-            profilePicture: null
-        }
-        , {
-            id: 4,
-            serviceType: 'PEDREIRO',
-            firstName: 'Fornecedor',
-            lastName: '4',
-            contactNumber: '(48) 99999-9999',
-            cpf: '177.607.715-68',
-            email: 'pedreiro@provider.com',
-            description: 'Descrição do Pedreiro',
-            hourValue: '100.00',
-            actingRegion: 'CITY',
-            rating: "5.0",
-            backgroundImage: null,
-            profilePicture: null
-        }
-        , {
-            id: 3,
-            serviceType: 'PINTOR',
-            firstName: 'Fornecedor',
-            lastName: '3',
-            contactNumber: '(48) 99999-9999',
-            cpf: '362.284.438-87',
-            email: 'pintor@provider.com',
-            description: 'Descrição do Pintor',
-            hourValue: '100.00',
-            actingRegion: 'CITY',
-            rating: "5.0",
-            backgroundImage: null,
-            profilePicture: null
-        }
-        , {
-            id: 2,
-            serviceType: 'MARCENEIRO',
-            firstName: 'Fornecedor',
-            lastName: '2',
-            contactNumber: '(48) 99999-9999',
-            cpf: '347.185.723-04',
-            email: 'marceneiro@provider.com',
-            description: 'Descrição do Marceneiro',
-            hourValue: '100.00',
-            actingRegion: 'CITY',
-            rating: "5.0",
-            backgroundImage: null,
-            profilePicture: null
-        }
-        , {
-            id: 1,
-            serviceType: 'EMPREGRADO',
-            firstName: 'Fornecedor',
-            lastName: '1',
-            contactNumber: '(48) 99999-9999',
-            cpf: '077.321.526-38',
-            email: 'empregado@provider.com',
-            description: 'Descrição do Empregado',
-            hourValue: '100.00',
-            actingRegion: 'CITY',
-            rating: "5.0",
-            backgroundImage: null,
-            profilePicture: null
-        }
-    ]
+import { Header } from '../../components/ui/Header';
+import { Loading } from '../../components/ui/Loading';
+import { ProviderCardDetails, searchBetterProviders, searchNewProviders, searchRandomProviders, ServiceTypeCard } from '../../features/searchProvider';
 
+export function SearchProvider() {
     const serviceTypes: ServiceType[] = [
         {
             id: 4,
@@ -113,8 +38,30 @@ export function SearchProvider() {
     ]
 
     const { navigate } = useNavigation<propsStack>();
-    const { isAuthenticated } = useAuthContext();
+    const { user, isAuthenticated } = useAuthContext();
     const { searchProvider } = useProviderContext();
+    const { colors } = useTheme();
+
+    const {
+        data: randomProvidersData,
+        isSuccess: randomProvidersIsSuccess,
+        isLoading: randomProvidersIsLoading,
+        isError: randomProvidersIsError
+    } = useQuery('randomProviders', () => searchRandomProviders(user, isAuthenticated));
+
+    const {
+        data: newProvidersData,
+        isSuccess: newProvidersIsSuccess,
+        isLoading: newProvidersIsLoading,
+        isError: newProvidersIsError
+    } = useQuery('newProviders', () => searchNewProviders(user, isAuthenticated));
+
+    const {
+        data: betterProvidersData,
+        isSuccess: betterProvidersIsSuccess,
+        isLoading: betterProvidersIsLoading,
+        isError: betterProvidersIsError
+    } = useQuery('betterProviders', () => searchBetterProviders(user, isAuthenticated));
 
     async function handleNavigateProvider(provider: Provider) {
         await searchProvider(provider.id)
@@ -177,14 +124,33 @@ export function SearchProvider() {
                         </Text>
                     </HStack>
 
-                    <FlatList
-                        mt={5}
-                        horizontal={true}
-                        data={providers}
-                        keyExtractor={provider => provider.id.toString()}
-                        renderItem={renderProviderCard}
-                        showsHorizontalScrollIndicator={false}
-                    />
+                    {
+                        randomProvidersIsLoading &&
+                        <Loading />
+                    }
+
+                    {
+                        randomProvidersIsError &&
+                        <Center mt={5} flex={1}>
+                            <Warning color={colors.red[600]} size={32} />
+                            <Text my={4} textAlign="center" color="gray.300" fontFamily="body" fontSize="sm">
+                                Aconteceu um erro ao  {"\n"}
+                                buscar os fornecedores
+                            </Text>
+                        </Center>
+                    }
+
+                    {
+                        randomProvidersIsSuccess &&
+                        <FlatList
+                            mt={5}
+                            horizontal={true}
+                            data={randomProvidersData}
+                            keyExtractor={provider => provider.id.toString()}
+                            renderItem={renderProviderCard}
+                            showsHorizontalScrollIndicator={false}
+                        />
+                    }
 
                     <Divider mt={5} />
 
@@ -218,42 +184,81 @@ export function SearchProvider() {
                         px={5}
                     >
                         <Text fontFamily="body" fontSize="md" color="gray.400">
-                            Melhores preços da {""}
+                            Novos {""}
                         </Text>
                         <Text fontFamily="body" fontSize="md" color="primary.700">
-                            semana
+                            fornecedores
                         </Text>
                     </HStack>
 
-                    <FlatList
-                        my={5}
-                        horizontal={true}
-                        data={providers}
-                        keyExtractor={provider => provider.id.toString()}
-                        renderItem={renderProviderCardDetails}
-                        showsHorizontalScrollIndicator={false}
-                    />
+                    {
+                        newProvidersIsLoading &&
+                        <Loading />
+                    }
+
+                    {
+                        newProvidersIsError &&
+                        <Center mt={5} flex={1}>
+                            <Warning color={colors.red[600]} size={32} />
+                            <Text my={4} textAlign="center" color="gray.300" fontFamily="body" fontSize="sm">
+                                Aconteceu um erro ao  {"\n"}
+                                buscar os fornecedores
+                            </Text>
+                        </Center>
+                    }
+
+                    {
+                        newProvidersIsSuccess &&
+                        <FlatList
+                            my={5}
+                            horizontal={true}
+                            data={newProvidersData}
+                            keyExtractor={provider => provider.id.toString()}
+                            renderItem={renderProviderCardDetails}
+                            showsHorizontalScrollIndicator={false}
+                        />
+                    }
 
                     <HStack
                         mt={4}
                         px={5}
                     >
                         <Text fontFamily="body" fontSize="md" color="gray.400">
-                            Top fornecedores do {""}
+                            Top {""}
                         </Text>
                         <Text fontFamily="body" fontSize="md" color="primary.700">
-                            mês
+                            fornecedores
                         </Text>
                     </HStack>
 
-                    <FlatList
-                        my={5}
-                        horizontal={true}
-                        data={providers}
-                        keyExtractor={provider => provider.id.toString()}
-                        renderItem={renderProviderCardDetails}
-                        showsHorizontalScrollIndicator={false}
-                    />
+                    {
+                        betterProvidersIsLoading &&
+                        <Loading />
+                    }
+
+                    {
+                        betterProvidersIsError &&
+                        <Center mt={5} flex={1}>
+                            <Warning color={colors.red[600]} size={32} />
+                            <Text my={4} textAlign="center" color="gray.300" fontFamily="body" fontSize="sm">
+                                Aconteceu um erro ao  {"\n"}
+                                buscar os fornecedores
+                            </Text>
+                        </Center>
+                    }
+
+                    {
+                        betterProvidersIsSuccess &&
+                        <FlatList
+                            my={5}
+                            horizontal={true}
+                            data={betterProvidersData}
+                            keyExtractor={provider => provider.id.toString()}
+                            renderItem={renderProviderCardDetails}
+                            showsHorizontalScrollIndicator={false}
+                        />
+                    }
+
                 </VStack>
             </ScrollView>
         </VStack >
