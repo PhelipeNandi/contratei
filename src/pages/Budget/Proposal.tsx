@@ -9,13 +9,19 @@ import {
     ScrollView,
     Button as NativeBaseButton
 } from 'native-base';
-import { useNavigation } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useForm, Controller } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as yup from 'yup';
 import { WhatsappLogo, SuitcaseSimple } from 'phosphor-react-native';
 
 import { ProviderBudget } from '../../types/provider';
-import { propsStack } from '../../routes/Navigators/Models';
+import { NewProposalBudget } from '../../types/budget';
 import { useAuthContext } from '../../hooks/useAuthContext';
 import { removeMaskContactNumberValeu } from '../../utils/masks';
+import { useProviderContext } from '../../hooks/useProviderContext';
+import { propsNavigationStack, propsStack } from '../../routes/Navigators/Models';
 
 import { Header } from '../../components/ui/Header';
 import { Button } from '../../components/ui/Button';
@@ -23,14 +29,40 @@ import { Input } from '../../components/form/Input';
 import { Modal } from '../../components/form/Modal';
 import { CardProvider } from '../../features/budget';
 import { TextArea } from '../../components/form/TextArea';
-import { useProviderContext } from '../../hooks/useProviderContext';
+import { createProposal } from '../../features/proposal';
+
+const newProposalBudget: yup.SchemaOf<NewProposalBudget> = yup.object({
+    description: yup.string().required("Descrição obrigatória"),
+    averageValue: yup.string().required("Valor Médio obrigatório")
+});
 
 export function Proposal() {
     const { colors } = useTheme();
+    const queryClient = useQueryClient();
     const { user, isConsumer } = useAuthContext();
-    const { searchProvider } = useProviderContext();
     const navigation = useNavigation<propsStack>();
+    const { searchProvider } = useProviderContext();
+    const routes = useRoute<RouteProp<propsNavigationStack, "proposal">>()
     const [showModal, setShowModal] = useState<boolean>(false);
+
+    const {
+        control,
+        handleSubmit,
+        setValue,
+        formState: { errors }
+    } = useForm<NewProposalBudget>({
+        resolver: yupResolver(newProposalBudget)
+    });
+
+    const {
+        isLoading,
+        mutate
+    } = useMutation((data: NewProposalBudget) => createProposal(data, user.id, routes.params?.idBudget), {
+        onSuccess: () => {
+            queryClient.invalidateQueries("budget");
+            navigation.goBack();
+        }
+    });
 
     const provider: ProviderBudget =
     {
@@ -91,17 +123,36 @@ export function Proposal() {
                         </VStack>
                     }
 
-                    <TextArea
-                        h={80}
-                        p={6}
-                        mb={5}
-                        isDisabled={isConsumer}
-                        title="Descrição"
+                    <Controller
+                        control={control}
+                        name="description"
+                        render={({ field: { value, onChange } }) => (
+                            <TextArea
+                                h={80}
+                                p={6}
+                                mb={5}
+                                isDisabled={isConsumer}
+                                title="Descrição"
+                                value={value}
+                                onChangeText={onChange}
+                                errorMessage={errors.description?.message}
+                            />
+                        )}
                     />
 
-                    <Input
-                        isDisabled={isConsumer}
-                        title="Valor Médio"
+                    <Controller
+                        control={control}
+                        name="averageValue"
+                        render={({ field: { value, onChange } }) => (
+                            <Input
+                                isDisabled={isConsumer}
+                                title="Valor Médio"
+                                keyboardType="numeric"
+                                value={value}
+                                onChangeText={onChange}
+                                errorMessage={errors.averageValue?.message}
+                            />
+                        )}
                     />
 
                     {
@@ -110,6 +161,9 @@ export function Proposal() {
                             my={7}
                             variant="primary"
                             title="Enviar"
+                            isLoading={isLoading}
+                            isLoadingText="Salvando"
+                            onPress={handleSubmit((value) => mutate(value))}
                         />
                     }
 

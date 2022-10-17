@@ -215,7 +215,7 @@ export function Budget() {
                                             key={index}
                                             onPress={() => handleNavigateProvider(provider.id)}
                                             onPressRefuse={() => setShowModal(true)}
-                                            onPressOffer={() => navigation.navigate("proposal", { idProposal: 1 })}
+                                            onPressOffer={() => navigation.navigate("proposal", { idBudget: budget.id, idProposal: 1 })}
                                         />
                                     })
                                 }

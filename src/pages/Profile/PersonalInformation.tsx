@@ -121,7 +121,7 @@ export function PersonalInformation() {
         isSuccess,
         isLoading,
         data,
-        mutate,
+        mutate
     } = useMutation((data: ChangePersonalInformation) => changePersonalInformation(data, user));
 
     useEffect(() => {

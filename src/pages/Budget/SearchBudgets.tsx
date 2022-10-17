@@ -93,8 +93,7 @@ export function SearchBudgets() {
                                 <Briefcase color={colors.primary[700]} size={32} />
                                 <Text mt={4} textAlign="center" color="gray.300" fontFamily="body" fontSize="sm">
                                     Não existe nenhum orçamento {"\n"}
-                                    cadastrado para a prioridade de {"\n"}
-                                    {normalizePriorityLevel(priorityLevelSelect).toLowerCase()}
+                                    cadastrado para essa prioridade selecionada
                                 </Text>
                             </Center>
                         )}

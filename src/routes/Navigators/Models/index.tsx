@@ -28,6 +28,7 @@ export type propsNavigationStack = {
         idBudget: number
     },
     proposal: {
+        idBudget: number,
         idProposal?: number
     },
     filterProvider: {

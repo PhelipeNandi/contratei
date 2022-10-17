@@ -26,3 +26,15 @@ export interface BudgetResponse {
     currentPage: number;
     totalPages: number;
 }
+
+export interface Proposal {
+    idBudget: number;
+    idProvider: number;
+    description: string;
+    averageValue: string;
+}
+
+export interface NewProposalBudget {
+    description: string;
+    averageValue: string;
+}
