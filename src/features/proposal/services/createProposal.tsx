@@ -3,7 +3,7 @@ import { NewProposalBudget } from "../../../types/budget";
 
 export async function createProposal(data: NewProposalBudget, providerId: number, budgetId: number): Promise<string> {
     try {
-        const response = await Api.post("proposal", {
+        const response = await Api.post("/proposal", {
             provider: {
                 id: providerId
             },

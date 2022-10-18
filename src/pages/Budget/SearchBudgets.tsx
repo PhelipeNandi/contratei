@@ -8,7 +8,7 @@ import { Warning, Briefcase } from 'phosphor-react-native';
 import { Budget } from '../../types/budget';
 import { useAuthContext } from '../../hooks/useAuthContext';
 import { propsStack } from '../../routes/Navigators/Models';
-import { normalizePriorityLevel } from '../../utils/formatStrings';
+import { useBudgetContext } from '../../hooks/useBudgetContext';
 
 import { Header } from '../../components/ui/Header';
 import { Loading } from '../../components/ui/Loading';
@@ -18,6 +18,7 @@ import { SelectPriorityLevel, searchBudgets } from '../../features/searchBudgets
 export function SearchBudgets() {
     const { colors } = useTheme();
     const { user } = useAuthContext();
+    const { searchBudget } = useBudgetContext();
     const { navigate } = useNavigation<propsStack>();
     const [priorityLevelSelect, setPriorityLevelSelect] = useState<string>();
 
@@ -49,8 +50,16 @@ export function SearchBudgets() {
         return <BudgetCardDetails data={item} onPress={() => handleNavigateBudget(item.id)} />
     }
 
-    function handleNavigateBudget(idBudget: number) {
-        navigate('budget', { idBudget });
+    async function handleNavigateBudget(idBudget: number) {
+        await searchBudget(idBudget)
+            .then(() => {
+                navigate('budget');
+            })
+            .catch((error) => {
+                if (error instanceof Error) {
+                    console.log(error.message);
+                }
+            });
     }
 
     return (

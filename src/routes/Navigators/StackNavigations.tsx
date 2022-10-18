@@ -26,6 +26,7 @@ import {
 } from '../../pages';
 import { ProviderProvider } from '../../contexts/providerContext';
 import { AddressProvider } from '../../contexts/adressContext';
+import { BudgetProvider } from '../../contexts/budgetContext';
 
 const Stack = createNativeStackNavigator<propsNavigationStack>();
 
@@ -42,34 +43,38 @@ export function LoginNavigation() {
 
 export function DashboardNavigation() {
     return (
-        <ProviderProvider>
-            <Stack.Navigator initialRouteName="dashboard" screenOptions={{ headerShown: false }}>
-                <Stack.Screen name="dashboard" component={Dashboard} />
-                <Stack.Screen name="myBudgets" component={MyBudgets} />
-                <Stack.Screen name="budget" component={Budget} />
-                <Stack.Screen name="createBudget" component={CreateBudget} />
-                <Stack.Screen name="proposal" component={Proposal} />
-                <Stack.Screen name="provider" component={Provider} />
-                <Stack.Screen name="commentsProvider" component={CommentsProvider} />
-                <Stack.Screen name="createNewCommentProvider" component={CreateNewCommentProvider} />
-                <Stack.Screen name="searchProviderNavigation" component={SearchProviderNavigation} />
-            </Stack.Navigator>
-        </ProviderProvider>
+        <BudgetProvider>
+            <ProviderProvider>
+                <Stack.Navigator initialRouteName="dashboard" screenOptions={{ headerShown: false }}>
+                    <Stack.Screen name="dashboard" component={Dashboard} />
+                    <Stack.Screen name="myBudgets" component={MyBudgets} />
+                    <Stack.Screen name="budget" component={Budget} />
+                    <Stack.Screen name="createBudget" component={CreateBudget} />
+                    <Stack.Screen name="proposal" component={Proposal} />
+                    <Stack.Screen name="provider" component={Provider} />
+                    <Stack.Screen name="commentsProvider" component={CommentsProvider} />
+                    <Stack.Screen name="createNewCommentProvider" component={CreateNewCommentProvider} />
+                    <Stack.Screen name="searchProviderNavigation" component={SearchProviderNavigation} />
+                </Stack.Navigator>
+            </ProviderProvider>
+        </BudgetProvider>
     )
 }
 
 export function BudgetNavigation() {
     return (
-        <ProviderProvider>
-            <Stack.Navigator initialRouteName="myBudgets" screenOptions={{ headerShown: false }}>
-                <Stack.Screen name="myBudgets" component={MyBudgets} />
-                <Stack.Screen name="budget" component={Budget} />
-                <Stack.Screen name="proposal" component={Proposal} />
-                <Stack.Screen name="provider" component={Provider} />
-                <Stack.Screen name="commentsProvider" component={CommentsProvider} />
-                <Stack.Screen name="createNewCommentProvider" component={CreateNewCommentProvider} />
-            </Stack.Navigator>
-        </ProviderProvider>
+        <BudgetProvider>
+            <ProviderProvider>
+                <Stack.Navigator initialRouteName="myBudgets" screenOptions={{ headerShown: false }}>
+                    <Stack.Screen name="myBudgets" component={MyBudgets} />
+                    <Stack.Screen name="budget" component={Budget} />
+                    <Stack.Screen name="proposal" component={Proposal} />
+                    <Stack.Screen name="provider" component={Provider} />
+                    <Stack.Screen name="commentsProvider" component={CommentsProvider} />
+                    <Stack.Screen name="createNewCommentProvider" component={CreateNewCommentProvider} />
+                </Stack.Navigator>
+            </ProviderProvider>
+        </BudgetProvider>
     )
 }
 
@@ -97,9 +102,14 @@ export function CreateBudgetNavigation() {
 
 export function SearchBudgetsNavigation() {
     return (
-        <Stack.Navigator initialRouteName="searchBudgets" screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="searchBudgets" component={SearchBudgets} />
-        </Stack.Navigator>
+        <BudgetProvider>
+            <Stack.Navigator initialRouteName="searchBudgets" screenOptions={{ headerShown: false }}>
+                <Stack.Screen name="searchBudgets" component={SearchBudgets} />
+                <Stack.Screen name="myBudgets" component={MyBudgets} />
+                <Stack.Screen name="budget" component={Budget} />
+                <Stack.Screen name="proposal" component={Proposal} />
+            </Stack.Navigator>
+        </BudgetProvider>
     )
 }
 

@@ -7,12 +7,14 @@ import { ButtonNavigation } from '../../features/dashboard';
 import { BudgetCardDetails } from '../../features/myBudgets/components/BudgetCardDetails';
 import { CardNavigation } from '../../components/ui/CardNavigation';
 import { useAuthContext } from '../../hooks/useAuthContext';
+import { useBudgetContext } from '../../hooks/useBudgetContext';
 import { searchMyBudgets } from '../../features/myBudgets/services/searchMyBudgets';
 import { Loading } from '../../components/ui/Loading';
 import { propsStack, propsTab } from '../../routes/Navigators/Models';
 
 export function Dashboard() {
     const { colors } = useTheme();
+    const { searchBudget } = useBudgetContext();
     const { user, isConsumer } = useAuthContext();
     const { navigate: navigateTab } = useNavigation<propsTab>();
     const { navigate: navigateStack } = useNavigation<propsStack>();
@@ -26,8 +28,16 @@ export function Dashboard() {
         enabled: isConsumer != null
     });
 
-    function handleNavigateBudget(idBudget: number) {
-        navigateStack('budget', { idBudget });
+    async function handleNavigateBudget(idBudget: number) {
+        await searchBudget(idBudget)
+            .then(() => {
+                navigateStack('budget');
+            })
+            .catch((error) => {
+                if (error instanceof Error) {
+                    console.log(error.message);
+                }
+            });
     }
 
     return (

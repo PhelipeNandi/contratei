@@ -9,6 +9,7 @@ import { Budget } from '../../types/budget';
 import { useAuthContext } from '../../hooks/useAuthContext';
 import { propsStack } from '../../routes/Navigators/Models';
 import { normalizeStatus } from '../../utils/formatStrings';
+import { useBudgetContext } from '../../hooks/useBudgetContext';
 
 import { Header } from '../../components/ui/Header';
 import { Loading } from '../../components/ui/Loading';
@@ -17,6 +18,7 @@ import { searchMyBudgets } from '../../features/myBudgets/services/searchMyBudge
 
 export function MyBudgets() {
     const { colors } = useTheme();
+    const { searchBudget } = useBudgetContext();
     const { user, isConsumer } = useAuthContext();
     const { navigate } = useNavigation<propsStack>();
     const [labelBudgetQuantity, setLabelBudgetQuantity] = useState<string>("Quantidade: 0");
@@ -61,8 +63,16 @@ export function MyBudgets() {
         return <BudgetCardDetails data={item} onPress={() => handleNavigateBudget(item.id)} />
     }
 
-    function handleNavigateBudget(idBudget: number) {
-        navigate('budget', { idBudget });
+    async function handleNavigateBudget(idBudget: number) {
+        await searchBudget(idBudget)
+            .then(() => {
+                navigate('budget');
+            })
+            .catch((error) => {
+                if (error instanceof Error) {
+                    console.log(error.message);
+                }
+            });
     }
 
     return (

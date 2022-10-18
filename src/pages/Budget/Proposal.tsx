@@ -9,8 +9,8 @@ import {
     ScrollView,
     Button as NativeBaseButton
 } from 'native-base';
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useNavigation } from '@react-navigation/native';
+import { useMutation, useQueryClient } from 'react-query';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup';
@@ -19,9 +19,10 @@ import { WhatsappLogo, SuitcaseSimple } from 'phosphor-react-native';
 import { ProviderBudget } from '../../types/provider';
 import { NewProposalBudget } from '../../types/budget';
 import { useAuthContext } from '../../hooks/useAuthContext';
+import { useBudgetContext } from '../../hooks/useBudgetContext';
 import { removeMaskContactNumberValeu } from '../../utils/masks';
 import { useProviderContext } from '../../hooks/useProviderContext';
-import { propsNavigationStack, propsStack } from '../../routes/Navigators/Models';
+import { propsStack } from '../../routes/Navigators/Models';
 
 import { Header } from '../../components/ui/Header';
 import { Button } from '../../components/ui/Button';
@@ -39,10 +40,10 @@ const newProposalBudget: yup.SchemaOf<NewProposalBudget> = yup.object({
 export function Proposal() {
     const { colors } = useTheme();
     const queryClient = useQueryClient();
+    const { budget } = useBudgetContext();
     const { user, isConsumer } = useAuthContext();
     const navigation = useNavigation<propsStack>();
     const { searchProvider } = useProviderContext();
-    const routes = useRoute<RouteProp<propsNavigationStack, "proposal">>()
     const [showModal, setShowModal] = useState<boolean>(false);
 
     const {
@@ -57,7 +58,7 @@ export function Proposal() {
     const {
         isLoading,
         mutate
-    } = useMutation((data: NewProposalBudget) => createProposal(data, user.id, routes.params?.idBudget), {
+    } = useMutation((data: NewProposalBudget) => createProposal(data, user.id, budget.id), {
         onSuccess: () => {
             queryClient.invalidateQueries("budget");
             navigation.goBack();
