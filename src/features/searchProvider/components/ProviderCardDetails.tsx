@@ -3,6 +3,7 @@ import { Box, Pressable, IPressableProps, AspectRatio, Image, Stack, Heading, Te
 import { Smiley } from 'phosphor-react-native';
 
 import { Provider } from '../../../types/provider';
+import { RatingProvider } from '../../commentsProvider';
 
 type Props = IPressableProps & {
   data: Provider;
@@ -13,6 +14,7 @@ export function ProviderCardDetails({ data, maxW, ...rest }: Props) {
   return (
     <Pressable {...rest}>
       <Box
+        flex={1}
         mx={5}
         maxW={maxW}
         bg="white"
@@ -43,20 +45,21 @@ export function ProviderCardDetails({ data, maxW, ...rest }: Props) {
 
             <Divider />
 
-            <HStack justifyContent="center" space={1}>
-              <Text fontFamily="body" fontSize="xs">
+            <HStack alignItems="center" justifyContent="center" space={1}>
+              <Text fontFamily="body" fontSize="md">
                 R$ {data.hourValue}
               </Text>
 
-              <Text fontFamily="body" fontSize="xs">
-                -
-              </Text>
+              {
+                data.rating && <Text fontFamily="body" fontSize="md">
+                  -
+                </Text>
+              }
 
-              <Smiley size={18} />
+              {
+                data.rating && <RatingProvider data={data.rating} />
+              }
 
-              <Text fontFamily="body" fontSize="xs">
-                9.2
-              </Text>
             </HStack>
           </Stack>
         </Box>

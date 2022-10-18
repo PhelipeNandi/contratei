@@ -92,7 +92,7 @@ export function SearchProvider() {
 
     function renderProviderCardDetails({ item }: ListRenderItemInfo<Provider>) {
         return <ProviderCardDetails
-            maxW={48}
+            maxW={56}
             data={item}
             onPress={() => handleNavigateProvider(item)}
         />
