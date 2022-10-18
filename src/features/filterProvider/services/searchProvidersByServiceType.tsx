@@ -1,7 +1,8 @@
 import { Api } from "../../../lib/Api";
+import { User } from "../../../types/user";
 import { ProviderResponse } from "../../../types/provider";
 
-export async function searchProvidersByServiceType(pageParam: number, serviceType: string, isAuthenticated: boolean): Promise<ProviderResponse> {
+export async function searchProvidersByServiceType(pageParam: number, serviceType: string, isAuthenticated: boolean, user?: User): Promise<ProviderResponse> {
     try {
         const url = isAuthenticated ? "provider" : "login/find-provider";
 
@@ -9,7 +10,8 @@ export async function searchProvidersByServiceType(pageParam: number, serviceTyp
             params: {
                 page: pageParam,
                 size: 5,
-                serviceType: serviceType
+                serviceType: serviceType,
+                consumerId: isAuthenticated ? user.id : null
             }
         });
 

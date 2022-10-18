@@ -2,7 +2,7 @@ import { ListRenderItemInfo } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useQuery } from 'react-query';
 import { HStack, Text, VStack, FlatList, ScrollView, Divider, Center, useTheme } from 'native-base';
-import { Warning } from 'phosphor-react-native';
+import { Briefcase, Warning } from 'phosphor-react-native';
 
 import { propsStack } from '../../routes/Navigators/Models';
 import { Provider, ServiceType } from '../../types/provider';
@@ -85,7 +85,8 @@ export function SearchProvider() {
 
     function renderServiceTypeCard({ item }: ListRenderItemInfo<ServiceType>) {
         return <ServiceTypeCard
-            onPress={() => handleNavigateFilterProvider(item)} serviceType={item.name}
+            serviceType={item.name}
+            onPress={() => handleNavigateFilterProvider(item)}
         />
     }
 
@@ -126,14 +127,14 @@ export function SearchProvider() {
 
                     {
                         randomProvidersIsLoading &&
-                        <Loading />
+                        <Loading my={12} />
                     }
 
                     {
                         randomProvidersIsError &&
                         <Center mt={5} flex={1}>
                             <Warning color={colors.red[600]} size={32} />
-                            <Text my={4} textAlign="center" color="gray.300" fontFamily="body" fontSize="sm">
+                            <Text mt={4} textAlign="center" color="gray.300" fontFamily="body" fontSize="sm">
                                 Aconteceu um erro ao  {"\n"}
                                 buscar os fornecedores
                             </Text>
@@ -149,6 +150,16 @@ export function SearchProvider() {
                             keyExtractor={provider => provider.id.toString()}
                             renderItem={renderProviderCard}
                             showsHorizontalScrollIndicator={false}
+                            contentContainerStyle={{ flexGrow: 1 }}
+                            ListEmptyComponent={() => (
+                                <Center mt={2} flex={1}>
+                                    <Briefcase color={colors.gray[300]} size={32} />
+                                    <Text mt={4} textAlign="center" color="gray.300" fontFamily="body" fontSize="sm">
+                                        Não foi encontrado {"\n"}
+                                        nenhum fornecedor
+                                    </Text>
+                                </Center>
+                            )}
                         />
                     }
 
@@ -193,14 +204,14 @@ export function SearchProvider() {
 
                     {
                         newProvidersIsLoading &&
-                        <Loading />
+                        <Loading my={12} />
                     }
 
                     {
                         newProvidersIsError &&
-                        <Center mt={5} flex={1}>
+                        <Center my={5} flex={1}>
                             <Warning color={colors.red[600]} size={32} />
-                            <Text my={4} textAlign="center" color="gray.300" fontFamily="body" fontSize="sm">
+                            <Text mt={4} textAlign="center" color="gray.300" fontFamily="body" fontSize="sm">
                                 Aconteceu um erro ao  {"\n"}
                                 buscar os fornecedores
                             </Text>
@@ -216,6 +227,16 @@ export function SearchProvider() {
                             keyExtractor={provider => provider.id.toString()}
                             renderItem={renderProviderCardDetails}
                             showsHorizontalScrollIndicator={false}
+                            contentContainerStyle={{ flexGrow: 1 }}
+                            ListEmptyComponent={() => (
+                                <Center mt={2} flex={1}>
+                                    <Briefcase color={colors.gray[300]} size={32} />
+                                    <Text mt={4} textAlign="center" color="gray.300" fontFamily="body" fontSize="sm">
+                                        Não foi encontrado {"\n"}
+                                        nenhum fornecedor
+                                    </Text>
+                                </Center>
+                            )}
                         />
                     }
 
@@ -233,12 +254,12 @@ export function SearchProvider() {
 
                     {
                         betterProvidersIsLoading &&
-                        <Loading />
+                        <Loading my={12} />
                     }
 
                     {
                         betterProvidersIsError &&
-                        <Center mt={5} flex={1}>
+                        <Center my={5} flex={1}>
                             <Warning color={colors.red[600]} size={32} />
                             <Text my={4} textAlign="center" color="gray.300" fontFamily="body" fontSize="sm">
                                 Aconteceu um erro ao  {"\n"}
@@ -256,11 +277,21 @@ export function SearchProvider() {
                             keyExtractor={provider => provider.id.toString()}
                             renderItem={renderProviderCardDetails}
                             showsHorizontalScrollIndicator={false}
+                            contentContainerStyle={{ flexGrow: 1 }}
+                            ListEmptyComponent={() => (
+                                <Center mt={2} flex={1}>
+                                    <Briefcase color={colors.gray[300]} size={32} />
+                                    <Text mt={4} textAlign="center" color="gray.300" fontFamily="body" fontSize="sm">
+                                        Não foi encontrado {"\n"}
+                                        nenhum fornecedor
+                                    </Text>
+                                </Center>
+                            )}
                         />
                     }
 
                 </VStack>
             </ScrollView>
-        </VStack >
+        </VStack>
     );
 }

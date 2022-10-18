@@ -4,7 +4,7 @@ import { Provider } from "../../../types/provider";
 
 export async function searchNewProviders(user: User, isAuthenticated: boolean): Promise<Provider[]> {
     try {
-        const url = isAuthenticated ? "/provider/new-providers" : "";
+        const url = isAuthenticated ? "/provider/new-providers" : "/login/new-providers";
 
         const response = await Api.get(url, {
             params: {

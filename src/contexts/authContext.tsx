@@ -67,6 +67,7 @@ export function AuthProvider({ children }) {
             .then(() => {
                 setUser(null);
                 setIsConsumer(null);
+                queryClient.invalidateQueries();
                 delete Api.defaults.headers['Authorization'];
             });
     }

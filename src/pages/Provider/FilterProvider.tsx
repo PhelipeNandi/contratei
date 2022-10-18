@@ -3,7 +3,7 @@ import { ListRenderItemInfo } from 'react-native';
 import { Text, VStack, HStack, IconButton, Box, FlatList, Center, useTheme } from 'native-base';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { propsNavigationStack, propsStack } from '../../routes/Navigators/Models';
-import { ArrowLeft, Warning } from 'phosphor-react-native';
+import { ArrowLeft, SmileyMeh, Warning } from 'phosphor-react-native';
 import { useInfiniteQuery } from 'react-query';
 
 import { Provider } from '../../types/provider';
@@ -21,7 +21,7 @@ export function FilterProvider() {
     const { searchProvider } = useProviderContext();
     const { colors } = useTheme();
     const [serviceTypeSelect, setServiceTypeSelect] = useState(route.params?.serviceType.name);
-    const { isAuthenticated } = useAuthContext();
+    const { isAuthenticated, user } = useAuthContext();
 
     const {
         data,
@@ -32,7 +32,7 @@ export function FilterProvider() {
         fetchNextPage,
         isFetchingNextPage
     } = useInfiniteQuery(["providersByServiceType", serviceTypeSelect],
-        ({ queryKey, pageParam = 0 }) => searchProvidersByServiceType(pageParam, queryKey[1], isAuthenticated), {
+        ({ queryKey, pageParam = 0 }) => searchProvidersByServiceType(pageParam, queryKey[1], isAuthenticated, user), {
         getNextPageParam: (page) => {
             if (page.currentPage < page.totalPages) {
                 return page.currentPage + 1;
@@ -120,16 +120,24 @@ export function FilterProvider() {
                 isSuccess &&
                 <FlatList
                     mt={5}
-                    bg="background"
                     data={data.pages.map((providerResponse) => providerResponse.providers).flat()}
                     keyExtractor={provider => provider.id.toString()}
                     renderItem={renderProviderCard}
                     showsVerticalScrollIndicator={false}
+                    contentContainerStyle={{ flexGrow: 1 }}
                     onEndReached={handleFetchNextPaget}
                     onEndReachedThreshold={0.1}
                     ListFooterComponent={
                         isFetchingNextPage && <Loading my={10} />
                     }
+                    ListEmptyComponent={() => (
+                        <Center flex={1}>
+                            <SmileyMeh color={colors.gray[300]} size={32} />
+                            <Text mt={4} textAlign="center" color="gray.300" fontFamily="body" fontSize="sm">
+                                Nenhum fornecedor encontrado
+                            </Text>
+                        </Center>
+                    )}
                 />
             }
 

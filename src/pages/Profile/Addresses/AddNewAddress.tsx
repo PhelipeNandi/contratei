@@ -92,7 +92,7 @@ export function AddNewAddress() {
 
     function handleOnSucessAddress() {
         addressContext.setIsModalOpen(true);
-        queryClient.invalidateQueries("myAddresses");
+        queryClient.invalidateQueries();
         navigation.goBack();
     }
 
