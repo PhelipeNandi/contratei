@@ -52,7 +52,7 @@ export function AddressCard({ data, ...rest }: Props) {
                     />
 
                     {
-                        data.complement &&
+                        data.complement != "" &&
                         <MarkedTitleWithValue
                             title="Complemento"
                             value={data.complement}
