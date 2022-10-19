@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Linking } from 'react-native';
 import {
     VStack,
@@ -7,22 +7,22 @@ import {
     IconButton,
     useTheme,
     ScrollView,
-    Button as NativeBaseButton
+    Button as NativeBaseButton,
+    Center
 } from 'native-base';
-import { useNavigation } from '@react-navigation/native';
-import { useMutation, useQueryClient } from 'react-query';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { useQuery, useMutation, useQueryClient } from 'react-query';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup';
-import { WhatsappLogo, SuitcaseSimple } from 'phosphor-react-native';
+import { WhatsappLogo, SuitcaseSimple, Warning } from 'phosphor-react-native';
 
-import { ProviderBudget } from '../../types/provider';
 import { NewProposalBudget } from '../../types/budget';
 import { useAuthContext } from '../../hooks/useAuthContext';
 import { useBudgetContext } from '../../hooks/useBudgetContext';
 import { removeMaskContactNumberValeu } from '../../utils/masks';
 import { useProviderContext } from '../../hooks/useProviderContext';
-import { propsStack } from '../../routes/Navigators/Models';
+import { propsNavigationStack, propsStack } from '../../routes/Navigators/Models';
 
 import { Header } from '../../components/ui/Header';
 import { Button } from '../../components/ui/Button';
@@ -30,7 +30,8 @@ import { Input } from '../../components/form/Input';
 import { Modal } from '../../components/form/Modal';
 import { CardProvider } from '../../features/budget';
 import { TextArea } from '../../components/form/TextArea';
-import { createProposal } from '../../features/proposal';
+import { acceptProposal, createProposal, searchProposalByIdProposal } from '../../features/proposal';
+import { Loading } from '../../components/ui/Loading';
 
 const newProposalBudget: yup.SchemaOf<NewProposalBudget> = yup.object({
     description: yup.string().required("Descrição obrigatória"),
@@ -45,6 +46,7 @@ export function Proposal() {
     const navigation = useNavigation<propsStack>();
     const { searchProvider } = useProviderContext();
     const [showModal, setShowModal] = useState<boolean>(false);
+    const route = useRoute<RouteProp<propsNavigationStack, "proposal">>();
 
     const {
         control,
@@ -56,8 +58,25 @@ export function Proposal() {
     });
 
     const {
+        data,
+        isSuccess,
         isLoading,
-        mutate
+        isError,
+        isFetched
+    } = useQuery("proposal", () => searchProposalByIdProposal(route.params?.idProposal), {
+        enabled: isConsumer
+    });
+
+    useEffect(() => {
+        if (isFetched && isConsumer) {
+            setValue("description", data.description);
+            setValue("averageValue", data.averageValue.toString());
+        }
+    }, [isFetched]);
+
+    const {
+        isLoading: isLoadingNewProposalBudget,
+        mutate: mutateNewProposalBudget
     } = useMutation((data: NewProposalBudget) => createProposal(data, user.id, budget.id), {
         onSuccess: () => {
             queryClient.invalidateQueries("budget");
@@ -65,14 +84,15 @@ export function Proposal() {
         }
     });
 
-    const provider: ProviderBudget =
-    {
-        id: 1,
-        firstName: 'Fornecedor',
-        lastName: '1',
-        contactNumber: '(48) 99638-5477',
-        profilePicture: null
-    }
+    const {
+        isLoading: isLoadingAcceptProposal,
+        mutate: mutateAcceptProposal
+    } = useMutation(() => acceptProposal(route.params?.idProposal, budget.id), {
+        onSuccess: () => {
+            queryClient.invalidateQueries("budget");
+            navigation.goBack();
+        }
+    });
 
     async function handleNavigateProvider(idProvider: number) {
         await searchProvider(idProvider)
@@ -88,7 +108,7 @@ export function Proposal() {
 
     async function handleSendWhatsappMessageProvider() {
         Linking.openURL(
-            `https://wa.me/55${removeMaskContactNumberValeu(provider.contactNumber)}?`
+            `https://wa.me/55${removeMaskContactNumberValeu(data.provider.contactNumber)}?`
             + `text=Olá,%20me%20chamo%20${user.firstName}.%0A`
             + `Gostaria%20de%20tirar%20algumas%20dúvidas%20a%20respeito%20`
             + `da%20proposta%20que%20você%20me%20encaminhou`
@@ -104,57 +124,78 @@ export function Proposal() {
                 <VStack flex={1} mt={5} px={8} bg="background">
 
                     {
-                        isConsumer &&
-                        <VStack>
-                            <Text mb={3} fontFamily="body" fontSize="xs" color="gray.300">
-                                Fornecedor
-                            </Text>
-
-                            <HStack mb={5} justifyContent="space-between" alignItems="center">
-                                <CardProvider
-                                    data={provider}
-                                    onPress={() => handleNavigateProvider(provider.id)}
-                                />
-
-                                <IconButton
-                                    icon={<WhatsappLogo color={colors.green[700]} size="35" weight='thin' />}
-                                    onPress={handleSendWhatsappMessageProvider}
-                                />
-                            </HStack>
-                        </VStack>
+                        isLoading &&
+                        <Loading />
                     }
 
-                    <Controller
-                        control={control}
-                        name="description"
-                        render={({ field: { value, onChange } }) => (
-                            <TextArea
-                                h={80}
-                                p={6}
-                                mb={5}
-                                isDisabled={isConsumer}
-                                title="Descrição"
-                                value={value}
-                                onChangeText={onChange}
-                                errorMessage={errors.description?.message}
-                            />
-                        )}
-                    />
+                    {
+                        isError &&
+                        <Center mt={5} flex={1}>
+                            <Warning color={colors.red[600]} size={32} />
+                            <Text mt={4} textAlign="center" color="gray.300" fontFamily="body" fontSize="sm">
+                                Aconteceu um erro ao  {"\n"}
+                                buscar os dados da proposta
+                            </Text>
+                        </Center>
+                    }
 
-                    <Controller
-                        control={control}
-                        name="averageValue"
-                        render={({ field: { value, onChange } }) => (
-                            <Input
-                                isDisabled={isConsumer}
-                                title="Valor Médio"
-                                keyboardType="numeric"
-                                value={value}
-                                onChangeText={onChange}
-                                errorMessage={errors.averageValue?.message}
+                    {
+                        (isSuccess || !isConsumer) &&
+                        <VStack>
+                            {
+                                isConsumer
+                                && <VStack>
+                                    <Text mb={3} fontFamily="body" fontSize="xs" color="gray.300">
+                                        Fornecedor
+                                    </Text>
+
+                                    <HStack mb={5} justifyContent="space-between" alignItems="center">
+                                        <CardProvider
+                                            data={data.provider}
+                                            onPress={() => handleNavigateProvider(data.provider.id)}
+                                        />
+
+                                        <IconButton
+                                            icon={<WhatsappLogo color={colors.green[700]} size="35" weight='thin' />}
+                                            onPress={handleSendWhatsappMessageProvider}
+                                        />
+                                    </HStack>
+                                </VStack>
+                            }
+
+                            <Controller
+                                control={control}
+                                name="description"
+                                render={({ field: { value, onChange } }) => (
+                                    <TextArea
+                                        h={80}
+                                        p={6}
+                                        mb={5}
+                                        isDisabled={isConsumer}
+                                        title="Descrição"
+                                        value={value}
+                                        onChangeText={onChange}
+                                        errorMessage={errors.description?.message}
+                                    />
+                                )}
                             />
-                        )}
-                    />
+
+                            <Controller
+                                control={control}
+                                name="averageValue"
+                                render={({ field: { value, onChange } }) => (
+                                    <Input
+                                        isDisabled={isConsumer}
+                                        title="Valor Médio"
+                                        keyboardType="numeric"
+                                        value={value}
+                                        onChangeText={onChange}
+                                        errorMessage={errors.averageValue?.message}
+                                    />
+                                )}
+                            />
+                        </VStack>
+                    }
 
                     {
                         !isConsumer &&
@@ -162,33 +203,25 @@ export function Proposal() {
                             my={7}
                             variant="primary"
                             title="Enviar"
-                            isLoading={isLoading}
+                            isLoading={isLoadingNewProposalBudget}
                             isLoadingText="Salvando"
-                            onPress={handleSubmit((value) => mutate(value))}
+                            onPress={handleSubmit((value) => mutateNewProposalBudget(value))}
                         />
                     }
 
                     {
                         isConsumer &&
-                        <HStack my={8} space={4}>
-                            <Button
-                                flex={1}
-                                variant="danger"
-                                title="Recusar"
-                                onPress={() => setShowModal(true)}
-                            />
-
-                            <Button
-                                flex={1}
-                                variant="sucess"
-                                title="Aceitar"
-                            />
-                        </HStack>
+                        <Button
+                            my={8}
+                            variant="sucess"
+                            title="Aceitar"
+                            onPress={() => setShowModal(true)}
+                        />
                     }
 
                     <Modal
-                        header="Recusar"
-                        body="Você tem certeza que quer recusar essa propsta?"
+                        header="Aceitar"
+                        body="Você tem certeza que quer aceitar essa propsta? Ao aceitar o sistema irá recusar as outras."
                         icon={SuitcaseSimple}
                         isOpen={showModal}
                         onClose={() => setShowModal(false)}
@@ -196,12 +229,15 @@ export function Proposal() {
                         <NativeBaseButton.Group space={2}>
                             <Button
                                 title="Cancelar"
-                                variant="primary"
+                                variant="danger"
                                 onPress={() => setShowModal(false)}
                             />
                             <Button
-                                title="Recusar"
-                                variant="danger"
+                                title="Aceitar"
+                                variant="sucess"
+                                isLoading={isLoadingAcceptProposal}
+                                isLoadingText="Aceitando"
+                                onPress={handleSubmit(() => mutateAcceptProposal())}
                             />
                         </NativeBaseButton.Group>
                     </Modal>

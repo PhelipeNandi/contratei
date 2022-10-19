@@ -23,7 +23,9 @@ export type propsNavigationStack = {
     settings: undefined,
     budget: undefined,
     budgetNavigation: undefined,
-    proposal: undefined,
+    proposal: {
+        idProposal: number
+    },
     filterProvider: {
         serviceType: ServiceType
     },

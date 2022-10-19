@@ -1,6 +1,7 @@
-import { useState } from 'react';
-import { VStack, ScrollView, Divider, Button as NativeBaseButton } from 'native-base';
+import { useEffect, useState } from 'react';
+import { VStack, ScrollView, Divider, Button as NativeBaseButton, Center, Text, useTheme } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
+import { useQuery } from 'react-query';
 import { propsStack } from '../../routes/Navigators/Models';
 import {
     Briefcase,
@@ -10,10 +11,10 @@ import {
     CalendarBlank,
     Money,
     HourglassMedium,
-    SuitcaseSimple
+    SuitcaseSimple,
+    Warning
 } from 'phosphor-react-native';
 
-import { Provider } from '../../types/provider';
 import { useAuthContext } from '../../hooks/useAuthContext';
 import { useBudgetContext } from '../../hooks/useBudgetContext';
 import { useProviderContext } from '../../hooks/useProviderContext';
@@ -23,46 +24,26 @@ import { Header } from '../../components/ui/Header';
 import { Button } from '../../components/ui/Button';
 import { Modal } from '../../components/form/Modal';
 import { CardDetails, ProgressStatusBudget, CardProvider, CardProviderOffer } from '../../features/budget';
+import { searchProposalsByIdBudget } from '../../features/proposal';
+import { Loading } from '../../components/ui/Loading';
 
 export function Budget() {
+    const { colors } = useTheme();
     const { isConsumer } = useAuthContext();
     const { searchProvider } = useProviderContext();
     const { budget } = useBudgetContext();
     const [showModal, setShowModal] = useState<boolean>(false);
     const navigation = useNavigation<propsStack>();
+    const isOpenBudgetForConsumer = isConsumer && budget.status === "OPEN" && budget.provider === null;
 
-    const providerList: Provider[] = [
-        {
-            id: 1,
-            serviceType: 'EMPREGRADO',
-            firstName: 'Fornecedor',
-            lastName: '1',
-            contactNumber: '(48) 99999-9999',
-            cpf: '077.321.526-38',
-            email: 'empregado@provider.com',
-            description: 'Descrição do Empregado',
-            hourValue: '100.00',
-            actingRegion: 'CITY',
-            rating: "5",
-            backgroundImage: null,
-            profilePicture: null
-        },
-        {
-            id: 2,
-            serviceType: 'EMPREGRADO',
-            firstName: 'Fornecedor',
-            lastName: '1',
-            contactNumber: '(48) 99999-9999',
-            cpf: '077.321.526-38',
-            email: 'empregado@provider.com',
-            description: 'Descrição do Empregado',
-            hourValue: '100.00',
-            actingRegion: 'CITY',
-            rating: "5",
-            backgroundImage: null,
-            profilePicture: null
-        }
-    ]
+    const {
+        data,
+        isSuccess,
+        isLoading,
+        isError
+    } = useQuery("proposals", () => searchProposalsByIdBudget(budget.id), {
+        enabled: isOpenBudgetForConsumer
+    });
 
     async function handleNavigateProvider(idProvider: number) {
         await searchProvider(idProvider)
@@ -175,24 +156,43 @@ export function Budget() {
                     }
 
                     {
-                        providerList.length > 0
-                        && budget.status === "OPEN"
-                        && isConsumer
-                        && <CardDetails
-                            title="Propostas"
-                            icon={SuitcaseSimple}
-                            children={
-                                providerList.map((provider, index) => {
-                                    return <CardProviderOffer
-                                        data={provider}
-                                        key={index}
-                                        onPress={() => handleNavigateProvider(provider.id)}
-                                        onPressRefuse={() => setShowModal(true)}
-                                        onPressOffer={() => navigation.navigate("proposal")}
-                                    />
-                                })
+                        isOpenBudgetForConsumer
+                        && <VStack>
+                            {
+                                isLoading &&
+                                <Loading />
                             }
-                        />
+
+                            {
+                                isError &&
+                                <Center mt={5} flex={1}>
+                                    <Warning color={colors.red[600]} size={32} />
+                                    <Text mt={4} textAlign="center" color="gray.300" fontFamily="body" fontSize="sm">
+                                        Aconteceu um erro ao  {"\n"}
+                                        buscar os fornecedores
+                                    </Text>
+                                </Center>
+                            }
+
+                            {
+                                isSuccess &&
+                                <CardDetails
+                                    title="Propostas"
+                                    icon={SuitcaseSimple}
+                                    children={
+                                        data.map((proposal, index) => {
+                                            return <CardProviderOffer
+                                                data={proposal.provider}
+                                                key={index}
+                                                onPress={() => handleNavigateProvider(proposal.provider.id)}
+                                                onPressRefuse={() => setShowModal(true)}
+                                                onPressOffer={() => navigation.navigate("proposal", { idProposal: proposal.id })}
+                                            />
+                                        })
+                                    }
+                                />
+                            }
+                        </VStack>
                     }
 
                     {

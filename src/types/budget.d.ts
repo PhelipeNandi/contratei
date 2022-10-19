@@ -1,4 +1,4 @@
-import { ProviderBudget } from "./provider";
+import { ProviderBudget, ProviderProposal } from "./provider";
 
 export interface Budget {
     id: number;
@@ -28,10 +28,12 @@ export interface BudgetResponse {
 }
 
 export interface Proposal {
+    id: number;
     idBudget: number;
-    idProvider: number;
+    provider: ProviderProposal;
     description: string;
     averageValue: string;
+    accepted: boolean;
 }
 
 export interface NewProposalBudget {

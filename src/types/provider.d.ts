@@ -22,6 +22,14 @@ export interface ProviderBudget {
     contactNumber?: string;
 }
 
+export interface ProviderProposal {
+    id: number;
+    firstName?: string;
+    lastName?: string;
+    profilePicture?: string;
+    contactNumber?: string;
+}
+
 export interface ServiceType {
     id: number;
     name: string;
