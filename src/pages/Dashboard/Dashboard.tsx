@@ -7,14 +7,12 @@ import { ButtonNavigation } from '../../features/dashboard';
 import { BudgetCardDetails } from '../../features/myBudgets/components/BudgetCardDetails';
 import { CardNavigation } from '../../components/ui/CardNavigation';
 import { useAuthContext } from '../../hooks/useAuthContext';
-import { useBudgetContext } from '../../hooks/useBudgetContext';
 import { searchMyBudgets } from '../../features/myBudgets/services/searchMyBudgets';
 import { Loading } from '../../components/ui/Loading';
 import { propsStack, propsTab } from '../../routes/Navigators/Models';
 
 export function Dashboard() {
     const { colors } = useTheme();
-    const { searchBudget } = useBudgetContext();
     const { user, isConsumer } = useAuthContext();
     const { navigate: navigateTab } = useNavigation<propsTab>();
     const { navigate: navigateStack } = useNavigation<propsStack>();
@@ -27,18 +25,6 @@ export function Dashboard() {
     } = useQuery("budgets", () => searchMyBudgets(0, user.id, "ALL", isConsumer), {
         enabled: isConsumer != null
     });
-
-    async function handleNavigateBudget(idBudget: number) {
-        await searchBudget(idBudget)
-            .then(() => {
-                navigateStack('budget');
-            })
-            .catch((error) => {
-                if (error instanceof Error) {
-                    console.log(error.message);
-                }
-            });
-    }
 
     return (
         <VStack flex={1} bg="primary.700">
@@ -141,7 +127,7 @@ export function Dashboard() {
                     <FlatList
                         data={data.budgets}
                         keyExtractor={(budget) => budget.id.toString()}
-                        renderItem={({ item }) => <BudgetCardDetails data={item} onPress={() => handleNavigateBudget(item.id)} />}
+                        renderItem={({ item }) => <BudgetCardDetails data={item} onPress={() => navigateStack('budget', { idBudget: item.id })} />}
                         showsVerticalScrollIndicator={false}
                         ListEmptyComponent={() => (
                             <Center flex={1}>
@@ -154,7 +140,7 @@ export function Dashboard() {
                     />
                 }
 
-            </VStack >
+            </VStack>
         </VStack >
     );
 }

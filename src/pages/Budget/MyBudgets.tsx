@@ -18,7 +18,6 @@ import { searchMyBudgets } from '../../features/myBudgets/services/searchMyBudge
 
 export function MyBudgets() {
     const { colors } = useTheme();
-    const { searchBudget } = useBudgetContext();
     const { user, isConsumer } = useAuthContext();
     const { navigate } = useNavigation<propsStack>();
     const [labelBudgetQuantity, setLabelBudgetQuantity] = useState<string>("Quantidade: 0");
@@ -60,19 +59,7 @@ export function MyBudgets() {
     }
 
     function renderBudgetCard({ item }: ListRenderItemInfo<Budget>) {
-        return <BudgetCardDetails data={item} onPress={() => handleNavigateBudget(item.id)} />
-    }
-
-    async function handleNavigateBudget(idBudget: number) {
-        await searchBudget(idBudget)
-            .then(() => {
-                navigate('budget');
-            })
-            .catch((error) => {
-                if (error instanceof Error) {
-                    console.log(error.message);
-                }
-            });
+        return <BudgetCardDetails data={item} onPress={() => navigate('budget', { idBudget: item.id })} />
     }
 
     return (

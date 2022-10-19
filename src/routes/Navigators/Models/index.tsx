@@ -21,10 +21,13 @@ export type propsNavigationStack = {
     addressNavigation: undefined,
     notifications: undefined,
     settings: undefined,
-    budget: undefined,
+    budget: {
+        idBudget: number
+    },
     budgetNavigation: undefined,
     proposal: {
-        idProposal: number
+        idBudget: number,
+        idProposal?: number
     },
     filterProvider: {
         serviceType: ServiceType

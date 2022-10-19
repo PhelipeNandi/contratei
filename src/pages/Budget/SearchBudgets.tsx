@@ -18,7 +18,6 @@ import { SelectPriorityLevel, searchBudgets } from '../../features/searchBudgets
 export function SearchBudgets() {
     const { colors } = useTheme();
     const { user } = useAuthContext();
-    const { searchBudget } = useBudgetContext();
     const { navigate } = useNavigation<propsStack>();
     const [priorityLevelSelect, setPriorityLevelSelect] = useState<string>();
 
@@ -47,19 +46,7 @@ export function SearchBudgets() {
     }
 
     function renderBudgetCard({ item }: ListRenderItemInfo<Budget>) {
-        return <BudgetCardDetails data={item} onPress={() => handleNavigateBudget(item.id)} />
-    }
-
-    async function handleNavigateBudget(idBudget: number) {
-        await searchBudget(idBudget)
-            .then(() => {
-                navigate('budget');
-            })
-            .catch((error) => {
-                if (error instanceof Error) {
-                    console.log(error.message);
-                }
-            });
+        return <BudgetCardDetails data={item} onPress={() => navigate('budget', { idBudget: item.id })} />
     }
 
     return (
