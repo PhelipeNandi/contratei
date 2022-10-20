@@ -56,6 +56,7 @@ export function CreateBudget() {
         isLoading
     } = useMutation((data: CreateNewBudget) => createNewBudgetRequest(data, user), {
         onSuccess: () => {
+            queryClient.invalidateQueries("budgets");
             queryClient.invalidateQueries("myBudgets");
             navigate("myBudgetsTab");
         }

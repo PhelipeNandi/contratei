@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
-import { VStack, ScrollView, Divider, Button as NativeBaseButton, Center, Text, useTheme } from 'native-base';
+import { useState } from 'react';
+import { Linking } from 'react-native';
+import { VStack, ScrollView, Divider, Button as NativeBaseButton, Center, Text, useTheme, HStack, IconButton } from 'native-base';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useQuery } from 'react-query';
 import { propsNavigationStack, propsStack } from '../../routes/Navigators/Models';
@@ -12,11 +13,13 @@ import {
     Money,
     HourglassMedium,
     SuitcaseSimple,
-    Warning
+    Warning,
+    WhatsappLogo
 } from 'phosphor-react-native';
 
 import { useAuthContext } from '../../hooks/useAuthContext';
 import { useBudgetContext } from '../../hooks/useBudgetContext';
+import { removeMaskContactNumberValeu } from '../../utils/masks';
 import { useProviderContext } from '../../hooks/useProviderContext';
 import { normalizeServiceType, normalizePriorityLevel } from '../../utils/formatStrings';
 
@@ -24,13 +27,19 @@ import { Header } from '../../components/ui/Header';
 import { Button } from '../../components/ui/Button';
 import { Modal } from '../../components/form/Modal';
 import { Loading } from '../../components/ui/Loading';
-import { searchProposalsByIdBudget } from '../../features/proposal';
-import { CardDetails, ProgressStatusBudget, CardProvider, CardProviderOffer, getBudgetById } from '../../features/budget';
+import { searchProposalsByIdBudget, searchProposalByIdProvider } from '../../features/proposal';
+import {
+    CardDetails,
+    ProgressStatusBudget,
+    CardProvider,
+    CardProviderOffer,
+    getBudgetById
+} from '../../features/budget';
 
 export function Budget() {
     const { colors } = useTheme();
     const { showAlert } = useBudgetContext();
-    const { isConsumer } = useAuthContext();
+    const { user, isConsumer } = useAuthContext();
     const navigation = useNavigation<propsStack>();
     const { searchProvider } = useProviderContext();
     const [showModal, setShowModal] = useState<boolean>(false);
@@ -57,6 +66,15 @@ export function Budget() {
         enabled: enableProposalsSearch
     });
 
+    const {
+        data: proposalProvider,
+        isSuccess: proposalProviderIsSuccess,
+        isLoading: proposalProviderIsLoading,
+        isError: proposalProviderIsError
+    } = useQuery("proposalProvider", () => searchProposalByIdProvider(user.id, routes.params?.idBudget), {
+        enabled: enableProposalsSearch && !isConsumer
+    });
+
     async function handleNavigateProvider(idProvider: number) {
         await searchProvider(idProvider)
             .then(() => {
@@ -67,6 +85,15 @@ export function Budget() {
                     console.log(error.message);
                 }
             });
+    }
+
+    async function handleSendWhatsappMessageProvider() {
+        Linking.openURL(
+            `https://wa.me/55${removeMaskContactNumberValeu(budget.provider.contactNumber)}?`
+            + `text=Olá,%20me%20chamo%20${user.firstName}.%0A`
+            + `Gostaria%20de%20tirar%20algumas%20dúvidas%20a%20respeito%20`
+            + `da%20proposta%20que%20você%20me%20encaminhou`
+        );
     }
 
     return (
@@ -175,11 +202,18 @@ export function Budget() {
                                 title="Fornecedor"
                                 icon={Briefcase}
                                 children={
-                                    <CardProvider
-                                        pl={5}
-                                        data={budget.provider}
-                                        onPress={() => handleNavigateProvider(budget.provider.id)}
-                                    />
+                                    <HStack justifyContent="space-between" alignItems="center">
+                                        <CardProvider
+                                            pl={5}
+                                            data={budget.provider}
+                                            onPress={() => handleNavigateProvider(budget.provider.id)}
+                                        />
+
+                                        <IconButton
+                                            icon={<WhatsappLogo color={colors.green[700]} size="35" weight='thin' />}
+                                            onPress={handleSendWhatsappMessageProvider}
+                                        />
+                                    </HStack>
                                 }
                             />
                         }
@@ -221,18 +255,65 @@ export function Budget() {
                                         }
                                     />
                                 }
+
+                                {
+                                    !(proposals === undefined || proposals.length != 0) &&
+                                    <Center mb={3}>
+                                        <SuitcaseSimple color={colors.gray[300]} size={32} />
+                                        <Text mt={4} textAlign="center" color="gray.300" fontFamily="body" fontSize="sm">
+                                            Você ainda não recebeu {"\n"}
+                                            nenhuma proposta
+                                        </Text>
+                                    </Center>
+                                }
                             </VStack>
                         }
 
                         {
-                            !isConsumer
-                            && budget.status === "OPEN"
-                            && <Button
-                                my={3}
-                                title="Enviar Proposta"
-                                variant="primary"
-                                onPress={() => navigation.navigate("proposal", { idBudget: routes.params?.idBudget })}
-                            />
+                            !isConsumer && budget.status === "OPEN"
+                            && <VStack>
+                                {
+                                    proposalProviderIsLoading &&
+                                    <Loading />
+                                }
+
+                                {
+                                    proposalProviderIsError &&
+                                    <Center mt={5} flex={1}>
+                                        <Warning color={colors.red[600]} size={32} />
+                                        <Text mt={4} textAlign="center" color="gray.300" fontFamily="body" fontSize="sm">
+                                            Aconteceu um erro ao  {"\n"}
+                                            buscar sua proposta
+                                        </Text>
+                                    </Center>
+                                }
+
+                                {
+                                    proposalProviderIsSuccess && proposalProvider != undefined &&
+                                    <CardDetails
+                                        title="Propostas"
+                                        icon={SuitcaseSimple}
+                                        children={
+                                            <CardProviderOffer
+                                                data={proposalProvider.provider}
+                                                onPress={() => handleNavigateProvider(proposalProvider.provider.id)}
+                                                onPressRefuse={() => setShowModal(true)}
+                                                onPressOffer={() => navigation.navigate("proposal", { idBudget: routes.params?.idBudget, idProposal: proposalProvider.id })}
+                                            />
+                                        }
+                                    />
+                                }
+
+                                {
+                                    (proposalProvider === undefined || proposalProvider === null) &&
+                                    <Button
+                                        my={3}
+                                        title="Enviar Proposta"
+                                        variant="primary"
+                                        onPress={() => navigation.navigate("proposal", { idBudget: routes.params?.idBudget })}
+                                    />
+                                }
+                            </VStack>
                         }
 
                         <Modal

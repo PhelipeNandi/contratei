@@ -48,11 +48,6 @@ export function Proposal() {
     const [showModal, setShowModal] = useState<boolean>(false);
     const routes = useRoute<RouteProp<propsNavigationStack, "proposal">>();
 
-    useEffect(() => {
-        console.log("idBudget", routes.params?.idBudget);
-        console.log("idProposal", routes.params?.idProposal);
-    }, []);
-
     const {
         control,
         handleSubmit,
@@ -69,11 +64,11 @@ export function Proposal() {
         isError,
         isFetched
     } = useQuery("proposal", () => searchProposalByIdProposal(routes.params?.idProposal), {
-        enabled: isConsumer
+        enabled: routes.params?.idProposal != undefined
     });
 
     useEffect(() => {
-        if (isFetched && isConsumer) {
+        if (isFetched) {
             setValue("description", data.description);
             setValue("averageValue", data.averageValue.toString());
         }
@@ -85,6 +80,7 @@ export function Proposal() {
     } = useMutation((data: NewProposalBudget) => createProposal(data, user.id, routes.params?.idBudget), {
         onSuccess: () => {
             queryClient.invalidateQueries("budget");
+            queryClient.invalidateQueries("proposalProvider");
             navigation.goBack();
         }
     });
@@ -95,6 +91,8 @@ export function Proposal() {
     } = useMutation(() => acceptProposal(routes.params?.idProposal, routes.params?.idBudget), {
         onSuccess: () => {
             queryClient.invalidateQueries("budget");
+            queryClient.invalidateQueries("budgets");
+            queryClient.invalidateQueries("myBudgets");
             navigation.goBack();
         }
     });
@@ -174,7 +172,7 @@ export function Proposal() {
                                     h={80}
                                     p={6}
                                     mb={5}
-                                    isDisabled={isConsumer}
+                                    isDisabled={isFetched}
                                     title="Descrição"
                                     value={value}
                                     onChangeText={onChange}
@@ -188,7 +186,7 @@ export function Proposal() {
                             name="averageValue"
                             render={({ field: { value, onChange } }) => (
                                 <Input
-                                    isDisabled={isConsumer}
+                                    isDisabled={isFetched}
                                     title="Valor Médio"
                                     keyboardType="numeric"
                                     value={value}
@@ -203,6 +201,7 @@ export function Proposal() {
                                 my={7}
                                 variant="primary"
                                 title="Enviar"
+                                isDisabled={isFetched}
                                 isLoading={isLoadingNewProposalBudget}
                                 isLoadingText="Salvando"
                                 onPress={handleSubmit((value) => mutateNewProposalBudget(value))}
