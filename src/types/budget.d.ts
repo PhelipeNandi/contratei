@@ -1,4 +1,4 @@
-import { ProviderBudget, ProviderProposal } from "./provider";
+import { ConsumerBudget, ProviderBudget, ProviderProposal } from "./provider";
 
 export interface Budget {
     id: number;
@@ -10,7 +10,7 @@ export interface Budget {
     description: string;
     openingDate: date;
     completionDate?: date;
-    consumerId: number;
+    consumer: ConsumerBudget;
     provider?: ProviderBudget;
 }
 

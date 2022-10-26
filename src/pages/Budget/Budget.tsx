@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Linking } from 'react-native';
 import { VStack, ScrollView, Divider, Button as NativeBaseButton, Center, Text, useTheme, HStack, IconButton } from 'native-base';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { useQuery } from 'react-query';
+import { useQuery, useMutation, useQueryClient } from 'react-query';
 import { propsNavigationStack, propsStack } from '../../routes/Navigators/Models';
 import {
     Briefcase,
@@ -14,7 +14,9 @@ import {
     HourglassMedium,
     SuitcaseSimple,
     Warning,
-    WhatsappLogo
+    WhatsappLogo,
+    Gear,
+    User
 } from 'phosphor-react-native';
 
 import { useAuthContext } from '../../hooks/useAuthContext';
@@ -31,19 +33,24 @@ import { searchProposalsByIdBudget, searchProposalByIdProvider } from '../../fea
 import {
     CardDetails,
     ProgressStatusBudget,
-    CardProvider,
+    UserCard,
     CardProviderOffer,
-    getBudgetById
+    getBudgetById,
+    changeBudget
 } from '../../features/budget';
+import { Input } from '../../components/form/Input';
 
 export function Budget() {
     const { colors } = useTheme();
+    const queryClient = useQueryClient();
     const { showAlert } = useBudgetContext();
     const { user, isConsumer } = useAuthContext();
     const navigation = useNavigation<propsStack>();
     const { searchProvider } = useProviderContext();
     const [showModal, setShowModal] = useState<boolean>(false);
     const routes = useRoute<RouteProp<propsNavigationStack, "budget">>();
+    const [valueBudget, setValueBudget] = useState<string | null>(null);
+    const [showModalCancelBudget, setShowModalCancelBudget] = useState<boolean>(false);
     const [enableProposalsSearch, setEnableProposalsSearch] = useState<boolean>(false);
 
     const {
@@ -75,6 +82,17 @@ export function Budget() {
         enabled: enableProposalsSearch && !isConsumer
     });
 
+    const {
+        mutate,
+        isLoading
+    } = useMutation((status: string) => changeBudget(budget, status, valueBudget), {
+        onSuccess: () => {
+            queryClient.invalidateQueries("budget");
+            queryClient.invalidateQueries("budgets");
+            queryClient.invalidateQueries("myBudgets");
+        }
+    });
+
     async function handleNavigateProvider(idProvider: number) {
         await searchProvider(idProvider)
             .then(() => {
@@ -92,7 +110,16 @@ export function Budget() {
             `https://wa.me/55${removeMaskContactNumberValeu(budget.provider.contactNumber)}?`
             + `text=Olá,%20me%20chamo%20${user.firstName}.%0A`
             + `Gostaria%20de%20tirar%20algumas%20dúvidas%20a%20respeito%20`
-            + `da%20proposta%20que%20você%20me%20encaminhou`
+            + `da%20orçamento%20${budget.title}`
+        );
+    }
+
+    async function handleSendWhatsappMessageConsumer() {
+        Linking.openURL(
+            `https://wa.me/55${removeMaskContactNumberValeu(budget.consumer.contactNumber)}?`
+            + `text=Olá,%20me%20chamo%20${user.firstName}.%0A`
+            + `Gostaria%20de%20tirar%20algumas%20dúvidas%20a%20respeito%20`
+            + `da%20orçamento%20${budget.title}`
         );
     }
 
@@ -181,37 +208,66 @@ export function Budget() {
                             </VStack>
                         }
 
-                        {
-                            budget.value &&
-                            <VStack>
-                                <Divider />
+                        <VStack>
+                            <Divider />
 
-                                <CardDetails
-                                    title="valor"
-                                    icon={Money}
-                                    description={"R$: " + budget.value}
-                                />
-
-                                <Divider />
-                            </VStack>
-                        }
-
-                        {
-                            budget.provider &&
                             <CardDetails
+                                flex={1}
+                                title="valor"
+                                icon={Money}
+                                children={
+                                    <Input
+                                        mx={5}
+                                        isDisabled={isConsumer || budget.status != "IN_PROGRESS" || isLoading}
+                                        value={valueBudget != null ? valueBudget : budget.value != null ? budget.value.toString() : null}
+                                        onChangeText={setValueBudget}
+                                        placeholder="0,00"
+                                        keyboardType="numeric"
+                                        onEndEditing={() => mutate(budget.status)}
+                                    />
+                                }
+                            />
+
+                            <Divider />
+                        </VStack>
+
+                        {
+                            isConsumer && budget.provider
+                            && <CardDetails
                                 title="Fornecedor"
                                 icon={Briefcase}
                                 children={
-                                    <HStack justifyContent="space-between" alignItems="center">
-                                        <CardProvider
+                                    <HStack mr={2} justifyContent="space-between" alignItems="center">
+                                        <UserCard
                                             pl={5}
-                                            data={budget.provider}
+                                            provider={budget.provider}
                                             onPress={() => handleNavigateProvider(budget.provider.id)}
                                         />
 
                                         <IconButton
                                             icon={<WhatsappLogo color={colors.green[700]} size="35" weight='thin' />}
                                             onPress={handleSendWhatsappMessageProvider}
+                                        />
+                                    </HStack>
+                                }
+                            />
+                        }
+
+                        {
+                            !isConsumer && budget.provider && (budget.status != "OPEN")
+                            && <CardDetails
+                                title="Consumidor"
+                                icon={User}
+                                children={
+                                    <HStack mr={2} justifyContent="space-between" alignItems="center">
+                                        <UserCard
+                                            pl={5}
+                                            consumer={budget.consumer}
+                                        />
+
+                                        <IconButton
+                                            icon={<WhatsappLogo color={colors.green[700]} size="35" weight='thin' />}
+                                            onPress={handleSendWhatsappMessageConsumer}
                                         />
                                     </HStack>
                                 }
@@ -260,7 +316,7 @@ export function Budget() {
                                     !(proposals === undefined || proposals.length != 0) &&
                                     <Center mb={3}>
                                         <SuitcaseSimple color={colors.gray[300]} size={32} />
-                                        <Text mt={4} textAlign="center" color="gray.300" fontFamily="body" fontSize="sm">
+                                        <Text my={4} textAlign="center" color="gray.300" fontFamily="body" fontSize="sm">
                                             Você ainda não recebeu {"\n"}
                                             nenhuma proposta
                                         </Text>
@@ -316,6 +372,40 @@ export function Budget() {
                             </VStack>
                         }
 
+                        {
+                            ((isConsumer && budget.status != "CANCELED" && budget.status != "CLOSED")
+                                || (!isConsumer && budget.status === "IN_PROGRESS"))
+                            && <VStack>
+                                <Divider />
+
+                                <CardDetails
+                                    title="Ações"
+                                    icon={Gear}
+                                    children={
+                                        <HStack mx={5} space={4}>
+                                            <Button
+                                                flex={1}
+                                                title="Cancelar"
+                                                variant="danger"
+                                                onPress={() => setShowModalCancelBudget(true)}
+                                            />
+
+                                            {
+                                                !isConsumer
+                                                && <Button
+                                                    flex={1}
+                                                    title="Finalizar"
+                                                    variant="sucess"
+                                                    onPress={() => mutate("CLOSED")}
+                                                />
+                                            }
+
+                                        </HStack>
+                                    }
+                                />
+                            </VStack>
+                        }
+
                         <Modal
                             header="Recusar"
                             body="Você tem certeza que quer recusar essa propsta?"
@@ -332,6 +422,30 @@ export function Budget() {
                                 <Button
                                     title="Recusar"
                                     variant="danger"
+                                />
+                            </NativeBaseButton.Group>
+                        </Modal>
+
+                        <Modal
+                            header="Recusar"
+                            body="Você tem certeza que quer cancelar esse orçamento?"
+                            icon={SuitcaseSimple}
+                            isOpen={showModalCancelBudget}
+                            onClose={() => setShowModalCancelBudget(false)}
+                        >
+                            <NativeBaseButton.Group space={2}>
+                                <Button
+                                    title="Voltar"
+                                    variant="primary"
+                                    onPress={() => setShowModalCancelBudget(false)}
+                                />
+                                <Button
+                                    title="Cancelar"
+                                    variant="danger"
+                                    onPress={() => {
+                                        mutate("CANCELED");
+                                        setShowModalCancelBudget(false)
+                                    }}
                                 />
                             </NativeBaseButton.Group>
                         </Modal>

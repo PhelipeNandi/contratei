@@ -22,7 +22,7 @@ export function CardDetails({
 
     return (
         <VStack
-            my={3}
+            my={5}
             {...rest}
         >
             <HStack alignItems="center" mb={4}>

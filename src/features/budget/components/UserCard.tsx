@@ -1,11 +1,18 @@
 import { Pressable, IPressableProps, HStack, Avatar, VStack, Text, Box } from 'native-base';
-import { ProviderBudget } from '../../../types/provider';
+import { ConsumerBudget, ProviderBudget } from '../../../types/provider';
 
 type Props = IPressableProps & {
-    data: ProviderBudget;
+    provider?: ProviderBudget;
+    consumer?: ConsumerBudget;
 }
 
-export function CardProvider({ data, ...rest }: Props) {
+export function UserCard({ provider, consumer, ...rest }: Props) {
+    const data = {
+        firstName: provider ? provider.firstName : consumer.firstName,
+        lastName: provider ? provider.lastName : consumer.lastName,
+        profilePicture: provider ? provider.profilePicture : consumer.profilePicture
+    }
+
     return (
         <Pressable {...rest}>
             <HStack
@@ -26,6 +33,6 @@ export function CardProvider({ data, ...rest }: Props) {
                     {data.firstName} {data.lastName}
                 </Text>
             </HStack>
-        </Pressable >
+        </Pressable>
     );
 }

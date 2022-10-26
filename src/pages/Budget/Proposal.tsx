@@ -28,7 +28,7 @@ import { Header } from '../../components/ui/Header';
 import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/form/Input';
 import { Modal } from '../../components/form/Modal';
-import { CardProvider } from '../../features/budget';
+import { UserCard } from '../../features/budget';
 import { TextArea } from '../../components/form/TextArea';
 import { acceptProposal, createProposal, searchProposalByIdProposal } from '../../features/proposal';
 import { Loading } from '../../components/ui/Loading';
@@ -151,8 +151,8 @@ export function Proposal() {
                                 </Text>
 
                                 <HStack mb={5} justifyContent="space-between" alignItems="center">
-                                    <CardProvider
-                                        data={data.provider}
+                                    <UserCard
+                                        provider={data.provider}
                                         onPress={() => handleNavigateProvider(data.provider.id)}
                                     />
 

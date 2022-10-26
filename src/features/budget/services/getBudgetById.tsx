@@ -15,7 +15,13 @@ export async function getBudgetById(idBudget: number): Promise<Budget> {
             description: response.data.description,
             openingDate: response.data.openingDate,
             completionDate: response.data.completionDate,
-            consumerId: response.data.consumer.id,
+            consumer: {
+                id: response.data.consumer.id,
+                firstName: response.data.consumer.firstName,
+                lastName: response.data.consumer.lastName,
+                profilePicture: response.data.consumer.profilePicture,
+                contactNumber: response.data.consumer.contactNumber
+            },
             provider: response.data.provider ? {
                 id: response.data.provider.id,
                 firstName: response.data.provider.firstName,

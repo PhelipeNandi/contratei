@@ -1,7 +1,7 @@
 import { Api } from "../../../lib/Api";
 import { NewAddress } from "../../../types/user";
 
-export async function alterAddress(data: NewAddress) {
+export async function alterAddress(data: NewAddress): Promise<string> {
     try {
         const response = await Api.put("address/change-address/" + data.id, {
             id: data.id,

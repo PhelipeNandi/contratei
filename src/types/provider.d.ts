@@ -14,6 +14,14 @@ export interface Provider {
     backgroundImage: string;
 }
 
+export interface ConsumerBudget {
+    id: number;
+    firstName?: string;
+    lastName?: string;
+    profilePicture?: string;
+    contactNumber?: string;
+}
+
 export interface ProviderBudget {
     id: number;
     firstName?: string;

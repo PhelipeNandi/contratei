@@ -22,7 +22,9 @@ export async function searchBudgets(pageParam: number, userId: number, priorityL
                 serviceType: budget.serviceType,
                 description: budget.description,
                 openingDate: budget.openingDate,
-                consumerId: budget.consumer.id
+                consumer: {
+                    id: budget.consumer.id
+                }
             })),
             currentPage: response.data.number,
             totalPages: response.data.totalPages

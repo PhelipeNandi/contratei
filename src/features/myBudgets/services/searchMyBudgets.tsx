@@ -27,7 +27,9 @@ export async function searchMyBudgets(pageParam: number, userId: number, status:
                 description: budget.description,
                 openingDate: budget.openingDate,
                 completionDate: budget.completionDate,
-                consumerId: budget.consumer.id,
+                consumer: {
+                    id: budget.consumer.id
+                },
                 provider: response.data.provider ? {
                     id: response.data.provider.id
                 } : null
