@@ -1,49 +1,55 @@
-import { VStack, Text, HStack } from 'native-base';
+import { VStack } from 'native-base';
 
+import { normalizeServiceType } from '../../../utils/formatStrings';
+import { Provider, ProviderMainAddress } from '../../../types/provider';
 import { MarkedTitleWithValue } from '../../../components/ui/MarkedTitleWithValue';
 
-import { Provider } from '../../../types/provider';
-
 type Props = {
-    data?: Provider;
+    provider: Provider;
+    addressProvider: ProviderMainAddress;
 }
 
-export function InfoProvider({ data }: Props) {
+export function InfoProvider({ provider, addressProvider }: Props) {
     return (
         <VStack px={8} mt={4}>
             <MarkedTitleWithValue
                 title="Tipo de Serviço"
-                value="Mecanico"
+                value={normalizeServiceType(provider.serviceType)}
             />
 
             <MarkedTitleWithValue
                 title="Cidade"
-                value="Tubarão"
+                value={addressProvider.city}
             />
 
             <MarkedTitleWithValue
                 title="Bairro"
-                value="Monte Castelo"
+                value={addressProvider.district}
             />
 
             <MarkedTitleWithValue
                 title="Rua"
-                value="José Bressan"
+                value={addressProvider.street}
             />
 
             <MarkedTitleWithValue
                 title="Número"
-                value="80"
+                value={addressProvider.numberStreet}
+            />
+
+            <MarkedTitleWithValue
+                title="CEP"
+                value={addressProvider.postCode}
             />
 
             <MarkedTitleWithValue
                 title="Telefone"
-                value="(48) 99638-5477"
+                value={provider.contactNumber}
             />
 
             <MarkedTitleWithValue
                 title="E-mail"
-                value="fornecedor1@provider.com"
+                value={provider.email}
             />
         </VStack>
     );

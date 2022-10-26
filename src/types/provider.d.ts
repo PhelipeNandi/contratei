@@ -73,3 +73,12 @@ export interface CommentResponse {
     currentPage: number;
     totalPages: number;
 }
+
+export interface ProviderMainAddress {
+    state: string;
+    city: string;
+    district: string;
+    street: string;
+    postCode: string;
+    numberStreet: string;
+}

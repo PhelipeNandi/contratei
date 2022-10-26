@@ -12,7 +12,8 @@ import { propsNavigationStack, propsStack } from '../../routes/Navigators/Models
 import {
     PerfilProvider,
     InfoProvider,
-    PhotosProvider
+    PhotosProvider,
+    searchMainAdressProvider
 } from '../../features/provider';
 import { Loading } from '../../components/ui/Loading';
 import { searchPhotosProvider } from '../../features/personalInformation.tsx';
@@ -26,17 +27,24 @@ export function Provider() {
     const { colors } = useTheme();
 
     const {
-        data,
-        isSuccess,
-        isLoading,
-        isError
+        data: mainAdressProviderData,
+        isSuccess: mainAdressProviderIsSuccess,
+        isLoading: mainAdressProviderIsLoading,
+        isError: mainAdressProviderIsErrror
+    } = useQuery('mainAdressProvider', () => searchMainAdressProvider(provider.id, isAuthenticated));
+
+    const {
+        data: commentsData,
+        isSuccess: commentsIsSuccess,
+        isLoading: commentsIsLoading,
+        isError: commentsIsErrror
     } = useQuery('commentProvider', () => searchCommentsByIdProvider(0, 3, provider.id, isAuthenticated));
 
     const {
-        data: dataPhotosProvider,
-        isSuccess: isSuccessPhotosProvider,
-        isLoading: isLoadingPhotosProvider,
-        isError: isErrorPhotosProvider
+        data: photosProviderData,
+        isSuccess: photosProviderIsSuccess,
+        isLoading: photosProviderIsLoading,
+        isError: photosProviderIsError
     } = useQuery('photosProvider', () => searchPhotosProvider(provider.id, isAuthenticated));
 
     function renderPhotosProvider({ item }: ListRenderItemInfo<Photo>) {
@@ -58,27 +66,49 @@ export function Provider() {
                         {provider.firstName} {provider.lastName}
                     </Text>
 
-                    <Text px={10} mt={4} fontFamily="body" fontSize="xs" color="gray.400">
-                        {provider.lastName}
+                    <Text px={8} mt={4} fontFamily="body" fontSize="xs" color="gray.400">
+                        {provider.description}
                     </Text>
 
                     <Text mt={5} px={5} fontFamily="body" fontSize="lg" color="primary.700">
                         Informações
                     </Text>
 
-                    <InfoProvider />
+                    {
+                        mainAdressProviderIsLoading &&
+                        <Loading />
+                    }
+
+                    {
+                        mainAdressProviderIsErrror &&
+                        <Center flex={1}>
+                            <Warning color={colors.red[600]} size={32} />
+                            <Text my={4} textAlign="center" color="gray.300" fontFamily="body" fontSize="sm">
+                                Aconteceu um erro ao buscar as {"\n"}
+                                informações do fornecedor
+                            </Text>
+                        </Center>
+                    }
+
+                    {
+                        mainAdressProviderIsSuccess &&
+                        <InfoProvider
+                            provider={provider}
+                            addressProvider={mainAdressProviderData}
+                        />
+                    }
 
                     <Text mt={5} px={5} fontFamily="body" fontSize="lg" color="primary.700">
                         Fotos
                     </Text>
 
                     {
-                        isLoadingPhotosProvider &&
+                        photosProviderIsLoading &&
                         <Loading />
                     }
 
                     {
-                        isErrorPhotosProvider &&
+                        photosProviderIsError &&
                         <Center flex={1}>
                             <Warning color={colors.red[600]} size={32} />
                             <Text my={4} textAlign="center" color="gray.300" fontFamily="body" fontSize="sm">
@@ -89,14 +119,14 @@ export function Provider() {
                     }
 
                     {
-                        isSuccessPhotosProvider &&
+                        photosProviderIsSuccess &&
                         <FlatList
                             mt={4}
-                            mb={data === undefined || data.comments.length != 0 ? 1 : 4}
+                            mb={commentsData === undefined || commentsData.comments.length != 0 ? 1 : 4}
                             alignSelf="center"
                             bg="background"
                             horizontal={true}
-                            data={dataPhotosProvider}
+                            data={photosProviderData}
                             keyExtractor={photo => photo.id.toString()}
                             renderItem={renderPhotosProvider}
                             showsHorizontalScrollIndicator={false}
@@ -122,7 +152,7 @@ export function Provider() {
                             Comentários
                         </Text>
                         {
-                            (data === undefined || data.comments.length != 0) &&
+                            (commentsData === undefined || commentsData.comments.length != 0) &&
                             <Text
                                 fontFamily="body"
                                 fontSize="xs"
@@ -135,12 +165,12 @@ export function Provider() {
                     </HStack>
 
                     {
-                        isLoading &&
+                        commentsIsLoading &&
                         <Loading />
                     }
 
                     {
-                        !(data === undefined || data.comments.length != 0) &&
+                        !(commentsData === undefined || commentsData.comments.length != 0) &&
                         <Center my={8}>
                             <ChatCenteredText color={colors.gray[300]} size={32} />
                             <Text mt={4} textAlign="center" color="gray.300" fontFamily="body" fontSize="sm">
@@ -151,7 +181,7 @@ export function Provider() {
                     }
 
                     {
-                        isError &&
+                        commentsIsErrror &&
                         <Center flex={1}>
                             <Warning color={colors.red[600]} size={32} />
                             <Text mt={4} textAlign="center" color="gray.300" fontFamily="body" fontSize="sm">
@@ -161,8 +191,8 @@ export function Provider() {
                     }
 
                     {
-                        isSuccess &&
-                        data.comments.map((comment, index) => {
+                        commentsIsSuccess &&
+                        commentsData.comments.map((comment, index) => {
                             return <CardCommentProvider
                                 key={index}
                                 data={comment}
