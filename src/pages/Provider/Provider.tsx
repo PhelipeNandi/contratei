@@ -1,30 +1,37 @@
+import { useState } from 'react';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { ListRenderItemInfo } from 'react-native';
-import { useQuery } from 'react-query';
-import { VStack, Text, ScrollView, FlatList, Fab, HStack, Center, useTheme } from 'native-base';
+import { VStack, Text, ScrollView, FlatList, Fab, HStack, Center, useTheme, Button as NativeBaseButton } from 'native-base';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { Plus, Warning, Image, ChatCenteredText } from 'phosphor-react-native';
+import { Plus, Warning, Image, ChatCenteredText, SuitcaseSimple } from 'phosphor-react-native';
 
 import { Photo } from '../../types/provider';
 import { useAuthContext } from '../../hooks/useAuthContext';
 import { useProviderContext } from '../../hooks/useProviderContext';
-import { propsNavigationStack, propsStack } from '../../routes/Navigators/Models';
+import { propsNavigationStack, propsStack, propsTab } from '../../routes/Navigators/Models';
 
 import {
     PerfilProvider,
     InfoProvider,
     PhotosProvider,
-    searchMainAdressProvider
+    searchMainAdressProvider,
+    createEmptyBudget
 } from '../../features/provider';
+import { Modal } from '../../components/form/Modal';
+import { Button } from '../../components/ui/Button';
 import { Loading } from '../../components/ui/Loading';
 import { searchPhotosProvider } from '../../features/personalInformation.tsx';
 import { CardCommentProvider, searchCommentsByIdProvider } from '../../features/commentsProvider';
 
 export function Provider() {
-    const route = useRoute<RouteProp<propsNavigationStack, "provider">>();
-    const navigation = useNavigation<propsStack>();
-    const { isAuthenticated, isConsumer } = useAuthContext();
-    const { provider } = useProviderContext();
     const { colors } = useTheme();
+    const queryClient = useQueryClient();
+    const { provider } = useProviderContext();
+    const [showModal, setShowModal] = useState<boolean>(false);
+    const { navigate: navigateTab } = useNavigation<propsTab>();
+    const { user, isAuthenticated, isConsumer } = useAuthContext();
+    const { navigate: navigateStack } = useNavigation<propsStack>();
+    const route = useRoute<RouteProp<propsNavigationStack, "provider">>();
 
     const {
         data: mainAdressProviderData,
@@ -46,6 +53,19 @@ export function Provider() {
         isLoading: photosProviderIsLoading,
         isError: photosProviderIsError
     } = useQuery('photosProvider', () => searchPhotosProvider(provider.id, isAuthenticated));
+
+    const {
+        isLoading: createEmptyBudgetIsLoading,
+        mutate: createEmptyBudgetMutate
+    } = useMutation(() => createEmptyBudget(user, provider), {
+        onSuccess: () => {
+            queryClient.invalidateQueries("budget");
+            queryClient.invalidateQueries("budgets");
+            queryClient.invalidateQueries("myBudgets");
+            setShowModal(false);
+            navigateTab("myBudgetsTab");
+        }
+    });
 
     function renderPhotosProvider({ item }: ListRenderItemInfo<Photo>) {
         return <PhotosProvider
@@ -145,23 +165,21 @@ export function Provider() {
                     <HStack
                         px={5}
                         my={1}
+                        mb={5}
                         alignItems="center"
                         justifyContent="space-between"
                     >
                         <Text fontFamily="body" fontSize="lg" color="primary.700">
                             Comentários
                         </Text>
-                        {
-                            (commentsData === undefined || commentsData.comments.length != 0) &&
-                            <Text
-                                fontFamily="body"
-                                fontSize="xs"
-                                color="primary.700"
-                                onPress={() => navigation.navigate("commentsProvider")}
-                            >
-                                Ver todos
-                            </Text>
-                        }
+                        <Text
+                            fontFamily="body"
+                            fontSize="xs"
+                            color="primary.700"
+                            onPress={() => navigateStack("commentsProvider")}
+                        >
+                            Ver todos
+                        </Text>
                     </HStack>
 
                     {
@@ -211,8 +229,32 @@ export function Provider() {
                     size="md"
                     bg="primary.700"
                     icon={<Plus color="white" size="15" />}
+                    onPress={() => setShowModal(true)}
                 />
             }
+
+            <Modal
+                header="Contratar"
+                body="Você que contratar este fornecedor?"
+                icon={SuitcaseSimple}
+                isOpen={showModal}
+                onClose={() => setShowModal(false)}
+            >
+                <NativeBaseButton.Group space={2}>
+                    <Button
+                        title="Cancelar"
+                        variant="danger"
+                        onPress={() => setShowModal(false)}
+                    />
+                    <Button
+                        title="Contratar"
+                        variant="sucess"
+                        isLoading={createEmptyBudgetIsLoading}
+                        isLoadingText="Contratando"
+                        onPress={() => createEmptyBudgetMutate()}
+                    />
+                </NativeBaseButton.Group>
+            </Modal>
         </VStack >
     );
 }

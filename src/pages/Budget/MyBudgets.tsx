@@ -9,7 +9,6 @@ import { Budget } from '../../types/budget';
 import { useAuthContext } from '../../hooks/useAuthContext';
 import { propsStack } from '../../routes/Navigators/Models';
 import { normalizeStatus } from '../../utils/formatStrings';
-import { useBudgetContext } from '../../hooks/useBudgetContext';
 
 import { Header } from '../../components/ui/Header';
 import { Loading } from '../../components/ui/Loading';

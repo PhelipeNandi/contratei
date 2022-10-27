@@ -87,6 +87,7 @@ export function SearchProviderNavigation() {
                 <Stack.Screen name="provider" component={Provider} />
                 <Stack.Screen name="commentsProvider" component={CommentsProvider} />
                 <Stack.Screen name="createNewCommentProvider" component={CreateNewCommentProvider} />
+                <Stack.Screen name="budgetNavigation" component={BudgetNavigation} />
             </Stack.Navigator>
         </ProviderProvider>
     )

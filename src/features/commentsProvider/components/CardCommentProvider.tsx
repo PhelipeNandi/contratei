@@ -26,9 +26,10 @@ export function CardCommentProvider({ data }: Props) {
                 />
 
                 <Box
+                    m={1}
                     w={64}
                     shadow={5}
-                    bg="gray.100"
+                    bg="background"
                     rounded="lg"
                 >
                     <VStack py={3} pl={5}>
