@@ -27,7 +27,8 @@ export async function searchProvidersByServiceType(pageParam: number, serviceTyp
                 description: provider.description,
                 hourValue: provider.hourValue,
                 actingRegion: provider.actingRegion,
-                rating: provider.score
+                rating: provider.score,
+                profilePicture: provider.profilePicture
             })),
             currentPage: data.number,
             totalPages: data.totalPages

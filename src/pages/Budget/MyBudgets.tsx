@@ -30,7 +30,7 @@ export function MyBudgets() {
         hasNextPage,
         fetchNextPage,
         isFetchingNextPage
-    } = useInfiniteQuery(["myBudgets", statusBudgetSelect],
+    } = useInfiniteQuery(["myBudgets", statusBudgetSelect, user.id.toString()],
         ({ queryKey, pageParam = 0 }) => searchMyBudgets(pageParam, user.id, queryKey[1], isConsumer), {
         getNextPageParam: (page) => {
             if (page.currentPage < page.totalPages) {
@@ -110,12 +110,12 @@ export function MyBudgets() {
                         keyExtractor={budget => budget.id.toString()}
                         renderItem={renderBudgetCard}
                         showsVerticalScrollIndicator={false}
+                        contentContainerStyle={{ flexGrow: 1 }}
                         ListEmptyComponent={() => (
-                            <Center mt={40}>
+                            <Center flex={1}>
                                 <Briefcase color={colors.primary[700]} size={32} />
                                 <Text mt={4} textAlign="center" color="gray.300" fontFamily="body" fontSize="sm">
-                                    Você ainda não possui orçamentos {"\n"}
-                                    {normalizeStatus(statusBudgetSelect).toLowerCase()}
+                                    Nenhum orçamento encontrado
                                 </Text>
                             </Center>
                         )}

@@ -68,7 +68,7 @@ export function AddNewAddress() {
         resolver: yupResolver(addNewAddressForm)
     });
 
-    useQuery('address', () => searchAddressViaCep(getValues("postCode")), {
+    useQuery("address", () => searchAddressViaCep(getValues("postCode")), {
         enabled: searchPostalCode,
         onSuccess: (data) => {
             setValue("postCode", data.postCode);

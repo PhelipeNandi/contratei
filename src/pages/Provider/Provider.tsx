@@ -38,21 +38,21 @@ export function Provider() {
         isSuccess: mainAdressProviderIsSuccess,
         isLoading: mainAdressProviderIsLoading,
         isError: mainAdressProviderIsErrror
-    } = useQuery('mainAdressProvider', () => searchMainAdressProvider(provider.id, isAuthenticated));
+    } = useQuery(["mainAdressProvider", provider.id], () => searchMainAdressProvider(provider.id, isAuthenticated));
 
     const {
         data: commentsData,
         isSuccess: commentsIsSuccess,
         isLoading: commentsIsLoading,
         isError: commentsIsErrror
-    } = useQuery('commentProvider', () => searchCommentsByIdProvider(0, 3, provider.id, isAuthenticated));
+    } = useQuery(["commentProvider", provider.id], () => searchCommentsByIdProvider(0, 3, provider.id, isAuthenticated));
 
     const {
         data: photosProviderData,
         isSuccess: photosProviderIsSuccess,
         isLoading: photosProviderIsLoading,
         isError: photosProviderIsError
-    } = useQuery('photosProvider', () => searchPhotosProvider(provider.id, isAuthenticated));
+    } = useQuery(["photosProvider", provider.id], () => searchPhotosProvider(provider.id, isAuthenticated));
 
     const {
         isLoading: createEmptyBudgetIsLoading,

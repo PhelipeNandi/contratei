@@ -12,7 +12,7 @@ export async function searchMyBudgets(pageParam: number, userId: number, status:
                 size: 5,
                 consumerId: isConsumer ? userId : null,
                 providerId: !isConsumer ? userId : null,
-                status: status === "ALL" || status === null ? null : status
+                status: status === "ALL" ? null : status
             }
         });
 

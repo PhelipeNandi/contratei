@@ -26,7 +26,7 @@ export function CommentsProvider() {
         hasNextPage,
         fetchNextPage,
         isFetchingNextPage
-    } = useInfiniteQuery("comments",
+    } = useInfiniteQuery(["comments", provider.id],
         ({ pageParam = 0 }) => searchCommentsByIdProvider(pageParam, 5, provider.id, isAuthenticated), {
         getNextPageParam: (page) => {
             if (page.currentPage < page.totalPages) {

@@ -58,7 +58,7 @@ export function Budget() {
         isSuccess: budgetIsSuccess,
         isLoading: budgetIsLoading,
         isError: budgetIsError
-    } = useQuery("budget", () => getBudgetById(routes.params?.idBudget), {
+    } = useQuery(["budget", routes.params?.idBudget], () => getBudgetById(routes.params?.idBudget), {
         onSuccess: () => {
             setEnableProposalsSearch(true);
         }
@@ -69,7 +69,7 @@ export function Budget() {
         isSuccess: proposalsIsSuccess,
         isLoading: proposalsIsLoading,
         isError: proposalsIsError
-    } = useQuery("proposals", () => searchProposalsByIdBudget(routes.params?.idBudget), {
+    } = useQuery(["proposals", routes.params?.idBudget], () => searchProposalsByIdBudget(routes.params?.idBudget), {
         enabled: enableProposalsSearch
     });
 
@@ -78,7 +78,7 @@ export function Budget() {
         isSuccess: proposalProviderIsSuccess,
         isLoading: proposalProviderIsLoading,
         isError: proposalProviderIsError
-    } = useQuery("proposalProvider", () => searchProposalByIdProvider(user.id, routes.params?.idBudget), {
+    } = useQuery(["proposalProvider", routes.params?.idBudget], () => searchProposalByIdProvider(user.id, routes.params?.idBudget), {
         enabled: enableProposalsSearch && !isConsumer
     });
 
@@ -227,56 +227,63 @@ export function Budget() {
                                     />
                                 }
                             />
-
-                            <Divider />
                         </VStack>
 
                         {
                             isConsumer && budget.provider
-                            && <CardDetails
-                                title="Fornecedor"
-                                icon={Briefcase}
-                                children={
-                                    <HStack mr={2} justifyContent="space-between" alignItems="center">
-                                        <UserCard
-                                            pl={5}
-                                            provider={budget.provider}
-                                            onPress={() => handleNavigateProvider(budget.provider.id)}
-                                        />
+                            && <VStack>
+                                <Divider />
+                                <CardDetails
+                                    title="Fornecedor"
+                                    icon={Briefcase}
+                                    children={
+                                        <HStack mr={2} justifyContent="space-between" alignItems="center">
+                                            <UserCard
+                                                pl={5}
+                                                provider={budget.provider}
+                                                onPress={() => handleNavigateProvider(budget.provider.id)}
+                                            />
 
-                                        <IconButton
-                                            icon={<WhatsappLogo color={colors.green[700]} size="35" weight='thin' />}
-                                            onPress={handleSendWhatsappMessageProvider}
-                                        />
-                                    </HStack>
-                                }
-                            />
+                                            <IconButton
+                                                icon={<WhatsappLogo color={colors.green[700]} size="35" weight='thin' />}
+                                                onPress={handleSendWhatsappMessageProvider}
+                                            />
+                                        </HStack>
+                                    }
+                                />
+                            </VStack>
                         }
 
                         {
                             !isConsumer && budget.provider && (budget.status != "OPEN")
-                            && <CardDetails
-                                title="Consumidor"
-                                icon={User}
-                                children={
-                                    <HStack mr={2} justifyContent="space-between" alignItems="center">
-                                        <UserCard
-                                            pl={5}
-                                            consumer={budget.consumer}
-                                        />
+                            &&
+                            <VStack>
+                                <Divider />
+                                <CardDetails
+                                    title="Consumidor"
+                                    icon={User}
+                                    children={
+                                        <HStack mr={2} justifyContent="space-between" alignItems="center">
+                                            <UserCard
+                                                pl={5}
+                                                consumer={budget.consumer}
+                                            />
 
-                                        <IconButton
-                                            icon={<WhatsappLogo color={colors.green[700]} size="35" weight='thin' />}
-                                            onPress={handleSendWhatsappMessageConsumer}
-                                        />
-                                    </HStack>
-                                }
-                            />
+                                            <IconButton
+                                                icon={<WhatsappLogo color={colors.green[700]} size="35" weight='thin' />}
+                                                onPress={handleSendWhatsappMessageConsumer}
+                                            />
+                                        </HStack>
+                                    }
+                                />
+                            </VStack>
                         }
 
                         {
                             isConsumer && budget.status === "OPEN"
                             && <VStack>
+                                <Divider />
+
                                 {
                                     proposalsIsLoading &&
                                     <Loading />
@@ -328,6 +335,8 @@ export function Budget() {
                         {
                             !isConsumer && budget.status === "OPEN"
                             && <VStack>
+                                <Divider />
+
                                 {
                                     proposalProviderIsLoading &&
                                     <Loading />

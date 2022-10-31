@@ -63,7 +63,7 @@ export function Proposal() {
         isLoading,
         isError,
         isFetched
-    } = useQuery("proposal", () => searchProposalByIdProposal(routes.params?.idProposal), {
+    } = useQuery(["proposal", routes.params?.idProposal], () => searchProposalByIdProposal(routes.params?.idProposal), {
         enabled: routes.params?.idProposal != undefined
     });
 

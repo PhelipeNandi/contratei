@@ -24,7 +24,7 @@ export function Addresses() {
         isLoading,
         isSuccess,
         isError
-    } = useQuery('myAddresses', () => searchAddress(user));
+    } = useQuery(["myAddresses", user.id], () => searchAddress(user));
 
     return (
         <VStack flex={1} bg="background">

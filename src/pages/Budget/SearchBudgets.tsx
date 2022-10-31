@@ -29,7 +29,7 @@ export function SearchBudgets() {
         hasNextPage,
         fetchNextPage,
         isFetchingNextPage
-    } = useInfiniteQuery(["openBudgets", priorityLevelSelect],
+    } = useInfiniteQuery(["openBudgets", priorityLevelSelect, user.id.toString()],
         ({ queryKey, pageParam = 0 }) => searchBudgets(pageParam, user.id, queryKey[1]), {
         getNextPageParam: (page) => {
             if (page.currentPage < page.totalPages) {

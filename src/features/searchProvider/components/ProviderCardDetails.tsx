@@ -26,7 +26,10 @@ export function ProviderCardDetails({ data, maxW, ...rest }: Props) {
           <AspectRatio w="100%" ratio={16 / 10}>
             <Image
               alt="image"
-              source={{ uri: "https://images.unsplash.com/photo-1622613371413-5c0da41cbc4f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8YXBwbGUlMjBzdG9yZXxlbnwwfHwwfHw%3D&w=1000&q=80" }}
+              source={{
+                uri: data.backgroundImage != undefined ? `data:image/gif;base64,${data.backgroundImage}`
+                  : "https://images.unsplash.com/photo-1622613371413-5c0da41cbc4f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8YXBwbGUlMjBzdG9yZXxlbnwwfHwwfHw%3D&w=1000&q=80"
+              }}
             />
           </AspectRatio>
           <Center bg="primary.700">

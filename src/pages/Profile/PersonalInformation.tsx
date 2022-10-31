@@ -136,7 +136,7 @@ export function PersonalInformation() {
         isSuccess: isSuccessPhotosProvider,
         isLoading: isLoadingPhotosProvider,
         isError: isErrorPhotosProvider
-    } = useQuery("photosProviderPersonalInformation", () => searchPhotosProvider(user.id), {
+    } = useQuery(["photosProviderPersonalInformation", user.id], () => searchPhotosProvider(user.id), {
         enabled: !isConsumer,
         onSuccess: (data) => {
             setPhotosProvider(data);

@@ -47,21 +47,21 @@ export function SearchProvider() {
         isSuccess: randomProvidersIsSuccess,
         isLoading: randomProvidersIsLoading,
         isError: randomProvidersIsError
-    } = useQuery('randomProviders', () => searchRandomProviders(user, isAuthenticated));
+    } = useQuery(['randomProviders', isAuthenticated], () => searchRandomProviders(user, isAuthenticated));
 
     const {
         data: newProvidersData,
         isSuccess: newProvidersIsSuccess,
         isLoading: newProvidersIsLoading,
         isError: newProvidersIsError
-    } = useQuery('newProviders', () => searchNewProviders(user, isAuthenticated));
+    } = useQuery(['newProviders', isAuthenticated], () => searchNewProviders(user, isAuthenticated));
 
     const {
         data: betterProvidersData,
         isSuccess: betterProvidersIsSuccess,
         isLoading: betterProvidersIsLoading,
         isError: betterProvidersIsError
-    } = useQuery('betterProviders', () => searchBetterProviders(user, isAuthenticated));
+    } = useQuery(['betterProviders', isAuthenticated], () => searchBetterProviders(user, isAuthenticated));
 
     async function handleNavigateProvider(provider: Provider) {
         await searchProvider(provider.id)
@@ -132,7 +132,7 @@ export function SearchProvider() {
 
                     {
                         randomProvidersIsError &&
-                        <Center mt={5} flex={1}>
+                        <Center my={8} flex={1}>
                             <Warning color={colors.red[600]} size={32} />
                             <Text mt={4} textAlign="center" color="gray.300" fontFamily="body" fontSize="sm">
                                 Aconteceu um erro ao  {"\n"}
@@ -209,7 +209,7 @@ export function SearchProvider() {
 
                     {
                         newProvidersIsError &&
-                        <Center my={5} flex={1}>
+                        <Center my={8} flex={1}>
                             <Warning color={colors.red[600]} size={32} />
                             <Text mt={4} textAlign="center" color="gray.300" fontFamily="body" fontSize="sm">
                                 Aconteceu um erro ao  {"\n"}
@@ -254,12 +254,12 @@ export function SearchProvider() {
 
                     {
                         betterProvidersIsLoading &&
-                        <Loading my={12} />
+                        <Loading my={16} />
                     }
 
                     {
                         betterProvidersIsError &&
-                        <Center my={5} flex={1}>
+                        <Center my={8} flex={1}>
                             <Warning color={colors.red[600]} size={32} />
                             <Text my={4} textAlign="center" color="gray.300" fontFamily="body" fontSize="sm">
                                 Aconteceu um erro ao  {"\n"}

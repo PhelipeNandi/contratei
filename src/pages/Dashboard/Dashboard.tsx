@@ -22,7 +22,7 @@ export function Dashboard() {
         isSuccess,
         isLoading,
         isError
-    } = useQuery("budgets", () => searchMyBudgets(0, user.id, "ALL", isConsumer), {
+    } = useQuery(["budgets", user.id], () => searchMyBudgets(0, user.id, "ALL", isConsumer), {
         enabled: isConsumer != null
     });
 
@@ -129,6 +129,7 @@ export function Dashboard() {
                         keyExtractor={(budget) => budget.id.toString()}
                         renderItem={({ item }) => <BudgetCardDetails data={item} onPress={() => navigateStack('budget', { idBudget: item.id })} />}
                         showsVerticalScrollIndicator={false}
+                        contentContainerStyle={{ flexGrow: 1 }}
                         ListEmptyComponent={() => (
                             <Center flex={1}>
                                 <Clipboard color={colors.gray[300]} size={32} />

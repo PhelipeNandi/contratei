@@ -16,9 +16,9 @@ export async function changeBudget(data: Budget, status: string, value?: string)
             consumer: {
                 id: data.consumer.id
             },
-            provider: {
+            provider: data.provider ? {
                 id: data.provider.id
-            }
+            } : null
         })
 
         if (response.status === 200) {
