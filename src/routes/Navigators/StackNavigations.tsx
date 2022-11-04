@@ -4,6 +4,7 @@ import {
     SplashScreen,
     SignIn,
     RegisterAccount,
+    GoogleRegisterAccount,
     Dashboard,
     SearchProvider,
     FilterProvider,
@@ -22,7 +23,7 @@ import {
     Settings,
     CommentsProvider,
     CreateNewCommentProvider,
-    SearchBudgets,
+    SearchBudgets
 } from '../../pages';
 import { ProviderProvider } from '../../contexts/providerContext';
 import { AddressProvider } from '../../contexts/adressContext';
@@ -37,6 +38,7 @@ export function LoginNavigation() {
             <Stack.Screen name="splashScreen" component={SplashScreen} />
             <Stack.Screen name="signIn" component={SignIn} />
             <Stack.Screen name="registerAccount" component={RegisterAccount} />
+            <Stack.Screen name="googleRegisterAccount" component={GoogleRegisterAccount} />
         </Stack.Navigator>
     )
 }

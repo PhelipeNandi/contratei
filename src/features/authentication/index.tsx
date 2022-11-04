@@ -1,4 +1,4 @@
 import { signInRequest } from "./services/signInRequest";
-import { signInGoogleRequest } from "./services/signInGoogleRequest";
+import { signInGoogleRequest, authenticateGoogleAccount, findUserGoogleAccount } from "./services/signInGoogleRequest";
 
-export { signInRequest, signInGoogleRequest }
+export { signInRequest, signInGoogleRequest, authenticateGoogleAccount, findUserGoogleAccount }

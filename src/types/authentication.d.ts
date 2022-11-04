@@ -20,3 +20,10 @@ export interface AuthResponse {
         access_token: string
     }
 }
+
+export interface GoogleUser {
+    firstName: string,
+    lastName: string,
+    email: string,
+    password: string
+}

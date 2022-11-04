@@ -3,11 +3,13 @@ import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup';
 import { Envelope, Key, GoogleLogo } from 'phosphor-react-native';
+import { useNavigation } from '@react-navigation/native';
 
 import Login from '../../assets/svg/login.svg';
-
-import { useAuthContext } from '../../hooks/useAuthContext';
 import { SignInData } from '../../types/authentication';
+import { useAuthContext } from '../../hooks/useAuthContext';
+import { propsStack } from '../../routes/Navigators/Models';
+
 import { Header } from '../../components/ui/Header';
 import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/form/Input';
@@ -20,6 +22,7 @@ const signInForm: yup.SchemaOf<SignInData> = yup.object({
 export function SignIn() {
     const { colors } = useTheme();
     const { signIn, signInGoogle } = useAuthContext();
+    const navigation = useNavigation<propsStack>();
 
     const { control, handleSubmit, formState: { errors } } = useForm<SignInData>({
         resolver: yupResolver(signInForm)
@@ -35,7 +38,11 @@ export function SignIn() {
     }
 
     async function handleSignInGoogle() {
-        await signInGoogle();
+        await signInGoogle()
+            .then((response) => {
+                console.log("3");
+                if (response != undefined && response === "Usuário não encontrado") navigation.navigate("googleRegisterAccount");
+            })
     }
 
     return (
@@ -45,7 +52,7 @@ export function SignIn() {
 
             <VStack flex={1} px={8} roundedTop={32} bg="background">
 
-                <VStack alignItems="center" justifyContent="center">
+                <VStack mt={10} alignItems="center" justifyContent="center">
                     <Login />
                 </VStack>
 
