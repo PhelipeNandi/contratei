@@ -21,7 +21,7 @@ import {
 
 import { useAuthContext } from '../../hooks/useAuthContext';
 import { useBudgetContext } from '../../hooks/useBudgetContext';
-import { removeMaskContactNumberValeu } from '../../utils/masks';
+import { normalizeContactNumberValeu } from '../../utils/formatStrings';
 import { useProviderContext } from '../../hooks/useProviderContext';
 import { normalizeServiceType, normalizePriorityLevel } from '../../utils/formatStrings';
 
@@ -107,7 +107,7 @@ export function Budget() {
 
     async function handleSendWhatsappMessageProvider() {
         Linking.openURL(
-            `https://wa.me/55${removeMaskContactNumberValeu(budget.provider.contactNumber)}?`
+            `https://wa.me/55${normalizeContactNumberValeu(budget.provider.contactNumber)}?`
             + `text=Olá,%20me%20chamo%20${user.firstName}.%0A`
             + `Gostaria%20de%20tirar%20algumas%20dúvidas%20a%20respeito%20`
             + `da%20orçamento%20${budget.title}`
@@ -116,7 +116,7 @@ export function Budget() {
 
     async function handleSendWhatsappMessageConsumer() {
         Linking.openURL(
-            `https://wa.me/55${removeMaskContactNumberValeu(budget.consumer.contactNumber)}?`
+            `https://wa.me/55${normalizeContactNumberValeu(budget.consumer.contactNumber)}?`
             + `text=Olá,%20me%20chamo%20${user.firstName}.%0A`
             + `Gostaria%20de%20tirar%20algumas%20dúvidas%20a%20respeito%20`
             + `da%20orçamento%20${budget.title}`

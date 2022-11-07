@@ -1,20 +1,45 @@
-import { HStack, Text, useTheme } from 'native-base';
-import { CreditCard as CreditCardIcon, DotsThree } from 'phosphor-react-native';
+import { VStack, Box, IBoxProps, Text, HStack } from 'native-base';
 
-export function CardCreditCard() {
-    const { colors } = useTheme();
+import { NewCreditCard } from '../../../types/user';
+import { normalizeNumberCreditCard } from '../../../utils/formatStrings';
 
+type Props = IBoxProps & {
+    data: NewCreditCard;
+}
+
+export function CardCreditCard({ data, ...rest }: Props) {
     return (
-        <HStack mt={5} alignItems="center">
-            <CreditCardIcon color={colors.primary[700]} size={32} />
-
-            <HStack pt={1} alignItems="center">
-                <DotsThree color={colors.black} size={24} />
-
-                <Text fontFamily="body" fontSize="sm" color="primary.700">
-                    444 (Crédito)
+        <Box
+            h={48}
+            w="100%"
+            bg="primary.700"
+            shadow={2}
+            rounded="2xl"
+            alignSelf="center"
+            {...rest}
+        >
+            <VStack
+                p={5}
+                alignContent="center"
+            >
+                <Text pt={12} fontFamily="mono" fontSize="lg" color="white">
+                    {normalizeNumberCreditCard(data.number)}
                 </Text>
-            </HStack>
-        </HStack>
+
+                <Text pt={5} fontFamily="mono" fontSize="md" color="white">
+                    {data.holder}
+                </Text>
+
+                <HStack alignItems="center" justifyContent="space-between">
+                    <Text pt={2} fontFamily="mono" fontSize="sm" color="white">
+                        {data.validity}
+                    </Text>
+
+                    <Text pt={2} fontFamily="mono" fontSize="sm" color="white">
+                        {data.cvv}
+                    </Text>
+                </HStack>
+            </VStack>
+        </Box>
     );
 }

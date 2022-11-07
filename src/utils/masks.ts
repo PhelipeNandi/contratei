@@ -1,4 +1,4 @@
-export const normalizeContactNumberValue = (value: string | undefined) => {
+export const maskContactNumberValue = (value: string | undefined) => {
     if (!value) return '';
 
     return value.replace(/[\D]/g, '')
@@ -7,7 +7,7 @@ export const normalizeContactNumberValue = (value: string | undefined) => {
         .replace(/(-\d{4})(\d+?)/, '$1');
 }
 
-export const normalizeCPF = (value: string | undefined) => {
+export const maskCPF = (value: string | undefined) => {
     if (!value) return '';
 
     return value.replace(/[\D]/g, '')
@@ -17,8 +17,26 @@ export const normalizeCPF = (value: string | undefined) => {
         .replace(/(-\d{2})(\d+?)/, '$1');
 }
 
-export const removeMaskContactNumberValeu = (value: string | undefined) => {
+export const maskNumberCreditCard = (value: string | undefined) => {
     if (!value) return '';
 
-    return value.replace(/[\D]/g, '');
+    const regex = /\d(?!\d{0,2}$|\d{13}$)/gm;
+    const subst = `*`;
+
+    return value.replace(regex, subst);
+}
+
+export const maskValidityCreditCard = (value: string | undefined) => {
+    if (!value) return '';
+
+    return value.replace(/[\D]/g, '')
+        .replace(/(\d{2})(\d)/, '$1/$2');
+}
+
+export const maskDateValidityCreditCard = (value: string | undefined) => {
+    if (!value) return '';
+
+    const date = new Date(value);
+
+    return (date.getMonth() + 1) + "/" + date.getFullYear().toString().slice(2);
 }

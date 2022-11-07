@@ -34,6 +34,12 @@ export const normalizeServiceType = (value: string | undefined) => {
     return value[0].toUpperCase() + value.slice(1).toLowerCase();
 }
 
+export const normalizeContactNumberValeu = (value: string | undefined) => {
+    if (!value) return '';
+
+    return value.replace(/[\D]/g, '');
+}
+
 export const normalizeBudgetValue = (value: string | undefined) => {
     if (!value) return '';
 
@@ -44,4 +50,20 @@ export const normalizeRatingProvider = (value: string | undefined): number => {
     if (!value) return 0;
 
     return Number((Number(value) * 2).toFixed(2));
+}
+
+export const normalizeNumberCreditCard = (value: string | undefined) => {
+    if (!value) return "";
+
+    return value.replace(/[\D]/g, '')
+        .replace(/(\d{4})(\d)/, '$1 $2')
+        .replace(/(\d{4})(\d)/, '$1 $2')
+        .replace(/(\d{4})(\d)/, '$1 $2');
+}
+
+export const normalizeValidityCreditCard = (value: string | undefined) => {
+    if (!value) return "";
+
+    return value.replace(/[\D]/g, '')
+        .replace(/(\d{2})(\d)/, '$1/01/$2');
 }

@@ -28,6 +28,7 @@ import {
 import { ProviderProvider } from '../../contexts/providerContext';
 import { AddressProvider } from '../../contexts/adressContext';
 import { BudgetProvider } from '../../contexts/budgetContext';
+import { CreditCardProvider } from '../../contexts/creditCardContex';
 
 const Stack = createNativeStackNavigator<propsNavigationStack>();
 
@@ -121,8 +122,7 @@ export function ProfileNavigationConsumer() {
         <Stack.Navigator initialRouteName="profile" screenOptions={{ headerShown: false }}>
             <Stack.Screen name="profile" component={Profile} />
             <Stack.Screen name="personalInformation" component={PersonalInformation} />
-            <Stack.Screen name="payments" component={Payments} />
-            <Stack.Screen name="addNewCreditCard" component={AddNewCreditCard} />
+            <Stack.Screen name="creditCardNavigation" component={CreditCardNavigation} />
             <Stack.Screen name="addressNavigation" component={AddressNavigation} />
             <Stack.Screen name="notifications" component={Notifications} />
             <Stack.Screen name="settings" component={Settings} />
@@ -136,11 +136,9 @@ export function ProfileNavigationProvider() {
             <Stack.Navigator initialRouteName="profile" screenOptions={{ headerShown: false }}>
                 <Stack.Screen name="profile" component={Profile} />
                 <Stack.Screen name="personalInformation" component={PersonalInformation} />
-                <Stack.Screen name="payments" component={Payments} />
                 <Stack.Screen name="provider" component={Provider} />
                 <Stack.Screen name="commentsProvider" component={CommentsProvider} />
                 <Stack.Screen name="createNewCommentProvider" component={CreateNewCommentProvider} />
-                <Stack.Screen name="addNewCreditCard" component={AddNewCreditCard} />
                 <Stack.Screen name="addressNavigation" component={AddressNavigation} />
                 <Stack.Screen name="notifications" component={Notifications} />
                 <Stack.Screen name="settings" component={Settings} />
@@ -157,5 +155,16 @@ export function AddressNavigation() {
                 <Stack.Screen name="addNewAddress" component={AddNewAddress} />
             </Stack.Navigator>
         </AddressProvider>
+    )
+}
+
+export function CreditCardNavigation() {
+    return (
+        <CreditCardProvider>
+            <Stack.Navigator initialRouteName="payments" screenOptions={{ headerShown: false }}>
+                <Stack.Screen name="payments" component={Payments} />
+                <Stack.Screen name="addNewCreditCard" component={AddNewCreditCard} />
+            </Stack.Navigator>
+        </CreditCardProvider>
     )
 }

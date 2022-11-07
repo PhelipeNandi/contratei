@@ -78,3 +78,19 @@ export interface NewAddress {
     complement: string;
     isMainAddress: string;
 }
+
+export interface CreditCard {
+    id: number;
+    number: string;
+    holder: string;
+    validity: string;
+    cvv: string;
+}
+
+export interface NewCreditCard {
+    id?: number;
+    number: string;
+    holder: string;
+    validity: string;
+    cvv: string;
+}

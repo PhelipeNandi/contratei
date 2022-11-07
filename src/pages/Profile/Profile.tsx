@@ -66,12 +66,15 @@ export function Profile() {
                                 />
                         }
 
-                        <MenuNavigation
-                            mt={4}
-                            title="Pagamentos"
-                            icon={Cardholder}
-                            onPress={() => navigation.navigate('payments')}
-                        />
+                        {
+                            isConsumer &&
+                            <MenuNavigation
+                                mt={4}
+                                title="Pagamentos"
+                                icon={Cardholder}
+                                onPress={() => navigation.navigate('creditCardNavigation')}
+                            />
+                        }
 
                         <MenuNavigation
                             mt={4}

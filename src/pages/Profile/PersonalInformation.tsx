@@ -16,7 +16,7 @@ import { Photo } from '../../types/provider';
 import { propsStack } from '../../routes/Navigators/Models';
 import { useAuthContext } from '../../hooks/useAuthContext';
 import { ChangePersonalInformation } from '../../types/user';
-import { normalizeCPF, normalizeContactNumberValue } from '../../utils/masks';
+import { maskContactNumberValue, maskCPF } from '../../utils/masks';
 
 import { Header } from '../../components/ui/Header';
 import { Input } from '../../components/form/Input';
@@ -90,11 +90,11 @@ export function PersonalInformation() {
     const cpfValue = watch('cpf');
 
     useEffect(() => {
-        setValue('contactNumber', normalizeContactNumberValue(contactNumberValue))
+        setValue('contactNumber', maskContactNumberValue(contactNumberValue))
     }, [contactNumberValue]);
 
     useEffect(() => {
-        setValue('cpf', normalizeCPF(cpfValue))
+        setValue('cpf', maskCPF(cpfValue))
     }, [cpfValue]);
 
     async function pickImageProfile() {

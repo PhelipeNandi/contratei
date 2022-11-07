@@ -5,7 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup';
 
 import { RegisterNewUser } from '../../types/authentication';
-import { normalizeCPF, normalizeContactNumberValue } from '../../utils/masks';
+import { maskCPF, maskContactNumberValue } from '../../utils/masks';
 
 import { Header } from '../../components/ui/Header';
 import { Input } from '../../components/form/Input';
@@ -57,11 +57,11 @@ export function RegisterAccount() {
     const cpfValue = watch('cpf');
 
     useEffect(() => {
-        setValue('contactNumber', normalizeContactNumberValue(contactNumberValue))
+        setValue('contactNumber', maskContactNumberValue(contactNumberValue))
     }, [contactNumberValue]);
 
     useEffect(() => {
-        setValue('cpf', normalizeCPF(cpfValue))
+        setValue('cpf', maskCPF(cpfValue))
     }, [cpfValue]);
 
     useEffect(() => {

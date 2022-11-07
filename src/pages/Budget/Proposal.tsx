@@ -20,7 +20,7 @@ import { WhatsappLogo, SuitcaseSimple, Warning } from 'phosphor-react-native';
 import { NewProposalBudget } from '../../types/budget';
 import { useAuthContext } from '../../hooks/useAuthContext';
 import { useBudgetContext } from '../../hooks/useBudgetContext';
-import { removeMaskContactNumberValeu } from '../../utils/masks';
+import { normalizeContactNumberValeu } from '../../utils/formatStrings';
 import { useProviderContext } from '../../hooks/useProviderContext';
 import { propsNavigationStack, propsStack } from '../../routes/Navigators/Models';
 
@@ -111,7 +111,7 @@ export function Proposal() {
 
     async function handleSendWhatsappMessageProvider() {
         Linking.openURL(
-            `https://wa.me/55${removeMaskContactNumberValeu(data.provider.contactNumber)}?`
+            `https://wa.me/55${normalizeContactNumberValeu(data.provider.contactNumber)}?`
             + `text=Olá,%20me%20chamo%20${user.firstName}.%0A`
             + `Gostaria%20de%20tirar%20algumas%20dúvidas%20a%20respeito%20`
             + `da%20proposta%20que%20você%20me%20encaminhou`
