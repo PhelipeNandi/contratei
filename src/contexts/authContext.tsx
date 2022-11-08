@@ -61,24 +61,20 @@ export function AuthProvider({ children }) {
     }
 
     async function signInGoogle(): Promise<string | void> {
-        await signInGoogleRequest()
-            .then((googleUser) => {
-                console.log("1");
-                setGoogleUser(googleUser);
-                authenticateGoogleAccount({ email: googleUser.email, password: googleUser.password })
-                    .then((response) => {
-                        console.log("2");
-                        if (response === "Usuário não encontrado") return response;
+        const googleUser = await signInGoogleRequest();
+        setGoogleUser(googleUser);
 
-                        findUserGoogleAccount(googleUser.email, response)
-                            .then((user) => {
-                                setUser(user);
-                                setIsConsumer(user.type === "Consumidor");
-                                AsyncStorage.setItem('@contratei:user', JSON.stringify(user));
-                                queryClient.invalidateQueries();
-                            });
-                    })
-            });
+        const user = await findUserGoogleAccount(googleUser.email, null);
+        if (user.id === 0) {
+            return "Usuário não encontrado";
+        }
+
+        const token = await authenticateGoogleAccount({ email: googleUser.email, password: googleUser.password });
+        user.token = token;
+        setUser(user);
+        setIsConsumer(user.type === "Consumidor");
+        AsyncStorage.setItem('@contratei:user', JSON.stringify(user));
+        queryClient.invalidateQueries();
     }
 
     function logOut() {

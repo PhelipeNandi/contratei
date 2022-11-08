@@ -4,7 +4,6 @@ import {
     SplashScreen,
     SignIn,
     RegisterAccount,
-    GoogleRegisterAccount,
     Dashboard,
     SearchProvider,
     FilterProvider,
@@ -39,7 +38,6 @@ export function LoginNavigation() {
             <Stack.Screen name="splashScreen" component={SplashScreen} />
             <Stack.Screen name="signIn" component={SignIn} />
             <Stack.Screen name="registerAccount" component={RegisterAccount} />
-            <Stack.Screen name="googleRegisterAccount" component={GoogleRegisterAccount} />
         </Stack.Navigator>
     )
 }

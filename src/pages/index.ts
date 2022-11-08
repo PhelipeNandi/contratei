@@ -1,7 +1,6 @@
 import { SplashScreen } from '../pages/Login/SplashScreen';
 import { SignIn } from '../pages/Login/SignIn';
 import { RegisterAccount } from '../pages/Login/RegisterAccount';
-import { GoogleRegisterAccount } from './Login/GoogleRegisterAccount';
 import { Dashboard } from './Dashboard/Dashboard';
 import { SearchProvider } from './Provider/SearchProvider';
 import { FilterProvider } from './Provider/FilterProvider';
@@ -26,7 +25,6 @@ export {
     SplashScreen,
     SignIn,
     RegisterAccount,
-    GoogleRegisterAccount,
     Dashboard,
     SearchProvider,
     FilterProvider,

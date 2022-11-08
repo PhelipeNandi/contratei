@@ -6,7 +6,6 @@ export type propsNavigationStack = {
     splashScreen: undefined,
     signIn: undefined,
     registerAccount: undefined,
-    googleRegisterAccount: undefined,
     dashboard: undefined,
     searchProvider: undefined,
     searchProviderNavigation: undefined,

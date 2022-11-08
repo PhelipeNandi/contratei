@@ -18,8 +18,6 @@ export async function signInGoogleRequest(): Promise<GoogleUser> {
         const response = await fetch(`https://www.googleapis.com/oauth2/v2/userinfo?alt=json&access_token=${params.access_token}`);
         const user = await response.json();
 
-        console.log(user);
-
         return {
             firstName: user.given_name,
             lastName: user.family_name,
@@ -30,14 +28,11 @@ export async function signInGoogleRequest(): Promise<GoogleUser> {
 }
 
 export async function authenticateGoogleAccount(data: SignInData): Promise<string> {
+    console.log(data);
     const responseAuthenticate = await Api.post("login/authenticate", {
         email: data.email,
         password: data.password
     });
-
-    if (responseAuthenticate.status === 403) {
-        return "Usuário não encontrado";
-    }
 
     Api.defaults.headers['Authorization'] = `Bearer ${responseAuthenticate.data.jwt}`;
 

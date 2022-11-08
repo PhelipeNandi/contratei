@@ -15,6 +15,7 @@ import { SelectServiceType } from '../../features/createBudget';
 import { registerAccountRequest } from '../../features/registerAccount';
 import { useNavigation } from '@react-navigation/native';
 import { propsStack } from '../../routes/Navigators/Models';
+import { useAuthContext } from '../../hooks/useAuthContext';
 
 const registerNewUserForm: yup.SchemaOf<RegisterNewUser> = yup.object({
     type: yup.mixed().oneOf(['Consumidor', 'Fornecedor']).required("Tipo obrigatório"),
@@ -29,6 +30,8 @@ const registerNewUserForm: yup.SchemaOf<RegisterNewUser> = yup.object({
 
 export function RegisterAccount() {
     const navigation = useNavigation<propsStack>();
+    const { googleUser, signIn } = useAuthContext();
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isProvider, setIsProvider] = useState<boolean>(false);
 
     const {
@@ -46,6 +49,15 @@ export function RegisterAccount() {
             serviceType: "EMPREGADO"
         }
     });
+
+    useEffect(() => {
+        if (googleUser != null) {
+            setValue("firstName", googleUser.firstName);
+            setValue("lastName", googleUser.lastName);
+            setValue("email", googleUser.email);
+            setValue("password", googleUser.password);
+        }
+    }, []);
 
     const typeValue = watch('type');
 
@@ -80,9 +92,16 @@ export function RegisterAccount() {
     }, [isSubmitSuccessful]);
 
     async function handleRegisterAccount(data: RegisterNewUser) {
+        setIsLoading(true);
         await registerAccountRequest(data)
             .then(() => {
-                navigation.goBack();
+                setIsLoading(false);
+
+                if (googleUser != null) {
+                    signIn({ email: googleUser.email, password: googleUser.password });
+                } else {
+                    navigation.goBack();
+                }
             })
             .catch((error) => {
                 if (error instanceof Error) {
@@ -141,6 +160,7 @@ export function RegisterAccount() {
                                 placeholder="Nome"
                                 value={value}
                                 onChangeText={onChange}
+                                isDisabled={googleUser != null}
                             />
                         )}
                     />
@@ -155,6 +175,7 @@ export function RegisterAccount() {
                                 placeholder="Sobrenome"
                                 value={value}
                                 onChangeText={onChange}
+                                isDisabled={googleUser != null}
                             />
                         )}
                     />
@@ -200,6 +221,7 @@ export function RegisterAccount() {
                                 autoCapitalize="none"
                                 value={value}
                                 onChangeText={onChange}
+                                isDisabled={googleUser != null}
                             />
                         )}
                     />
@@ -215,6 +237,7 @@ export function RegisterAccount() {
                                 secureTextEntry
                                 value={value}
                                 onChangeText={onChange}
+                                isDisabled={googleUser != null}
                             />
                         )}
                     />
@@ -224,6 +247,8 @@ export function RegisterAccount() {
                         mt={5}
                         title="Cadastrar"
                         variant="sucess"
+                        isLoading={isLoading}
+                        isLoadingText="Cadastrando"
                         onPress={handleSubmit(handleRegisterAccount)}
                     />
 

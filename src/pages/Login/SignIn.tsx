@@ -40,8 +40,9 @@ export function SignIn() {
     async function handleSignInGoogle() {
         await signInGoogle()
             .then((response) => {
-                console.log("3");
-                if (response != undefined && response === "Usuário não encontrado") navigation.navigate("googleRegisterAccount");
+                if (response != undefined && response === "Usuário não encontrado") {
+                    navigation.navigate("registerAccount");
+                }
             })
     }
 
