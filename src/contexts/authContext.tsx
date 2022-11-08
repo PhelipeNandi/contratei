@@ -81,6 +81,7 @@ export function AuthProvider({ children }) {
         AsyncStorage.removeItem('@contratei:user')
             .then(() => {
                 setUser(null);
+                setGoogleUser(null);
                 setIsConsumer(null);
                 queryClient.invalidateQueries();
                 delete Api.defaults.headers['Authorization'];
