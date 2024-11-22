@@ -5,8 +5,9 @@ A parte do backend do projeto pode ser encontrada [aqui](https://github.com/Laus
 
 ## Tecnologias Utilizadas
 
-- **React Native**
-- **Typescript**
+- **React 18**
+- **React Native 0.69.6**
+- **TypeScript**
 - **Expo**
 - **Native Base**
 - **React Navigation**
@@ -30,4 +31,3 @@ A parte do backend do projeto pode ser encontrada [aqui](https://github.com/Laus
 ![Imagem 12](./images/OrcamentoEmAndamento.jpg)
 ![Imagem 13](./images/Pagamento.jpg)
 ![Imagem 14](./images/Proposta.jpg)
-
